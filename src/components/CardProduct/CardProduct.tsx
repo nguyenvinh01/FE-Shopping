@@ -46,15 +46,6 @@ const ProductCard = styled.div`
   }
 `;
 
-const titlecard: React.ReactNode = (
-  <div>
-    <p className="product-title">Title of the product card goes here.</p>
-    <p>
-      <span>100000 - 80000</span>
-    </p>
-  </div>
-);
-
 interface cardType {
   name?: string;
   desc?: string;
@@ -78,11 +69,7 @@ export const CardProduct: React.FC<cardType> = ({ desc }) => {
 
         <p>100000 - 80000</p>
 
-        <Meta
-          style={{ marginBlockEnd: 0 }}
-          // title={titlecard}
-          description={desc}
-        />
+        <Meta style={{ marginBlockEnd: 0 }} description={desc} />
         <Button type="primary" shape="round">
           Add to card
         </Button>
