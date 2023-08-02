@@ -1,13 +1,20 @@
 import React from "react";
 import { ItemPage } from "./FooterComponent";
+import { Image } from "antd";
+import { styled } from "styled-components";
 interface ItemFooter {
   title: string;
   item: ItemPage[];
   children?: React.ReactNode;
+  image?: string;
 }
+const ItemFooter = styled.div`
+  margin: 0px 20px;
+`;
 export const FooterItem = ({ item, title, children, ...rest }: ItemFooter) => {
   return (
-    <div>
+    <ItemFooter>
+      {rest.image && <Image src={rest.image} preview={false} />}
       <ul>
         <li className="title">{title}</li>
         {item.map((item: ItemPage) => {
@@ -19,6 +26,6 @@ export const FooterItem = ({ item, title, children, ...rest }: ItemFooter) => {
         })}
       </ul>
       <div>{children}</div>
-    </div>
+    </ItemFooter>
   );
 };

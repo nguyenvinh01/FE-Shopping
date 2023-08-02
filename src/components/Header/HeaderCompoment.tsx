@@ -44,7 +44,6 @@ const items: MenuProps["items"] = [
 
 const { Item } = Menu;
 const { Header } = Layout;
-const { Search } = Input;
 type MenuItem = {
   key?: string;
   label?: string;
@@ -69,6 +68,7 @@ const HeaderLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 25px;
   .ant-layout-header {
     text-align: center;
     color: #000;
@@ -93,7 +93,13 @@ export const HeaderCompoment = () => {
             </Item>
           ))}
         </Menu>
-        {/* <div>
+
+        <SearchComponent
+          placeholder="search text"
+          textButton="Search"
+          color="red"
+        />
+        <div>
           <Space>
             <Button shape="round" type="primary">
               Sign Up
@@ -102,8 +108,8 @@ export const HeaderCompoment = () => {
               Sign In
             </Button>
           </Space>
-        </div> */}
-        <AvatarProfile>
+        </div>
+        {/* <AvatarProfile>
           <Space>
             <a>
               <BsCart4 size={25} />
@@ -112,14 +118,8 @@ export const HeaderCompoment = () => {
               <Avatar src={AvatarUser} size={40}></Avatar>
             </Dropdown>
           </Space>
-        </AvatarProfile>
+        </AvatarProfile> */}
       </Header>
-
-      <SearchComponent
-        placeholder="search text"
-        textButton="Search"
-        color="red"
-      />
     </HeaderLayout>
   );
 };
