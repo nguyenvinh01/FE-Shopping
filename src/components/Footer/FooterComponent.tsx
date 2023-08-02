@@ -13,9 +13,8 @@ const Footer = styled.div`
   height: fit-content;
   background-color: #393434;
   display: flex;
-  /* flex-direction: row; */
   justify-content: center;
-  /* padding: 0px 200px; */
+  margin-top: 30px;
 `;
 const PageFooter = styled.div`
   display: flex;
