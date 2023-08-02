@@ -9,7 +9,7 @@ const ProductCard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px;
   }
 
   .ant-card-body h3 {
@@ -22,18 +22,12 @@ const ProductCard = styled.div`
   }
 
   .ant-card-body p {
-    margin: 0 0 15px 0;
+    margin: 0 0 10px 0;
     font-weight: bold;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-  }
-
-  .ant-card-body .ant-btn {
-    margin: 10px 5px;
-    align-self: flex-end;
-    background-color: #ff9c00;
   }
 
   .ant-card-meta-title,
@@ -43,6 +37,12 @@ const ProductCard = styled.div`
     -webkit-line-clamp: 2;
     overflow: hidden;
     min-height: 44px;
+  }
+
+  .ant-card-body .ant-btn {
+    margin: 10px 5px 0 0;
+    align-self: flex-end;
+    background-color: #ff9c00;
   }
 `;
 
@@ -56,12 +56,12 @@ export const CardProduct: React.FC<cardType> = ({ desc }) => {
     <ProductCard>
       <Card
         hoverable
-        style={{ width: 220, height: 400 }}
+        style={{ width: 220, height: "auto" }}
         cover={
           <img
             alt="product"
             src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            style={{ width: 220, height: 200 }}
+            style={{ width: 220, height: 190 }}
           />
         }
       >
