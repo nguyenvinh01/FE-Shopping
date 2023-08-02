@@ -18,7 +18,7 @@ const ContentTitle = styled.p`
   margin: 30px 0 10px 0;
 `;
 
-const HomeContent = styled.div`
+const HomeItems = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: stretch;
@@ -31,24 +31,24 @@ export const Home: React.FC = () => {
     <HomePage>
       <ContentWrapper>
         <ContentTitle>Shop Our Top Categories</ContentTitle>
-        <HomeContent>
+        <HomeItems>
           <CardCategory />
           <CardCategory />
           <CardCategory />
           <CardCategory />
           <CardCategory />
           <CardCategory />
-        </HomeContent>
+        </HomeItems>
       </ContentWrapper>
 
       <ContentWrapper>
         <ContentTitle>Best Deals For You!</ContentTitle>
-        <HomeContent>
+        <HomeItems>
           <CardProduct desc="Công ty sản xuất: Shaoxing Shangyu Yifei Mold Co., Ltd.  Địa chỉ: Thiệu Hưng, Chiết Giang" />
           <CardProduct desc="Công ty sản xuất: Shaoxing Shangyu Yifei " />
           <CardProduct desc="Công ty sản xuất: Shaoxing Shangyu Yifei Mold Co., Ltd.  Địa chỉ:" />
           <CardProduct desc="Công ty sản xuất: Shaoxing " />
-        </HomeContent>
+        </HomeItems>
       </ContentWrapper>
     </HomePage>
   );

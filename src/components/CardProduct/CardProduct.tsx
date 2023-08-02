@@ -5,6 +5,8 @@ import { Button, Card } from "antd";
 const { Meta } = Card;
 
 const ProductCard = styled.div`
+  /* margin: 10px 5px; */
+
   .ant-card-body {
     display: flex;
     flex-direction: column;
