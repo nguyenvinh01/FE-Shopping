@@ -13,7 +13,7 @@ const InputSearchComponent = styled.div`
     width: fit-content;
     background-color: #fff;
     width: 400px;
-    height: 40px;
+    height: 42px;
   }
   .ant-input-wrapper {
     border: none;
