@@ -5,6 +5,7 @@ const color = "red";
 const InputSearchComponent = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 10px;
   .ant-input-group-wrapper {
     border: 1px solid #000;
     border-radius: 30px;
@@ -65,10 +66,8 @@ export const SearchComponent = ({
     <InputSearchComponent>
       <Search
         placeholder={placeholder}
-        //   allowClear
         enterButton={textButton}
         size="large"
-        //   onSearch={onSearch}
         {...rest}
       />
     </InputSearchComponent>
