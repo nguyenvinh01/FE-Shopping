@@ -3,44 +3,48 @@ import React from "react";
 import { styled } from "styled-components";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsFillClipboardFill, BsCart3 } from "react-icons/bs";
-import { UserProfile } from "../UserProfile/UserProfile";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { dashboardUser, routes } from "../../routes";
-import { UserCart } from "../UserCart/UserCart";
 
 const DashboardUserWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   height: 100%;
+  width: 100%;
+  margin-right: 100px;
 `;
 const DashboardUserSide = styled.div`
-  width: 150px;
+  width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* flex-basis: 1; */
   .ant-list-item {
     border: none;
     padding-top: 0px;
   }
 `;
 const DashboardUserContent = styled.div`
-  flex-shrink: 9;
+  flex-grow: 7;
+  width: 100%;
 `;
 const data = [
   {
+    path: "/dashboard/",
     title: "Tài khoản",
     icon: <AiOutlineUser />,
   },
   {
+    path: "/dashboard/cart",
     title: "Giỏ hàng",
     icon: <BsFillClipboardFill />,
   },
   {
+    path: "/dashboard/order",
     title: "Đơn hàng",
     icon: <BsCart3 />,
   },
 ];
+
 export const DashboardUser = () => {
   return (
     <DashboardUserWrapper>
@@ -52,13 +56,7 @@ export const DashboardUser = () => {
             <List.Item>
               <i>{item.icon}</i>
               <List.Item.Meta
-                //   avatar={
-                //     <Avatar
-                //       src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
-                //     />
-                //   }
-                title={<a href="/">{item.title}</a>}
-                // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                title={<Link to={item.path}>{item.title}</Link>}
               />
             </List.Item>
           )}
@@ -73,25 +71,11 @@ export const DashboardUser = () => {
         <Routes>
           {dashboardUser.map((route, index) => {
             const Page = route.page;
-
             return (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={
-                  // <Layout>
-                  <Page />
-                  // </Layout>
-                }
-              />
+              <Route key={route.path} path={route.path} element={<Page />} />
             );
           })}
         </Routes>
-        {/* <Routes>
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/settings" element={<UserProfile />} />
-          <Route path="/" element={<UserCart />} />
-        </Routes> */}
       </DashboardUserContent>
     </DashboardUserWrapper>
   );
