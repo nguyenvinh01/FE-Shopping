@@ -1,10 +1,5 @@
 import React, { Fragment } from "react";
-// import { AppRoute } from "./routes";
-import { HeaderCompoment } from "./components/Header/HeaderCompoment";
-import { FooterComponent } from "./components/Footer/FooterComponent";
 import "./App.css";
-import { ProductDetail } from "./pages/ProductDetail/ProductDetail";
-import { DashboardUser } from "./pages/DashboardUser/DashboardUser";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { routes } from "./routes";
