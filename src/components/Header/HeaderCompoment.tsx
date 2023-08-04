@@ -68,7 +68,7 @@ const HeaderLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
   .ant-layout-header {
     text-align: center;
     color: #000;
