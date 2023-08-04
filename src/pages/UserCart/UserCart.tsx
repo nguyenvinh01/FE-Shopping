@@ -1,5 +1,5 @@
 import { Checkbox, Image, List } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
 import { CartItem, CartItemType } from "./CartItem";
@@ -44,12 +44,17 @@ const CartItemWrapper = styled.div`
   border: 1px solid #c2bfbf;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
+
 export const UserCart = () => {
+  const [checked, setChecked] = useState(false);
+  const handleChange = () => {
+    setChecked(!checked);
+  };
   return (
     <UserCartWrapper>
       <List>
         <List.Item>
-          <Checkbox></Checkbox>
+          <Checkbox onChange={handleChange} checked={checked}></Checkbox>
           <div className="list-item image-product">
             <p>Sản phẩm</p>
           </div>
@@ -73,6 +78,11 @@ export const UserCart = () => {
         <br />
 
         <CartItemWrapper>
+          <CartItem items={data} checked={checked} />
+        </CartItemWrapper>
+        <br />
+        <br />
+        {/* <CartItemWrapper>
           <CartItem items={data} />
         </CartItemWrapper>
         <br />
@@ -81,12 +91,7 @@ export const UserCart = () => {
           <CartItem items={data} />
         </CartItemWrapper>
         <br />
-        <br />
-        <CartItemWrapper>
-          <CartItem items={data} />
-        </CartItemWrapper>
-        <br />
-        <br />
+        <br /> */}
       </List>
       <PurchaseBar />
     </UserCartWrapper>

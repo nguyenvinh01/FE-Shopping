@@ -16,29 +16,6 @@ const CheckoutPageWrapper = styled.div`
   .checkout-item-first {
     width: 650px;
   }
-  /* .image-product-checkout {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .body-checkout {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  .product-detail-checkout {
-    display: flex;
-  }
-  .body-checkout {
-    display: flex;
-    justify-content: space-between;
-  }
-  .body-checkout p {
-    margin-left: -50px;
-  }
-  .checkout-item {
-    width: 200px;
-  } */
 `;
 const data = [
   {

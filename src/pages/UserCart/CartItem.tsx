@@ -1,7 +1,8 @@
 import { Button, Checkbox, Image, InputNumber, List } from "antd";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProductImage from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
 
 export interface CartItemType {
   image: string;
@@ -14,15 +15,30 @@ export interface CartItemType {
 }
 type PropsCart = {
   items: CartItemType;
+  checked: boolean;
 };
-export const CartItem = ({ items }: PropsCart) => {
+export const CartItem = ({ items, checked }: PropsCart) => {
+  const [check, setChecked] = useState<boolean>();
+  const handleChange = (e: CheckboxChangeEvent) => {
+    setChecked(e.target.checked);
+    // setChecked();
+
+    console.log("cart item");
+  };
   const handleDelete = () => {
     console.log(123);
   };
+  useEffect(() => {
+    setChecked(checked);
+    console.log(check);
+  }, [checked]);
   return (
     <>
       <List.Item>
-        <Checkbox></Checkbox>
+        <Checkbox
+          checked={check}
+          onChange={(e: CheckboxChangeEvent) => handleChange(e)}
+        ></Checkbox>
         <div className="list-item image-product">
           <Image
             src={items.image}
