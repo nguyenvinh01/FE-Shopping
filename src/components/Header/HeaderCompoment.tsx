@@ -15,29 +15,25 @@ import Logo from "../../assets/sanakilogo1.png";
 import { BsCart4 } from "react-icons/bs";
 import AvatarUser from "../../assets/images/pngtree-man-user-avatar-person-illustration-png-image_5239517.png";
 import { SearchComponent } from "../SearchComponent/SearchComponent";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 const items: MenuProps["items"] = [
   {
     key: "1",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.antgroup.com"
-      >
-        Thông tin cá nhân
-      </a>
+      <Link to={"/dashboard"}>
+        <span>Thông tin cá nhân</span>
+      </Link>
     ),
   },
   {
     key: "2",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.aliyun.com"
-      >
-        Đơn hàng
-      </a>
+      <Link to={"/dashboard/order"}>
+        <span>Đơn hàng</span>
+      </Link>
     ),
   },
 ];
@@ -45,17 +41,20 @@ const items: MenuProps["items"] = [
 const { Item } = Menu;
 const { Header } = Layout;
 type MenuItem = {
-  key?: string;
-  label?: string;
+  key: string;
+  label: string;
+  path: string;
 };
 const itemsMenu: MenuItem[] = [
   {
     key: "home",
     label: "Home",
+    path: "/",
   },
   {
     key: "product",
     label: "Product",
+    path: "/",
   },
 ];
 
@@ -68,7 +67,7 @@ const HeaderLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
   .ant-layout-header {
     text-align: center;
     color: #000;
@@ -80,6 +79,10 @@ const HeaderLayout = styled.div`
   }
 `;
 export const HeaderCompoment = () => {
+  const dataCart = useSelector<RootState>((state) => state.cart);
+  console.log(dataCart);
+
+  const navigate = useNavigate();
   return (
     <HeaderLayout>
       <Header>
@@ -88,7 +91,12 @@ export const HeaderCompoment = () => {
         </Image>
         <Menu mode="horizontal">
           {itemsMenu.map((menuItem) => (
-            <Item key={menuItem.key}>
+            <Item
+              key={menuItem.key}
+              onClick={() => {
+                navigate(menuItem.path);
+              }}
+            >
               <a>{menuItem.label}</a>
             </Item>
           ))}
@@ -99,26 +107,41 @@ export const HeaderCompoment = () => {
           textButton="Search"
           color="red"
         />
-        <div>
+        {/* <div>
           <Space>
-            <Button shape="round" type="primary">
+            <Button
+              shape="round"
+              type="primary"
+              onClick={() => {
+                navigate("/sign-up");
+              }}
+            >
               Sign Up
             </Button>
-            <Button shape="round" type="primary" ghost>
+            <Button
+              shape="round"
+              type="primary"
+              ghost
+              onClick={() => {
+                navigate("/sign-in");
+              }}
+            >
               Sign In
             </Button>
           </Space>
-        </div>
-        {/* <AvatarProfile>
+        </div> */}
+        <AvatarProfile>
           <Space>
-            <a>
-              <BsCart4 size={25} />
-            </a>
+            <Link to={"/dashboard/cart"}>
+              <span>
+                <BsCart4 size={25} />
+              </span>
+            </Link>
             <Dropdown menu={{ items }} placement="bottomRight" arrow>
               <Avatar src={AvatarUser} size={40}></Avatar>
             </Dropdown>
           </Space>
-        </AvatarProfile> */}
+        </AvatarProfile>
       </Header>
     </HeaderLayout>
   );

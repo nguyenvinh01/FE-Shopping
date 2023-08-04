@@ -1,10 +1,13 @@
 import AdminPage from "../pages/AdminPage/AdminPage";
 import { AdminProducts } from "../pages/AdminProducts/AdminProducts";
 import { DashboardAdmin } from "../pages/DashboardAdmin/DashboardAdmin";
+import { CheckoutPage } from "../pages/CheckoutPage/CheckoutPage";
 import { DashboardUser } from "../pages/DashboardUser/DashboardUser";
 import { Home } from "../pages/Home/Home";
+import { OrerPage } from "../pages/OrderPage/OrerPage";
 import { SignIn } from "../pages/SignIn/SignIn";
 import { SignUp } from "../pages/SignUp/SignUp";
+import { UserCart } from "../pages/UserCart/UserCart";
 import { UserProfile } from "../pages/UserProfile/UserProfile";
 
 export const routes = [
@@ -33,12 +36,25 @@ export const routes = [
     page: DashboardAdmin,
     isHeader: false,
   },
+  {
+    path: "/check-out",
+    page: CheckoutPage,
+    isHeader: true,
+  },
 ];
 
 export const dashboardUser = [
   {
     path: "/",
     page: UserProfile,
+  },
+  {
+    path: "/cart",
+    page: UserCart,
+  },
+  {
+    path: "/order",
+    page: OrerPage,
   },
 ];
 
