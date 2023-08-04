@@ -1,0 +1,116 @@
+import { Space, Table } from "antd";
+import { Content } from "antd/es/layout/layout";
+import type { ColumnsType } from "antd/es/table";
+import React from "react";
+import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
+import { HeaderAdmin } from "../../components/HeaderAdmin/HeaderAdmin";
+
+interface DataType {
+  key: string;
+  id: string;
+  name: string;
+  category: string;
+  quantity: number;
+  price: number;
+  //   status: string;
+}
+
+const handleDetail = (id: string) => {
+  console.log(id);
+};
+const handleEdit = (id: string) => {
+  console.log(id);
+};
+const handleDelete = (id: String) => {
+  console.log(id);
+};
+
+const columns: ColumnsType<DataType> = [
+  {
+    title: "Product Id",
+    dataIndex: "id",
+    key: "id",
+  },
+  {
+    title: "Product Name",
+    dataIndex: "name",
+    key: "name",
+    // render: (text) => <a>{text}</a>,
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
+    // render: (text) => <a>{text}</a>,
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity",
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+  },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    render: (text, useData) => (
+      <Space>
+        <span>
+          <span>
+            <a onClick={() => handleDetail(useData.id)}>
+              <AiOutlineEye />
+            </a>
+            <a onClick={() => handleEdit(useData.id)}>
+              <AiOutlineEdit />
+            </a>
+            <a onClick={() => handleDelete(useData.id)}>
+              <AiOutlineDelete />
+            </a>
+          </span>
+        </span>
+      </Space>
+    ),
+  },
+];
+
+const data: DataType[] = [
+  {
+    key: "1",
+    id: "1",
+    name: "Product1",
+    category: "Category1",
+    quantity: 100,
+    price: 10000,
+  },
+  {
+    key: "2",
+    id: "2",
+    name: "Product2",
+    category: "Category2",
+    quantity: 100,
+    price: 10000,
+  },
+  {
+    key: "3",
+    id: "3",
+    name: "Product3",
+    category: "Category3",
+    quantity: 100,
+    price: 10000,
+  },
+];
+
+export const AdminProducts = () => {
+  return (
+    <>
+      <HeaderAdmin pageName="AdminProducts" />
+      <div>
+        <Table columns={columns} dataSource={data} />;
+      </div>
+    </>
+  );
+};
