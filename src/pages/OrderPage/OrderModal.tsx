@@ -1,4 +1,4 @@
-import { Descriptions, Modal, Image } from "antd";
+import { Descriptions, Modal, Image, List } from "antd";
 import React from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
@@ -14,10 +14,15 @@ const DescriptionOrderWrapper = styled.div`
 `;
 
 const OrderDetailWrapper = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: flex-start; */
   width: 100%;
+  .order-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
   .image-order {
     width: 100px;
     height: 100px;
@@ -65,16 +70,20 @@ export const OrderModal = ({
           </Descriptions>
         </DescriptionOrderWrapper>
         <OrderDetailWrapper>
-          <div className="image-order">
-            <Image src={ProductImage} />
-          </div>
-          <div className="detail-order">
-            <h3>Name product</h3>
-            <div className="price-quantity">
-              <p>Số lượng: 2</p>
-              <p>Thành tiền: 123123123</p>
-            </div>
-          </div>
+          <List>
+            <List.Item>
+              <div className="image-order">
+                <Image src={ProductImage} />
+              </div>
+              <div className="detail-order">
+                <h3>Name product</h3>
+                <div className="price-quantity">
+                  <p>Số lượng: 2</p>
+                  <p>Thành tiền: 123123123</p>
+                </div>
+              </div>
+            </List.Item>
+          </List>
         </OrderDetailWrapper>
       </Modal>
     </div>
