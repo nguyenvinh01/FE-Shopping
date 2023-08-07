@@ -3,12 +3,13 @@ import React, { Fragment } from "react";
 import ImageProduct from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
 interface CheckoutItemType {
-  image: string;
-  productname: string;
-  categories: string;
+  image?: string;
+  productname?: string;
+  categories?: string;
   price: number;
   quantity: number;
-  amount: number;
+  amount?: number;
+  product_id?: string;
 }
 const CheckOutItemWrapper = styled.div`
   .image-product-checkout {
@@ -45,6 +46,7 @@ export const CheckoutItem = ({
   price,
   quantity,
   amount,
+  product_id,
 }: CheckoutItemType) => {
   return (
     <CheckOutItemWrapper>

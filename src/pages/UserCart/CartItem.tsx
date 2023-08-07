@@ -3,34 +3,49 @@ import React, { useState, useEffect } from "react";
 import ProductImage from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { ReduxCartItemType } from "../../redux/slice/cartSlice";
 
 export interface CartItemType {
-  image: string;
-  desc: string;
-  categories: string;
+  id: string;
+  image?: string;
+  desc?: string;
+  categories?: string;
   price: number;
-  // quantity: 1,
-  amount: number;
-  // text: "Thao tac",
+  quantity: number;
+  product_id?: string;
+  amount?: number;
 }
 type PropsCart = {
   items: CartItemType;
   checked: boolean;
+  handleAddToCart: (item: CartItemType) => void;
+  handleDeleteFromCart: (item: CartItemType) => void;
 };
-export const CartItem = ({ items, checked }: PropsCart) => {
+const demoDataCart: ReduxCartItemType = {
+  id: "string",
+  quantity: 2323,
+  price: 234,
+};
+export const CartItem = ({
+  items,
+  checked,
+  handleAddToCart,
+  handleDeleteFromCart,
+}: PropsCart) => {
   const [check, setChecked] = useState<boolean>();
+
   const handleChange = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);
-    // setChecked();
-
-    console.log("cart item");
+    // if(e.target.checked){}
+    handleAddToCart(items);
+    // else handleDeleteFromCart(items);
   };
   const handleDelete = () => {
     console.log(123);
   };
   useEffect(() => {
     setChecked(checked);
-    console.log(check);
+    // console.log(check);
   }, [checked]);
   return (
     <>
@@ -56,7 +71,7 @@ export const CartItem = ({ items, checked }: PropsCart) => {
         </div>
         <div className="list-item">
           <p>
-            <InputNumber min={1} max={10} defaultValue={3} />
+            <InputNumber min={1} max={10} defaultValue={items.quantity} />
           </p>
         </div>
         <div className="list-item">
