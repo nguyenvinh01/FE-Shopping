@@ -1,6 +1,8 @@
-import AdminPage from "../pages/AdminPage/AdminPage";
-import { AdminProducts } from "../pages/AdminProducts/AdminProducts";
-import { DashboardAdmin } from "../pages/DashboardAdmin/DashboardAdmin";
+import { AdminOrders } from "../pages/Admin/AdminOrders/AdminOrders";
+import AdminPage from "../pages/Admin/AdminPage/AdminPage";
+import { AdminProducts } from "../pages/Admin/AdminProducts/AdminProducts";
+import { EditProduct } from "../pages/Admin/AdminProducts/EditProduct";
+import { DashboardAdmin } from "../pages/Admin/DashboardAdmin/DashboardAdmin";
 import { CheckoutPage } from "../pages/CheckoutPage/CheckoutPage";
 import { DashboardUser } from "../pages/DashboardUser/DashboardUser";
 import { Home } from "../pages/Home/Home";
@@ -66,5 +68,13 @@ export const dashboardAdmin = [
   {
     path: "products",
     page: AdminProducts,
+  },
+  {
+    path: "products/edit",
+    page: EditProduct,
+  },
+  {
+    path: "orders",
+    page: AdminOrders,
   },
 ];

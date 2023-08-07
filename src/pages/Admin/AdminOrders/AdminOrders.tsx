@@ -3,16 +3,15 @@ import { Content } from "antd/es/layout/layout";
 import type { ColumnsType } from "antd/es/table";
 import React from "react";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
-import { HeaderAdmin } from "../../components/HeaderAdmin/HeaderAdmin";
+import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 
 interface DataType {
   key: string;
-  id: string;
-  name: string;
-  category: string;
-  quantity: number;
-  price: number;
-  //   status: string;
+  order_id: string;
+  username: string;
+  amount: number;
+  orderdate: string;
+  status: string;
 }
 
 const handleDetail = (id: string) => {
@@ -27,31 +26,31 @@ const handleDelete = (id: String) => {
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Product Id",
-    dataIndex: "id",
+    title: "Order Id",
+    dataIndex: "order_id",
     key: "id",
   },
   {
-    title: "Product Name",
-    dataIndex: "name",
+    title: "User Name",
+    dataIndex: "username",
     key: "name",
     // render: (text) => <a>{text}</a>,
   },
   {
-    title: "Category",
-    dataIndex: "category",
-    key: "category",
+    title: "Order Date",
+    dataIndex: "orderdate",
+    key: "orderdate",
     // render: (text) => <a>{text}</a>,
   },
   {
-    title: "Quantity",
-    dataIndex: "quantity",
-    key: "quantity",
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
   },
   {
-    title: "Price",
-    dataIndex: "price",
-    key: "price",
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
   },
   {
     title: "Actions",
@@ -61,13 +60,13 @@ const columns: ColumnsType<DataType> = [
       <Space>
         <span>
           <span>
-            <a onClick={() => handleDetail(useData.id)}>
+            <a onClick={() => handleDetail(useData.order_id)}>
               <AiOutlineEye />
             </a>
-            <a onClick={() => handleEdit(useData.id)}>
+            <a onClick={() => handleEdit(useData.order_id)}>
               <AiOutlineEdit />
             </a>
-            <a onClick={() => handleDelete(useData.id)}>
+            <a onClick={() => handleDelete(useData.order_id)}>
               <AiOutlineDelete />
             </a>
           </span>
@@ -80,31 +79,31 @@ const columns: ColumnsType<DataType> = [
 const data: DataType[] = [
   {
     key: "1",
-    id: "1",
-    name: "Product1",
-    category: "Category1",
-    quantity: 100,
-    price: 10000,
+    order_id: "1",
+    username: "User1",
+    amount: 1000000,
+    orderdate: "4/8/23",
+    status: "done",
   },
   {
     key: "2",
-    id: "2",
-    name: "Product2",
-    category: "Category2",
-    quantity: 100,
-    price: 10000,
+    order_id: "2",
+    username: "User2",
+    amount: 1300000,
+    orderdate: "4/8/23",
+    status: "done",
   },
   {
     key: "3",
-    id: "3",
-    name: "Product3",
-    category: "Category3",
-    quantity: 100,
-    price: 10000,
+    order_id: "3",
+    username: "User3",
+    amount: 1500000,
+    orderdate: "4/8/23",
+    status: "pending",
   },
 ];
 
-export const AdminProducts = () => {
+export const AdminOrders = () => {
   return (
     <>
       <HeaderAdmin pageName="AdminProducts" />
