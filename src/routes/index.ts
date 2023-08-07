@@ -1,7 +1,7 @@
 import { CheckoutPage } from "../pages/CheckoutPage/CheckoutPage";
 import { DashboardUser } from "../pages/DashboardUser/DashboardUser";
 import { Home } from "../pages/Home/Home";
-import { OrerPage } from "../pages/OrderPage/OrerPage";
+import { OrderPage } from "../pages/OrderPage/OrderPage";
 import { SignIn } from "../pages/SignIn/SignIn";
 import { UserCart } from "../pages/UserCart/UserCart";
 import { UserProfile } from "../pages/UserProfile/UserProfile";
@@ -40,6 +40,6 @@ export const dashboardUser = [
   },
   {
     path: "/order",
-    page: OrerPage,
+    page: OrderPage,
   },
 ];

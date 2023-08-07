@@ -19,7 +19,7 @@ const OrderPageWrapper = styled.div`
   }
 `;
 
-export const OrerPage = () => {
+export const OrderPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [idOrder, setIdOrder] = useState("");
   const showModal = () => {
@@ -64,9 +64,6 @@ export const OrerPage = () => {
         <br />
         <br />
         <OrderItem onClick={() => handleClick("1")} />
-        <br />
-        <OrderItem onClick={() => handleClick("2")} />
-        <br /> <OrderItem onClick={() => handleClick("3")} />
       </List>
       <OrderModal
         visible={isVisible}

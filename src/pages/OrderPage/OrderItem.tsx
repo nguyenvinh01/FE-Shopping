@@ -43,7 +43,6 @@ export const OrderItem = ({ onClick }: PropsOrderItem) => {
         <div>Ngay dat</div>
         <div>Tong tien</div>
         <div>
-          Trạng thái
           <AiOutlineArrowRight />
         </div>
       </List.Item>
