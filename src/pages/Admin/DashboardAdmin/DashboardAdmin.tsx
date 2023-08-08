@@ -1,8 +1,8 @@
 import React from "react";
-import { SideBar } from "../../components/SideBar/SideBar";
+import { SideBar } from "../../../components/SideBar/SideBar";
 import { styled } from "styled-components";
 import { Route, Routes } from "react-router-dom";
-import { dashboardAdmin } from "../../routes";
+import { dashboardAdmin } from "../../../routes";
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 

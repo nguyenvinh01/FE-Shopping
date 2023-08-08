@@ -99,7 +99,7 @@ const items = [
     label: "Products",
   },
   {
-    key: "/dashboard/device_list",
+    key: "/admin/orders",
     icon: <BsLayoutTextSidebarReverse />,
     label: "Orders",
   },

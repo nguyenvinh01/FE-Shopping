@@ -1,7 +1,7 @@
 import React from "react";
-import { StatisticalCard } from "../../components/StatisticalCard/StatisticalCard";
+import { StatisticalCard } from "../../../components/StatisticalCard/StatisticalCard";
 import { styled } from "styled-components";
-import { HeaderAdmin } from "../../components/HeaderAdmin/HeaderAdmin";
+import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 
 const Statistical = styled.div`
   display: flex;
