@@ -1,118 +1,107 @@
-import { Space, Table } from "antd";
-import { Content } from "antd/es/layout/layout";
-import type { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
-import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
+import React from "react";
+import { Input, Select, Button } from "antd";
+import styled from "styled-components";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
-import { EditProduct } from "./EditProduct";
+import { ProductList } from "./ProductList";
 import { useNavigate } from "react-router-dom";
 
-interface DataType {
+const { Option } = Select;
+
+const AdminContainer = styled.div`
+  background-color: #ffffff;
+  padding: 5px 10px;
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  padding: 10px 0;
+  border-bottom: 1px solid #dcdcdc;
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: max-content;
+`;
+
+interface OptionData {
   key: string;
-  id: string;
-  name: string;
-  category: string;
-  quantity: number;
-  price: number;
-  //   status: string;
+  value: string;
+  children: string;
 }
 
-const data: DataType[] = [
-  {
-    key: "1",
-    id: "1",
-    name: "Product1",
-    category: "Category1",
-    quantity: 100,
-    price: 10000,
-  },
-  {
-    key: "2",
-    id: "2",
-    name: "Product2",
-    category: "Category2",
-    quantity: 100,
-    price: 10000,
-  },
-  {
-    key: "3",
-    id: "3",
-    name: "Product3",
-    category: "Category3",
-    quantity: 100,
-    price: 10000,
-  },
-];
-
 export const AdminProducts = () => {
+  const [selectedCategory, setSelectedCategory] = React.useState("");
   const navigate = useNavigate();
 
-  const handleDetail = (id: string) => {};
-  const handleEdit = (id: string) => {
-    navigate("/admin/products/edit");
-  };
-  const handleDelete = (id: String) => {
-    console.log(id);
+  const handleSearch = (value: string) => {
+    // Xử lý tìm kiếm theo giá trị value và danh mục category
+    // Gọi hàm onSearch để truyền giá trị tìm kiếm và danh mục lên component cha
+    console.log(value, selectedCategory);
   };
 
-  const columns: ColumnsType<DataType> = [
-    {
-      title: "Product Id",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Product Name",
-      dataIndex: "name",
-      key: "name",
-      // render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
-      // render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: (text, useData) => (
-        <Space>
-          <span>
-            <span>
-              <a onClick={() => handleDetail(useData.id)}>
-                <AiOutlineEye />
-              </a>
-              <a onClick={() => handleEdit(useData.id)}>
-                <AiOutlineEdit />
-              </a>
-              <a onClick={() => handleDelete(useData.id)}>
-                <AiOutlineDelete />
-              </a>
-            </span>
-          </span>
-        </Space>
-      ),
-    },
-  ];
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+  };
+
+  const filterOption = (input: string, option: OptionData | undefined) => {
+    if (option?.children) {
+      return option.children
+        .toString()
+        .toLowerCase()
+        .includes(input.toLowerCase());
+    }
+    return false;
+  };
 
   return (
     <>
       <HeaderAdmin pageName="AdminProducts" />
-      <div>
-        <Table columns={columns} dataSource={data} />;
-      </div>
+      <AdminContainer>
+        <TopContainer>
+          <SearchContainer>
+            <Input.Search
+              placeholder="Nhập từ khoá tìm kiếm"
+              onSearch={handleSearch}
+              style={{ width: 300 }}
+            />
+            <Select
+              placeholder="Chọn danh mục"
+              // value={formValues.category}
+              onChange={handleCategoryChange}
+              mode="multiple" // Cho phép chọn nhiều danh mục
+              showSearch // Hiển thị thanh tìm kiếm
+              filterOption={filterOption} // Tìm kiếm danh mục theo tên
+              style={{ width: "300px" }}
+            >
+              <Option key="1" value="category1">
+                Danh mục 1
+              </Option>
+              <Option key="2" value="category2">
+                Danh mục 2
+              </Option>
+              <Option key="3" value="category3">
+                Category 3
+              </Option>
+              {/* Thêm danh sách danh mục khác nếu cần */}
+            </Select>
+          </SearchContainer>
+
+          <Button
+            type="primary"
+            onClick={() => navigate("/admin/products/add")}
+          >
+            Add new product
+          </Button>
+        </TopContainer>
+        <ProductList />
+      </AdminContainer>
     </>
   );
 };

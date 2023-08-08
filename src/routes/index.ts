@@ -1,7 +1,7 @@
 import { AdminOrders } from "../pages/Admin/AdminOrders/AdminOrders";
 import AdminPage from "../pages/Admin/AdminPage/AdminPage";
 import { AdminProducts } from "../pages/Admin/AdminProducts/AdminProducts";
-import { EditProduct } from "../pages/Admin/AdminProducts/EditProduct";
+import { EditProduct } from "../pages/Admin/AdminProducts/EditProduct/EditProduct";
 import { DashboardAdmin } from "../pages/Admin/DashboardAdmin/DashboardAdmin";
 import { CheckoutPage } from "../pages/CheckoutPage/CheckoutPage";
 import { DashboardUser } from "../pages/DashboardUser/DashboardUser";
@@ -11,6 +11,8 @@ import { SignIn } from "../pages/SignIn/SignIn";
 import { SignUp } from "../pages/SignUp/SignUp";
 import { UserCart } from "../pages/UserCart/UserCart";
 import { UserProfile } from "../pages/UserProfile/UserProfile";
+import { AddProduct } from "../pages/Admin/AdminProducts/AddProduct/AddProduct";
+import { AdminProductDetail } from "../pages/Admin/AdminProducts/AdminProductDetail/AdminProductDetail";
 
 export const routes = [
   {
@@ -72,6 +74,14 @@ export const dashboardAdmin = [
   {
     path: "products/edit",
     page: EditProduct,
+  },
+  {
+    path: "products/add",
+    page: AddProduct,
+  },
+  {
+    path: "products/detail",
+    page: AdminProductDetail,
   },
   {
     path: "orders",
