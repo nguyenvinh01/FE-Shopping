@@ -19,33 +19,19 @@ type PropsCart = {
   items: CartItemType;
   checked: boolean;
   handleAddToCart: (item: CartItemType) => void;
-  handleDeleteFromCart: (item: CartItemType) => void;
 };
-const demoDataCart: ReduxCartItemType = {
-  id: "string",
-  quantity: 2323,
-  price: 234,
-};
-export const CartItem = ({
-  items,
-  checked,
-  handleAddToCart,
-  handleDeleteFromCart,
-}: PropsCart) => {
-  const [check, setChecked] = useState<boolean>();
+export const CartItem = ({ items, checked, handleAddToCart }: PropsCart) => {
+  const [check, setChecked] = useState<boolean>(false);
 
   const handleChange = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);
-    // if(e.target.checked){}
     handleAddToCart(items);
-    // else handleDeleteFromCart(items);
   };
   const handleDelete = () => {
     console.log(123);
   };
   useEffect(() => {
     setChecked(checked);
-    // console.log(check);
   }, [checked]);
   return (
     <>

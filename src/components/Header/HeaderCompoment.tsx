@@ -36,6 +36,14 @@ const items: MenuProps["items"] = [
       </Link>
     ),
   },
+  {
+    key: "3",
+    label: (
+      <Link to={"/"}>
+        <span>Đăng xuất</span>
+      </Link>
+    ),
+  },
 ];
 
 const { Item } = Menu;

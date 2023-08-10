@@ -2,6 +2,8 @@ import { Button, Form, Image, Input, Row } from "antd";
 import React, { useState } from "react";
 import logo from "../../assets/sanakilogo1.png";
 import { styled } from "styled-components";
+import { LoginCredentials, useLoginMutation } from "../../redux/apis/apiUser";
+import { AxiosResponse } from "axios";
 
 const LoginBg = styled.div`
   height: 100vh;
@@ -48,7 +50,10 @@ type FieldType = {
   username?: string;
   password?: string;
 };
-
+const dataLogin: LoginCredentials = {
+  email: "admin@gmail.com",
+  password: "Hieu12345",
+};
 const handleSubmit = (values: any) => {
   console.log("Success:", values);
 };
@@ -60,7 +65,13 @@ const onFinishFailed = (errorInfo: any) => {
 export const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [login] = useLoginMutation();
+  const handleLogin = () => {
+    login(dataLogin).then((res) => {
+      console.log(res, "res");
+    });
+    // console.log(data, "data login");
+  };
   return (
     <>
       <LoginBg>
@@ -78,7 +89,7 @@ export const SignIn = () => {
             initialValues={{
               remember: true,
             }}
-            onFinish={handleSubmit}
+            onFinish={handleLogin}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
@@ -142,7 +153,7 @@ export const SignIn = () => {
                 type="primary"
                 htmlType="submit"
                 style={{ width: 360, marginTop: 10 }}
-                onClick={handleSubmit}
+                // onClick={handleLogin}
               >
                 Login
               </Button>

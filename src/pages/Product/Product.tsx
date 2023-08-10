@@ -91,6 +91,7 @@ export const Products = () => {
             max={20000}
             onChange={HandleChangePriceFilter}
             value={typeof filterPrice === "number" ? filterPrice : 0}
+            step={1000}
           />
           <p>Max price {filterPrice}</p>
 

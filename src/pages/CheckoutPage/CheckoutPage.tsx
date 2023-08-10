@@ -1,4 +1,4 @@
-import { Button, Descriptions, Image, List, Space } from "antd";
+import { Button, Descriptions, Image, List, Radio, Space } from "antd";
 import DescriptionsItem from "antd/es/descriptions/Item";
 import React from "react";
 import { AiFillFileMarkdown } from "react-icons/ai";
@@ -21,14 +21,25 @@ const CheckoutPageWrapper = styled.div`
   .checkout-item-first {
     width: 650px;
   }
+
+  .ant-radio-button-wrapper {
+    /* border: none; */
+    margin: 0px 10px;
+    width: fit-content;
+  }
+  .ant-radio-button-wrapper:first-child {
+    border-radius: 0;
+  }
+
+  .ant-radio-button-wrapper:last-child {
+    border-radius: 0;
+  }
 `;
 export const CheckoutPage = () => {
   const navigate = useNavigate();
   const dataCart = useSelector<RootState, CartItemType[]>(
     (state) => state.cart.items
   );
-  console.log(dataCart, "dataCart");
-
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(resetCart());
@@ -36,6 +47,23 @@ export const CheckoutPage = () => {
   };
   return (
     <CheckoutPageWrapper>
+      <div>
+        <div>
+          <p>Tên người nhận: 0015 Osinski Locks</p>
+        </div>
+        <div>
+          <p>Địa chỉ giao hàng: 0015 Osinski Locks</p>
+        </div>
+        <div>
+          <p>
+            Phương thức thanh toán:
+            <Radio.Group optionType="button" buttonStyle="solid">
+              <Radio value="option1">Thanh toán khi nhận hàng</Radio>
+              <Radio value="option2">Chuyển khoản</Radio>
+            </Radio.Group>
+          </p>
+        </div>
+      </div>
       <div className="header-checkout">
         <div className="checkout-item-first">
           <p>Sản phẩm</p>
