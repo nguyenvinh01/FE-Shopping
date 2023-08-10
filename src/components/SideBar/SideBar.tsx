@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { Avatar, Button, Layout } from "antd";
 import { Menu } from "antd";
 import logo from "../../assets/images/sanakilogo 1.png";
-import { FaUserAlt, FaBoxOpen } from "react-icons/fa";
+import { FaUserAlt } from "react-icons/fa";
 import { FiLogOut, FiHome } from "react-icons/fi";
 import { BsBox2, BsLayoutTextSidebarReverse } from "react-icons/bs";
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -18,7 +18,7 @@ const AdminSideBar = styled(Sider)`
   .ant-layout-sider-children {
     display: flex;
     flex-direction: column;
-    height: "100vh";
+    height: 100vh;
     justify-content: space-between;
   }
 
@@ -104,7 +104,7 @@ const items = [
     label: "Orders",
   },
   {
-    key: "/dashboard/device_list",
+    key: "/admin/accounts",
     icon: <HiOutlineUserGroup />,
     label: "Accounts",
   },
