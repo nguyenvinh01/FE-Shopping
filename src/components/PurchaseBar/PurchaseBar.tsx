@@ -8,10 +8,6 @@ import { ReduxCartItemType, addCartItem } from "../../redux/slice/cartSlice";
 import { setUser } from "../../redux/slice/userSlice";
 import { CartItemType } from "../../pages/UserCart/CartItem";
 
-const initialState: ReduxCartItemType =
-  //   { items: { id: "string", quantity: 2323, price: 234 } },
-  { id: "string", quantity: 2323, price: 234 };
-
 const PurchaseBarWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -50,7 +46,6 @@ export const PurchaseBar = ({ handleAddToCart, cart }: PurchaseBarType) => {
       price: 10,
     };
     dispatch(addCartItem(cart));
-    // dispatch(setUser(""));
     navigate("/check-out");
   };
   useEffect(() => {
@@ -64,7 +59,7 @@ export const PurchaseBar = ({ handleAddToCart, cart }: PurchaseBarType) => {
         <p>
           Giá:{" "}
           {cart.reduce<number>((prev, current, index, array) => {
-            return prev + current.price;
+            return prev + current.price * current.quantity;
           }, 0)}
         </p>
         <Button
