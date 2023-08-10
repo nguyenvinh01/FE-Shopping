@@ -21,7 +21,12 @@ const CategoryCard = styled.div`
   }
 `;
 
-export const CardCategory = () => {
+interface cardCategoryType {
+  name: string;
+  img_url: string;
+}
+
+export const CardCategory: React.FC<cardCategoryType> = (name, img_url) => {
   return (
     <CategoryCard>
       <p>Tech</p>

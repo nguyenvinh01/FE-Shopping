@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CardProduct } from "../../components/CardProduct/CardProduct";
 import { styled } from "styled-components";
 import { CardCategory } from "../../components/CardCategory/CardCategory";
+import { useGetCategoriesQuery } from "../../redux/apis/apiCategory";
+import { useGetProductsQuery } from "../../redux/apis/apiProduct";
 
 const HomePage = styled.div`
   /* padding: 0 200px; */
@@ -27,6 +29,14 @@ const HomeItems = styled.div`
 `;
 
 export const Home: React.FC = () => {
+  const { data: categoriesData } = useGetCategoriesQuery("");
+  const { data: productsData } = useGetProductsQuery("");
+
+  useEffect(() => {}, []);
+
+  console.log("categoriesData1: ", categoriesData);
+  console.log("productsData: ", productsData);
+
   return (
     <HomePage>
       <ContentWrapper>
