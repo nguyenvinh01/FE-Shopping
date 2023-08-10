@@ -13,6 +13,7 @@ import { UserCart } from "../pages/UserCart/UserCart";
 import { UserProfile } from "../pages/UserProfile/UserProfile";
 import { AddProduct } from "../pages/Admin/AdminProducts/AddProduct/AddProduct";
 import { AdminProductDetail } from "../pages/Admin/AdminProducts/AdminProductDetail/AdminProductDetail";
+import { AdminAccounts } from "../pages/Admin/AdminAccounts/AdminAccounts";
 
 export const routes = [
   {
@@ -86,5 +87,9 @@ export const dashboardAdmin = [
   {
     path: "orders",
     page: AdminOrders,
+  },
+  {
+    path: "accounts",
+    page: AdminAccounts,
   },
 ];

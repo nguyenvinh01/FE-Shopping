@@ -1,9 +1,9 @@
 import { Space, Table } from "antd";
-import { Content } from "antd/es/layout/layout";
 import type { ColumnsType } from "antd/es/table";
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
+import { OrderModal } from "../../OrderPage/OrderModal";
 
 interface DataType {
   key: string;
@@ -13,68 +13,6 @@ interface DataType {
   orderdate: string;
   status: string;
 }
-
-const handleDetail = (id: string) => {
-  console.log(id);
-};
-const handleEdit = (id: string) => {
-  console.log(id);
-};
-const handleDelete = (id: String) => {
-  console.log(id);
-};
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Order Id",
-    dataIndex: "order_id",
-    key: "id",
-  },
-  {
-    title: "User Name",
-    dataIndex: "username",
-    key: "name",
-    // render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Order Date",
-    dataIndex: "orderdate",
-    key: "orderdate",
-    // render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Amount",
-    dataIndex: "amount",
-    key: "amount",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    key: "actions",
-    render: (text, useData) => (
-      <Space>
-        <span>
-          <span>
-            <a onClick={() => handleDetail(useData.order_id)}>
-              <AiOutlineEye />
-            </a>
-            <a onClick={() => handleEdit(useData.order_id)}>
-              <AiOutlineEdit />
-            </a>
-            <a onClick={() => handleDelete(useData.order_id)}>
-              <AiOutlineDelete />
-            </a>
-          </span>
-        </span>
-      </Space>
-    ),
-  },
-];
 
 const data: DataType[] = [
   {
@@ -104,12 +42,86 @@ const data: DataType[] = [
 ];
 
 export const AdminOrders = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [idOrder, setIdOrder] = useState("");
+  const showModal = () => {
+    setIsVisible(true);
+  };
+
+  const hideModal = () => {
+    setIsVisible(false);
+  };
+
+  const handleOk = () => {
+    // Xử lý khi người dùng bấm nút OK (nếu cần)
+    hideModal();
+  };
+
+  const handleCancel = () => {
+    // Xử lý khi người dùng bấm nút Cancel (nếu cần)
+    hideModal();
+  };
+
+  const handleDetail = (id: string) => {
+    showModal();
+  };
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Order Id",
+      dataIndex: "order_id",
+      key: "id",
+    },
+    {
+      title: "User Name",
+      dataIndex: "username",
+      key: "name",
+      // render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Order Date",
+      dataIndex: "orderdate",
+      key: "orderdate",
+      // render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
+      render: (text, orderData) => (
+        <Space>
+          <span>
+            <a onClick={() => handleDetail(orderData.order_id)}>
+              <AiOutlineEye size={18} style={{ marginLeft: "10px" }} />
+            </a>
+          </span>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <>
-      <HeaderAdmin pageName="AdminProducts" />
+      <HeaderAdmin pageName="Order" />
       <div>
         <Table columns={columns} dataSource={data} />;
       </div>
+      <OrderModal
+        visible={isVisible}
+        onCancel={handleCancel}
+        onOk={handleOk}
+        idOrder={idOrder}
+      />
     </>
   );
 };
