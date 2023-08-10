@@ -1,5 +1,5 @@
 import { Checkbox, Image, List } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
 import { CartItem, CartItemType } from "./CartItem";
@@ -82,6 +82,7 @@ const HeaderCart = (
 );
 export const UserCart = () => {
   const [checked, setChecked] = useState(false);
+  const [checkedAll, setCheckedAll] = useState(false);
   const [currentCart, setCurrentCart] = useState<CartItemType[]>([]);
   const handleChange = () => {
     setChecked(!checked);
@@ -92,24 +93,37 @@ export const UserCart = () => {
     if (currentCart?.some((cart) => cart.id === item.id)) {
       const newCart = currentCart?.filter((cart) => cart.id !== item.id);
       setCurrentCart(newCart);
-      // console.log(currentCart, 1);
     } else {
       setCurrentCart([...currentCart, item]);
-      // console.log(currentCart, 2);
     }
   };
-  const handleDeleteFromCart = (item: CartItemType) => {
-    const newCart = currentCart?.filter((cart) => cart.id !== item.id);
-    setCurrentCart(newCart);
-    console.log(currentCart, "currentCart");
+  const handleCheckedAll = () => {
+    setCurrentCart(data);
+    if (currentCart.length === data.length && checkedAll == true) {
+      setCurrentCart([]);
+      setChecked(false);
+      setCheckedAll(false);
+    } else setCheckedAll(!checkedAll);
   };
+  useEffect(() => {
+    if (currentCart.length === data.length) {
+      setCheckedAll(true);
+      setChecked(true);
+    } else {
+      setCheckedAll(false);
+      // setChecked(false);
+    }
+  }, [currentCart]);
   return (
     <UserCartWrapper>
       <List
         dataSource={data}
         header={
           <List.Item>
-            <Checkbox onChange={handleChange} checked={checked}></Checkbox>
+            <Checkbox
+              onChange={handleCheckedAll}
+              checked={checkedAll}
+            ></Checkbox>
             {HeaderCart}
           </List.Item>
         }
@@ -121,7 +135,6 @@ export const UserCart = () => {
                   items={item}
                   checked={checked}
                   handleAddToCart={handleAddToCart}
-                  handleDeleteFromCart={handleDeleteFromCart}
                 />
               </CartItemWrapper>
               <br />

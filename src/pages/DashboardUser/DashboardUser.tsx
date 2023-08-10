@@ -33,11 +33,11 @@ const data = [
     title: "Tài khoản",
     icon: <AiOutlineUser />,
   },
-  {
-    path: "/dashboard/cart",
-    title: "Giỏ hàng",
-    icon: <BsFillClipboardFill />,
-  },
+  // {
+  //   path: "/dashboard/cart",
+  //   title: "Giỏ hàng",
+  //   icon: <BsFillClipboardFill />,
+  // },
   {
     path: "/dashboard/order",
     title: "Đơn hàng",

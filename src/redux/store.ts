@@ -4,6 +4,7 @@ import { cartReducer } from "./slice/cartSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
+import { userApi } from "./apis/apiUser";
 
 const persistConfig = {
   key: "cart",
@@ -16,8 +17,10 @@ export const store = configureStore({
   reducer: {
     user: userReducer,
     cart: persistedCartReducer,
+    [userApi.reducerPath]: userApi.reducer,
   },
-  middleware: [thunk],
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(userApi.middleware),
 });
 
 export const persistor = persistStore(store);
