@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HeaderCompoment } from "../Header/HeaderCompoment";
 import { FooterComponent } from "../Footer/FooterComponent";
 import "../../App.css";
+import { useGetUserQuery } from "../../redux/apis/apiUser";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/slice/userSlice";
 
 type DefaultComponentType = {
   children: React.ReactNode;
 };
 export const DefaultComponent = ({ children }: DefaultComponentType) => {
+  const { data, isLoading } = useGetUserQuery();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setUser(data));
+  }, [data]);
   return (
     <div className="App">
       <div className="header">

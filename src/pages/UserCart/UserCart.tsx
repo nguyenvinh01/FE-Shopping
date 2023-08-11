@@ -2,12 +2,12 @@ import { Checkbox, Image, List } from "antd";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
-import { CartItem, CartItemType } from "./CartItem";
+import { CartItem } from "./CartItem";
 import { PurchaseBar } from "../../components/PurchaseBar/PurchaseBar";
+import { CartItemType } from "../../interface/interface";
 
 const data: CartItemType[] = [
   {
-    // title: "San pham",
     id: "12",
     image: ProductImage,
     desc: "Vero id delectus eos animi quia et.",
@@ -15,10 +15,8 @@ const data: CartItemType[] = [
     price: 1200,
     quantity: 1,
     amount: 12344,
-    // text: "Thao tac",
   },
   {
-    // title: "San pham",
     id: "123",
     image: ProductImage,
     desc: "Vero id delectus eos animi quia et.",
@@ -26,7 +24,6 @@ const data: CartItemType[] = [
     price: 1200,
     quantity: 1,
     amount: 12344,
-    // text: "Thao tac",
   },
 ];
 const UserCartWrapper = styled.div`

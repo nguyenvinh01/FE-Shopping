@@ -1,17 +1,11 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import produce from "immer"; // Import thư viện immer
 import { isArray } from "util";
-import { CartItemType } from "../../pages/UserCart/CartItem";
+import { CartItemType } from "../../interface/interface";
 
 const initialState: CartStateType = {
   items: [],
 };
-export interface ReduxCartItemType {
-  id?: string;
-  quantity?: number;
-  price?: number;
-  product_id?: number;
-}
 type Action = {
   payload: CartItemType[];
   type: string;

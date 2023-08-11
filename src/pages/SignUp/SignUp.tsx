@@ -2,7 +2,9 @@ import { Button, Form, Image, Input, Row } from "antd";
 import React, { useState } from "react";
 import logo from "../../assets/sanakilogo1.png";
 import { styled } from "styled-components";
-
+import { useRegisterMutation } from "../../redux/apis/apiUser";
+import { Response } from "../../interface/interface";
+import { useNavigate } from "react-router-dom";
 const LoginBg = styled.div`
   height: 100vh;
   /* width: 100vw; */
@@ -49,10 +51,6 @@ type FieldType = {
   password?: string;
 };
 
-const handleSubmit = (values: any) => {
-  console.log("Success:", values);
-};
-
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
@@ -60,7 +58,14 @@ const onFinishFailed = (errorInfo: any) => {
 export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [regiser] = useRegisterMutation();
+  const navigate = useNavigate();
+  const handleSubmit = async (values: any) => {
+    const response: Response = await regiser(values);
+    if (response.data?.success) {
+      navigate("/sign-in");
+    }
+  };
   return (
     <>
       <LoginBg>
@@ -90,7 +95,7 @@ export const SignUp = () => {
 
             <Form.Item<FieldType>
               label="Email"
-              name="Email"
+              name="email"
               rules={[
                 {
                   required: true,
@@ -108,6 +113,59 @@ export const SignUp = () => {
             </Form.Item>
 
             <Form.Item<FieldType>
+              label="Full name"
+              name="fullname"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your fullname!",
+                },
+                { whitespace: false },
+              ]}
+            >
+              <Input
+                placeholder="Enter fullname"
+                id="fullname"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Address"
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your address!",
+                },
+                { whitespace: false },
+              ]}
+            >
+              <Input
+                placeholder="Enter address"
+                id="addresss"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Phone"
+              name="phone"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your phone!",
+                },
+                { whitespace: false },
+              ]}
+            >
+              <Input
+                placeholder="Enter phone"
+                id="phone"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item<FieldType>
               label="Password"
               name="password"
               rules={[
@@ -117,7 +175,7 @@ export const SignUp = () => {
                 },
                 {
                   pattern: new RegExp(
-                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/
+                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$/
                   ),
                   message:
                     " Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character!",
@@ -133,7 +191,7 @@ export const SignUp = () => {
 
             <Form.Item<FieldType>
               label="Confirm Password"
-              name="confirm_password"
+              // name="confirm_password"
               rules={[
                 {
                   required: true,
@@ -168,7 +226,7 @@ export const SignUp = () => {
                 type="primary"
                 htmlType="submit"
                 style={{ width: 360, marginTop: 10 }}
-                onClick={handleSubmit}
+                // onClick={() => handleSubmit}
               >
                 Login
               </Button>

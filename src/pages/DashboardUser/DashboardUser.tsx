@@ -1,10 +1,11 @@
 import { List, Menu } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsFillClipboardFill, BsCart3 } from "react-icons/bs";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { dashboardUser, routes } from "../../routes";
+import { useGetUserQuery } from "../../redux/apis/apiUser";
 
 const DashboardUserWrapper = styled.div`
   display: flex;
@@ -27,17 +28,13 @@ const DashboardUserContent = styled.div`
   flex-grow: 7;
   width: 100%;
 `;
-const data = [
+const options = [
   {
     path: "/dashboard/",
     title: "Tài khoản",
     icon: <AiOutlineUser />,
   },
-  // {
-  //   path: "/dashboard/cart",
-  //   title: "Giỏ hàng",
-  //   icon: <BsFillClipboardFill />,
-  // },
+
   {
     path: "/dashboard/order",
     title: "Đơn hàng",
@@ -51,7 +48,7 @@ export const DashboardUser = () => {
       <DashboardUserSide>
         <List
           itemLayout="horizontal"
-          dataSource={data}
+          dataSource={options}
           renderItem={(item, index) => (
             <List.Item>
               <i>{item.icon}</i>

@@ -1,3 +1,6 @@
+import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
+
 enum ROLE {
   BASIC,
   ADMIN,
@@ -49,4 +52,23 @@ export interface User {
   phone: string;
   role: ROLE;
   image_url: string;
+}
+export interface DataUserUpdate {
+  userImage?: Blob;
+  userInformation?: {
+    fullname: string;
+    address: string;
+    phone: string;
+  };
+}
+interface DataResponse {
+  statusCode?: string;
+  message?: string;
+  AccessToken?: string;
+  success: boolean;
+}
+// export interface
+export interface Response {
+  data?: DataResponse;
+  error?: FetchBaseQueryError | SerializedError;
 }

@@ -27,10 +27,9 @@ axiosInstance.interceptors.request.use(
     if (decoded_token?.exp < currentTime.getTime() / 1000) {
     }
     if (token) {
-      config.headers[
-        "Authorization"
-      ] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE0NDY4MWI5LThlYWItNDdjZi1hNWE1LTU1YTk3MzdjYjc4NiIsInJvbGUiOiJBRE1JTiIsIm5hbWUiOiJOZ3V5ZW4gSGlldSIsImlhdCI6MTY5MTQ4Mjg3NiwiZXhwIjoxNjkxNDg2NDc2fQ.El-DkM9gvmDKNpZHSxvpPPl_OnjlFtzwrrasltazHFE`;
     }
+    config.headers["Authorization"] = `Bearer ${token}`;
+    // config.headers["Content-Type"] = "multipart/form-data;";
     return config;
   },
   (error) => {
