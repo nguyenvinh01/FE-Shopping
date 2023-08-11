@@ -2,15 +2,8 @@ import { Image } from "antd";
 import React, { Fragment } from "react";
 import ImageProduct from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
-interface CheckoutItemType {
-  image?: string;
-  productname?: string;
-  categories?: string;
-  price: number;
-  quantity: number;
-  amount?: number;
-  product_id?: string;
-}
+import { CheckoutItemType } from "../../interface/interface";
+
 const CheckOutItemWrapper = styled.div`
   .image-product-checkout {
     display: flex;

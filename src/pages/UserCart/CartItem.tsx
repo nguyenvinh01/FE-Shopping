@@ -3,18 +3,8 @@ import React, { useState, useEffect } from "react";
 import ProductImage from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { ReduxCartItemType } from "../../redux/slice/cartSlice";
+import { CartItemType } from "../../interface/interface";
 
-export interface CartItemType {
-  id: string;
-  image?: string;
-  desc?: string;
-  categories?: string;
-  price: number;
-  quantity: number;
-  product_id?: string;
-  amount?: number;
-}
 type PropsCart = {
   items: CartItemType;
   checked: boolean;

@@ -9,8 +9,8 @@ import { CheckoutItem } from "./CheckoutItem";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { CartItemType } from "../UserCart/CartItem";
-import { ReduxCartItemType, resetCart } from "../../redux/slice/cartSlice";
+import { resetCart } from "../../redux/slice/cartSlice";
+import { CartItemType } from "../../interface/interface";
 const CheckoutPageWrapper = styled.div`
   .header-checkout {
     display: flex;
