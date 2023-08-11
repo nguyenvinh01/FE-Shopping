@@ -14,11 +14,17 @@ import { UserProfile } from "../pages/UserProfile/UserProfile";
 import { AddProduct } from "../pages/Admin/AdminProducts/AddProduct/AddProduct";
 import { AdminProductDetail } from "../pages/Admin/AdminProducts/AdminProductDetail/AdminProductDetail";
 import { AdminAccounts } from "../pages/Admin/AdminAccounts/AdminAccounts";
+import { Products } from "../pages/Product/Product";
 
 export const routes = [
   {
     path: "/",
     page: Home,
+    isHeader: true,
+  },
+  {
+    path: "/products",
+    page: Products,
     isHeader: true,
   },
   {

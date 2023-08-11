@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 import { ProductList } from "./ProductList";
 import { useNavigate } from "react-router-dom";
+import { useGetCategoriesQuery } from "../../../redux/apis/apiCategory";
+import { useGetProductsQuery } from "../../../redux/apis/apiProduct";
+import { Category } from "../../../interface/interface";
 
 const { Option } = Select;
 
@@ -40,10 +43,23 @@ export const AdminProducts = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("");
   const navigate = useNavigate();
 
+  const { data: categoriesData } = useGetCategoriesQuery("");
+
   const handleSearch = (value: string) => {
     // Xử lý tìm kiếm theo giá trị value và danh mục category
     // Gọi hàm onSearch để truyền giá trị tìm kiếm và danh mục lên component cha
     console.log(value, selectedCategory);
+  };
+
+  const categoryOptions = () => {
+    if (!categoriesData) {
+      return null; //Hoặc hiển thị thông báo tải
+    }
+    return categoriesData.map((category: Category) => (
+      <Option key={category.id} value={category.id}>
+        {category.label}
+      </Option>
+    ));
   };
 
   const handleCategoryChange = (value: string) => {
@@ -80,15 +96,7 @@ export const AdminProducts = () => {
               filterOption={filterOption} // Tìm kiếm danh mục theo tên
               style={{ width: "300px" }}
             >
-              <Option key="1" value="category1">
-                Danh mục 1
-              </Option>
-              <Option key="2" value="category2">
-                Danh mục 2
-              </Option>
-              <Option key="3" value="category3">
-                Category 3
-              </Option>
+              {categoryOptions()}
               {/* Thêm danh sách danh mục khác nếu cần */}
             </Select>
           </SearchContainer>
@@ -100,7 +108,7 @@ export const AdminProducts = () => {
             Add new product
           </Button>
         </TopContainer>
-        <ProductList />
+        <ProductList category={selectedCategory} />
       </AdminContainer>
     </>
   );

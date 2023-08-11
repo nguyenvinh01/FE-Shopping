@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { styled } from "styled-components";
 import { CardProduct } from "../../components/CardProduct/CardProduct";
 import { SearchList } from "../../components/SearchList/SearchList";
-import { Button, Select, Slider } from "antd";
+import { Button, Checkbox, Select, Slider } from "antd";
+import { useGetCategoriesQuery } from "../../redux/apis/apiCategory";
+import { useGetProductsQuery } from "../../redux/apis/apiProduct";
+import { Category, Product } from "../../interface/interface";
+import { CheckboxValueType } from "antd/es/checkbox/Group";
 
 const ProductContent = styled.div`
   display: flex;
@@ -45,6 +49,14 @@ const FilterSlider = styled.div`
   }
 `;
 
+const CategorySearch = styled.div`
+  padding-bottom: 15px;
+
+  h3 {
+    margin-top: 10px;
+  }
+`;
+
 const ProductItems = styled.div`
   flex-basis: 77%;
   padding: 0 15px;
@@ -66,12 +78,39 @@ export const Products = () => {
   const [filterPrice, setFilterPrice] = useState(0);
   const [priceSort, setPriceSort] = useState(0);
 
+  const { data: categoriesData } = useGetCategoriesQuery("");
+  const { data: productsData } = useGetProductsQuery("");
+
   const HandleChangePriceFilter = (newValue: number) => {
     setFilterPrice(newValue);
   };
 
   const handleChangePriceSort = (newValue: number) => {
     setPriceSort(newValue);
+  };
+
+  const onCheckBoxChange = (checkedValues: CheckboxValueType[]) => {
+    console.log("checked = ", checkedValues);
+  };
+
+  const categoryOptions = categoriesData.map((category: Category) => ({
+    value: category.id,
+    label: category.label,
+  }));
+
+  const renderProductList = () => {
+    if (!productsData) {
+      return null; //Hoặc hiển thị thông báo tải
+    }
+    return productsData.map((product: Product) => (
+      <CardProduct
+        key={product.id}
+        name={product.name}
+        price={product.price}
+        // desc={product.description}
+        img_url={product.image_url}
+      />
+    ));
   };
 
   return (
@@ -83,7 +122,6 @@ export const Products = () => {
             Reset
           </Button>
         </FilterHeader>
-
         <FilterSlider>
           <h3>Price</h3>
           <Slider
@@ -102,22 +140,19 @@ export const Products = () => {
             options={priceOptions}
           />
         </FilterSlider>
-
-        <SearchList></SearchList>
-        <SearchList></SearchList>
+        {/* // <SearchList></SearchList>
+        // <SearchList></SearchList> */}
+        <CategorySearch>
+          <h3>Categories</h3>
+          <Checkbox.Group
+            options={categoryOptions}
+            onChange={onCheckBoxChange}
+            style={{ flexDirection: "column" }}
+          />
+        </CategorySearch>
       </ProductFilter>
 
-      <ProductItems>
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-        <CardProduct />
-      </ProductItems>
+      <ProductItems>{renderProductList()}</ProductItems>
     </ProductContent>
   );
 };

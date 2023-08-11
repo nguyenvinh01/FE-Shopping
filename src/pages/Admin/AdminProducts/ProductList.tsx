@@ -2,6 +2,9 @@ import { Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { ProductListType } from "../../../interface/interface";
+import { useGetProductsQuery } from "../../../redux/apis/apiProduct";
+import { useEffect } from "react";
 
 interface DataType {
   key: string;
@@ -40,8 +43,11 @@ const data: DataType[] = [
   },
 ];
 
-export const ProductList = () => {
+export const ProductList: React.FC<ProductListType> = ({ category }) => {
+  const { data: productsData } = useGetProductsQuery({ category });
   const navigate = useNavigate();
+
+  useEffect(() => {}, [category]);
 
   const handleDetail = (id: string) => {
     navigate("/admin/products/detail");
@@ -107,7 +113,7 @@ export const ProductList = () => {
 
   return (
     <>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={productsData} />
     </>
   );
 };

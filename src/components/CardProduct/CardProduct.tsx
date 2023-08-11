@@ -1,11 +1,17 @@
 import React from "react";
 import { styled } from "styled-components";
 import { Button, Card } from "antd";
+import { CardProductType } from "../../interface/interface";
 
 const { Meta } = Card;
 
 const ProductCard = styled.div`
   /* margin: 10px 5px; */
+  margin-bottom: 15px;
+  .ant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
 
   .ant-card-body {
     display: flex;
@@ -48,12 +54,12 @@ const ProductCard = styled.div`
   }
 `;
 
-interface cardType {
-  name?: string;
-  desc?: string;
-}
-
-export const CardProduct: React.FC<cardType> = ({ desc }) => {
+export const CardProduct: React.FC<CardProductType> = ({
+  name,
+  price,
+  desc,
+  img_url,
+}) => {
   return (
     <ProductCard>
       <Card
@@ -62,14 +68,14 @@ export const CardProduct: React.FC<cardType> = ({ desc }) => {
         cover={
           <img
             alt="product"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+            src={img_url}
             style={{ width: 220, height: 190 }}
           />
         }
       >
-        <h3>Title of the product card goes here.</h3>
+        <h3>{name}</h3>
 
-        <p>100000 - 80000</p>
+        <p>{price}</p>
 
         <Meta style={{ marginBlockEnd: 0 }} description={desc} />
         <Button type="primary" shape="round">

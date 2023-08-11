@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 import { CardCategory } from "../../components/CardCategory/CardCategory";
 import { useGetCategoriesQuery } from "../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../redux/apis/apiProduct";
+import { Category, Product } from "../../interface/interface";
 
 const HomePage = styled.div`
   /* padding: 0 200px; */
@@ -25,6 +26,7 @@ const HomeItems = styled.div`
   justify-content: space-between;
   align-items: stretch;
   margin-top: 10px;
+  flex-wrap: wrap;
   /* gap: 10px; */
 `;
 
@@ -34,31 +36,47 @@ export const Home: React.FC = () => {
 
   useEffect(() => {}, []);
 
-  console.log("categoriesData1: ", categoriesData);
-  console.log("productsData: ", productsData);
+  // console.log("categoriesData: ", categoriesData);
+  // console.log("productsData: ", productsData);
+
+  const renderCategoryList = () => {
+    if (!categoriesData) {
+      return null; // Hoặc hiển thị thông báo tải hoặc xử lý khác
+    }
+    return categoriesData.map((category: Category) => (
+      <CardCategory
+        key={category.id}
+        name={category.label}
+        img_url={category.image_url}
+      />
+    ));
+  };
+
+  const renderProductList = () => {
+    if (!productsData) {
+      return null; //Hoặc hiển thị thông báo tải
+    }
+    return productsData.map((product: Product) => (
+      <CardProduct
+        key={product.id}
+        name={product.name}
+        price={product.price}
+        desc={product.description}
+        img_url={product.image_url}
+      />
+    ));
+  };
 
   return (
     <HomePage>
       <ContentWrapper>
         <ContentTitle>Shop Our Top Categories</ContentTitle>
-        <HomeItems>
-          <CardCategory />
-          <CardCategory />
-          <CardCategory />
-          <CardCategory />
-          <CardCategory />
-          <CardCategory />
-        </HomeItems>
+        <HomeItems>{renderCategoryList()}</HomeItems>
       </ContentWrapper>
 
       <ContentWrapper>
         <ContentTitle>Best Deals For You!</ContentTitle>
-        <HomeItems>
-          <CardProduct desc="Công ty sản xuất: Shaoxing Shangyu Yifei Mold Co., Ltd.  Địa chỉ: Thiệu Hưng, Chiết Giang" />
-          <CardProduct desc="Công ty sản xuất: Shaoxing Shangyu Yifei " />
-          <CardProduct desc="Công ty sản xuất: Shaoxing Shangyu Yifei Mold Co., Ltd.  Địa chỉ:" />
-          <CardProduct desc="Công ty sản xuất: Shaoxing " />
-        </HomeItems>
+        <HomeItems>{renderProductList()}</HomeItems>
       </ContentWrapper>
     </HomePage>
   );
