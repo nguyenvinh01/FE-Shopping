@@ -25,21 +25,6 @@ const OrderPageWrapper = styled.div`
   }
 `;
 
-interface DataType {
-  gender: string;
-  name: {
-    title: string;
-    first: string;
-    last: string;
-  };
-  email: string;
-  picture: {
-    large: string;
-    medium: string;
-    thumbnail: string;
-  };
-  nat: string;
-}
 export const OrderPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [idOrder, setIdOrder] = useState("");

@@ -1,9 +1,20 @@
-import { Button, Form, Image, Input, Row } from "antd";
-import React, { useState } from "react";
+import { Button, Form, Image, Input, Row, notification } from "antd";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/sanakilogo1.png";
 import { styled } from "styled-components";
-import { LoginCredentials, useLoginMutation } from "../../redux/apis/apiUser";
+import {
+  LoginCredentials,
+  useGetUserQuery,
+  useLoginMutation,
+} from "../../redux/apis/apiUser";
 import { AxiosResponse } from "axios";
+import { LoginResponse } from "../../interface/interface";
+import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../redux/slice/userSlice";
+import { RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
 
 const LoginBg = styled.div`
   height: 100vh;
@@ -50,10 +61,6 @@ type FieldType = {
   username?: string;
   password?: string;
 };
-const dataLogin: LoginCredentials = {
-  email: "admin@gmail.com",
-  password: "Hieu12345",
-};
 const handleSubmit = (values: any) => {
   console.log("Success:", values);
 };
@@ -62,16 +69,36 @@ const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
 
+interface Response {
+  data?: LoginResponse;
+  error?: FetchBaseQueryError | SerializedError;
+}
 export const SignIn = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector<RootState>((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login] = useLoginMutation();
-  const handleLogin = () => {
-    login(dataLogin).then((res) => {
-      console.log(res, "res");
+  const [login, { isSuccess, isError }] = useLoginMutation();
+  const handleLogin = async () => {
+    const dataLogin: LoginCredentials = {
+      email: email,
+      password: password,
+    };
+    // const dataLoginResponse: ResponseLogin = await login(dataLogin)
+    login(dataLogin).then((res: Response) => {
+      if (res.data) {
+        localStorage.setItem("access_token", res.data.AccessToken);
+        navigate("/dashboard");
+      } else {
+        notification.open({
+          message: "Error",
+          description: "Error",
+        });
+      }
     });
-    // console.log(data, "data login");
   };
+
   return (
     <>
       <LoginBg>
@@ -125,13 +152,13 @@ export const SignIn = () => {
                   required: true,
                   message: "Please input your password!",
                 },
-                {
-                  pattern: new RegExp(
-                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/
-                  ),
-                  message:
-                    " Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character!",
-                },
+                // {
+                //   pattern: new RegExp(
+                //     /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/
+                //   ),
+                //   message:
+                //     " Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character!",
+                // },
               ]}
             >
               <Input.Password

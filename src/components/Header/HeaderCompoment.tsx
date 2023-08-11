@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Layout,
   Menu,
@@ -15,10 +15,13 @@ import Logo from "../../assets/sanakilogo1.png";
 import { BsCart4 } from "react-icons/bs";
 import AvatarUser from "../../assets/images/pngtree-man-user-avatar-person-illustration-png-image_5239517.png";
 import { SearchComponent } from "../SearchComponent/SearchComponent";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import Cookies from "js-cookie";
+import { InitialStateType, resetUser } from "../../redux/slice/userSlice";
+
 const items: MenuProps["items"] = [
   {
     key: "1",
@@ -88,9 +91,21 @@ const HeaderLayout = styled.div`
 `;
 export const HeaderCompoment = () => {
   const dataCart = useSelector<RootState>((state) => state.cart);
-  console.log(dataCart);
-
+  const dispatch = useDispatch();
+  const user = useSelector<RootState, InitialStateType>((state) => state.user);
   const navigate = useNavigate();
+  console.log(dataCart);
+  const logOut = () => {
+    // localStorage.clear();
+    // Cookies.set("RefreshToken", "", {
+    //   path: "/",
+    //   expires: new Date(0),
+    //   httpOnly: false,
+    // });
+    dispatch(resetUser({}));
+    navigate("/");
+  };
+  useEffect(() => {}, [user]);
   return (
     <HeaderLayout>
       <Header>
@@ -115,41 +130,45 @@ export const HeaderCompoment = () => {
           textButton="Search"
           color="red"
         />
-        {/* <div>
-          <Space>
-            <Button
-              shape="round"
-              type="primary"
-              onClick={() => {
-                navigate("/sign-up");
-              }}
-            >
-              Sign Up
-            </Button>
-            <Button
-              shape="round"
-              type="primary"
-              ghost
-              onClick={() => {
-                navigate("/sign-in");
-              }}
-            >
-              Sign In
-            </Button>
-          </Space>
-        </div> */}
-        <AvatarProfile>
-          <Space>
-            <Link to={"/dashboard/cart"}>
-              <span>
+        {user.user?.id ? (
+          <AvatarProfile>
+            <Space>
+              {/* <Link to={"/dashboard/cart"}> */}
+              <span onClick={() => dispatch(resetUser(""))}>
                 <BsCart4 size={25} />
               </span>
-            </Link>
-            <Dropdown menu={{ items }} placement="bottomRight" arrow>
-              <Avatar src={AvatarUser} size={40}></Avatar>
-            </Dropdown>
-          </Space>
-        </AvatarProfile>
+              {/* </Link> */}
+              <Dropdown menu={{ items }} placement="bottomRight" arrow>
+                <Avatar src={AvatarUser} size={40}></Avatar>
+              </Dropdown>
+            </Space>
+          </AvatarProfile>
+        ) : (
+          <div>
+            <Space>
+              <Button
+                shape="round"
+                type="primary"
+                onClick={() => {
+                  navigate("/sign-up");
+                }}
+              >
+                Sign Up
+              </Button>
+              <Button
+                shape="round"
+                type="primary"
+                ghost
+                onClick={() => {
+                  navigate("/sign-in");
+                }}
+              >
+                Sign In
+              </Button>
+            </Space>
+          </div>
+        )}
+        {/*  */}
       </Header>
     </HeaderLayout>
   );

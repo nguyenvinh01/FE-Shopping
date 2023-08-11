@@ -4,9 +4,9 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { ReduxCartItemType, addCartItem } from "../../redux/slice/cartSlice";
+import { addCartItem } from "../../redux/slice/cartSlice";
 import { setUser } from "../../redux/slice/userSlice";
-import { CartItemType } from "../../pages/UserCart/CartItem";
+import { CartItemType } from "../../interface/interface";
 
 const PurchaseBarWrapper = styled.div`
   display: flex;
