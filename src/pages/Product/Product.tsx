@@ -93,7 +93,7 @@ export const Products = () => {
     console.log("checked = ", checkedValues);
   };
 
-  const categoryOptions = categoriesData.map((category: Category) => ({
+  const categoryOptions = categoriesData?.map((category: Category) => ({
     value: category.id,
     label: category.label,
   }));
@@ -102,7 +102,7 @@ export const Products = () => {
     if (!productsData) {
       return null; //Hoặc hiển thị thông báo tải
     }
-    return productsData.map((product: Product) => (
+    return productsData?.map((product: Product) => (
       <CardProduct
         key={product.id}
         name={product.name}

@@ -15,6 +15,7 @@ import { AddProduct } from "../pages/Admin/AdminProducts/AddProduct/AddProduct";
 import { AdminProductDetail } from "../pages/Admin/AdminProducts/AdminProductDetail/AdminProductDetail";
 import { AdminAccounts } from "../pages/Admin/AdminAccounts/AdminAccounts";
 import { Products } from "../pages/Product/Product";
+import { ProductDetail } from "../pages/ProductDetail/ProductDetail";
 
 export const routes = [
   {
@@ -25,6 +26,11 @@ export const routes = [
   {
     path: "/products",
     page: Products,
+    isHeader: true,
+  },
+  {
+    path: "/products/:id",
+    page: ProductDetail,
     isHeader: true,
   },
   {

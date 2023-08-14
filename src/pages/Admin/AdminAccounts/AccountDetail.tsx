@@ -3,11 +3,13 @@ import { UserOutlined } from "@ant-design/icons";
 import React from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../../assets/images/lap 1.png";
+import { useGetUserByIdQuery } from "../../../redux/apis/apiUser";
 export interface OrderModalType {
   visible: boolean;
   onCancel: () => void;
   onOk: () => void;
   idOrder: string;
+  idUser: string;
 }
 
 const UserDetailWrapper = styled.div`
@@ -48,7 +50,9 @@ export const AccountDetail = ({
   onCancel,
   onOk,
   idOrder,
+  idUser,
 }: OrderModalType) => {
+  const { data } = useGetUserByIdQuery(idUser);
   return (
     <div>
       <Modal
@@ -60,20 +64,24 @@ export const AccountDetail = ({
       >
         <UserDetailWrapper>
           <div style={{ marginRight: "10px", flex: "1" }}>
-            <Avatar shape="square" size={180} icon={<UserOutlined />} />
+            <Avatar
+              shape="square"
+              size={180}
+              icon={<UserOutlined />}
+              src={data?.image_url}
+            />
           </div>
           <DescriptionOrderWrapper>
             <Descriptions title="Account" layout="vertical" column={2}>
-              <Descriptions.Item label="Full Name">John Doe</Descriptions.Item>
-              {/* <Descriptions.Item label="Họ và tên">John Doe</Descriptions.Item> */}
-              <Descriptions.Item label="Email">
-                johndoe@example.com
+              <Descriptions.Item label="Full Name">
+                {data?.fullname}
               </Descriptions.Item>
+              <Descriptions.Item label="Email">{data?.email}</Descriptions.Item>
               <Descriptions.Item label="Số điện thoại">
-                (835) 609-5440 x607
+                {data?.phone}
               </Descriptions.Item>
               <Descriptions.Item label="Địa chỉ">
-                Cassin Mountain, Velmastad, Avon
+                {data?.email}
               </Descriptions.Item>
 
               <Descriptions.Item label="Tổng tiền">90000000</Descriptions.Item>

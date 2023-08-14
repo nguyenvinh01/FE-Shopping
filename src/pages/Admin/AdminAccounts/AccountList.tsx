@@ -1,4 +1,4 @@
-import { Space, Table } from "antd";
+import { Skeleton, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -7,49 +7,29 @@ import { useState } from "react";
 import { AccountDetail } from "./AccountDetail";
 
 interface DataType {
-  key: string;
+  // key?: string;
   id: string;
-  name: string;
+  fullname: string;
   email: string;
-  orders: number;
-  total: number;
+  phone?: string;
+  // orders?: number;
+  // total?: number;
   //   status: string;
 }
 
-const data: DataType[] = [
-  {
-    key: "1",
-    id: "1",
-    name: "test1",
-    email: "test1@gmail.com",
-    orders: 30,
-    total: 10000000,
-  },
-  {
-    key: "2",
-    id: "2",
-    name: "test2",
-    email: "test2@gmail.com",
-    orders: 30,
-    total: 10000000,
-  },
-  {
-    key: "3",
-    id: "3",
-    name: "test3",
-    email: "test3@gmail.com",
-    orders: 30,
-    total: 10000000,
-  },
-];
-
-export const AccountList = () => {
+interface AccountListProps {
+  data: DataType[];
+  isFetch: boolean;
+}
+export const AccountList = ({ data, isFetch }: AccountListProps) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [idOrder, setIdOrder] = useState("");
+  const [idUser, setIdUser] = useState("");
 
-  const showModal = () => {
+  const showModal = (id: string) => {
     setIsVisible(true);
+    setIdUser(id);
   };
 
   const hideModal = () => {
@@ -67,7 +47,7 @@ export const AccountList = () => {
   };
 
   const handleDetail = (id: string) => {
-    showModal();
+    showModal(id);
   };
 
   const handleEdit = (id: string) => {
@@ -85,8 +65,8 @@ export const AccountList = () => {
     },
     {
       title: "Customer Name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "fullname",
+      key: "fullname",
       // render: (text) => <a>{text}</a>,
     },
     {
@@ -96,15 +76,21 @@ export const AccountList = () => {
       // render: (text) => <a>{text}</a>,
     },
     {
-      title: "Orders Count",
-      dataIndex: "orders",
-      key: "orders",
+      title: "Customer Phone",
+      dataIndex: "phone",
+      key: "phone",
+      // render: (text) => <a>{text}</a>,
     },
-    {
-      title: "Total Income",
-      dataIndex: "total",
-      key: "total",
-    },
+    // {
+    //   title: "Orders Count",
+    //   dataIndex: "orders",
+    //   key: "orders",
+    // },
+    // {
+    //   title: "Total Income",
+    //   dataIndex: "total",
+    //   key: "total",
+    // },
     {
       title: "Actions",
       dataIndex: "actions",
@@ -128,15 +114,21 @@ export const AccountList = () => {
       ),
     },
   ];
+  console.log(isFetch, "list");
 
   return (
     <>
-      <Table columns={columns} dataSource={data} />
+      {!isFetch ? (
+        <Table columns={columns} dataSource={data} />
+      ) : (
+        <Skeleton active />
+      )}
       <AccountDetail
         visible={isVisible}
         onCancel={handleCancel}
         onOk={handleOk}
         idOrder={idOrder}
+        idUser={idUser}
       />
     </>
   );

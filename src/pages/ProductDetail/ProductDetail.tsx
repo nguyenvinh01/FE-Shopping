@@ -5,6 +5,8 @@ import Logo from "../../assets/images/Group 1481.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BsCart4 } from "react-icons/bs";
+import { useParams } from "react-router-dom";
+import { useGetProductDetailQuery } from "../../redux/apis/apiProduct";
 
 const ProductDetailWrapper = styled.div``;
 
@@ -27,34 +29,25 @@ const DescProduct = styled.div`
   flex-direction: column;
 `;
 export const ProductDetail = () => {
+  const { id }: any = useParams();
+  const { data } = useGetProductDetailQuery(id);
   return (
     <ProductDetailWrapper>
       <DetailProduct>
         <Space size={50}>
           <ImageProduct>
-            <Image src={Logo} />
+            <Image src={data?.image_url} width={450} height={450} />
           </ImageProduct>
           <DescProduct>
             <div>
-              <h2>Product name</h2>
+              <h2>{data?.name}</h2>
             </div>
             <div>
-              <h3>Price</h3>
+              <h3>{data?.price}</h3>
             </div>
-            {/* <h3>Price</h3> */}
             <div>
               <h4>Description</h4>
-              <p>
-                Alias et non nisi. Error voluptate error ut et. Asperiores ut
-                odio. Voluptas voluptas voluptatem minima unde quasi quas.
-                Itaque nihil consequatur sed quae porro pariatur mollitia porro.
-                Qui eligendi quo et laboriosam. Provident nihil amet voluptatem
-                quaerat possimus ex voluptates incidunt. Necessitatibus cumque
-                aut reprehenderit incidunt voluptatibus quasi nisi. Qui officiis
-                amet sapiente. Inventore molestias unde occaecati. Cum et
-                officia saepe inventore laudantium aut. Expedita iure rerum a
-                dolorem est eos fugit. Velit sequi voluptas similique minus et.
-              </p>
+              <p>{data?.description}</p>
             </div>
             <div>
               <Button size={"large"} type="primary">
