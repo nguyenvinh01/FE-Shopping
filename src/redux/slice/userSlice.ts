@@ -1,6 +1,6 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { User } from "../../interface/interface";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 const initialState: InitialStateType = {
   user: {

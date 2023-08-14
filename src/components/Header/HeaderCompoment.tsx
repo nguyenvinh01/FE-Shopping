@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { InitialStateType, resetUser } from "../../redux/slice/userSlice";
 
 const items: MenuProps["items"] = [

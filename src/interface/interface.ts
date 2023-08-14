@@ -61,6 +61,12 @@ export interface Category {
   image_url: string;
 }
 
+export interface CategoryOptionData {
+  key: string;
+  value: string;
+  children: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -68,6 +74,14 @@ export interface Product {
   description: string;
   quantity: number;
   image_url: string;
+}
+
+export interface ProductFormValues {
+  name: string;
+  category: string[];
+  price: number;
+  quantity: number;
+  description: string;
 }
 
 export interface CardProductType {
@@ -81,8 +95,27 @@ export interface cardCategoryType {
   img_url?: string;
 }
 
-export interface ProductListType {
+export interface DataProductListType {
+  id: string;
+  name: string;
   category: string;
+  quantity: number;
+  price: number;
+  //   status: string;
+}
+export interface ProductListType {
+  productsData: DataProductListType[];
+}
+
+export interface DataProductUpdate {
+  productImage?: Blob;
+  productInformation?: {
+    name: string;
+    category: string[];
+    price: number;
+    quantity: number;
+    description: string;
+  };
 }
 export interface DataUserUpdate {
   userImage?: Blob;
