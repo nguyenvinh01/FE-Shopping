@@ -72,7 +72,7 @@ export const userApi = createApi({
     }),
     getUser: builder.query<User, void>({
       query: () => ({
-        url: "/user",
+        url: "/user/me",
         method: "GET",
       }),
       providesTags: ["User"],
@@ -95,6 +95,18 @@ export const userApi = createApi({
         };
       },
     }),
+    getAllUser: builder.query({
+      query: (filter) => ({
+        url: "/user",
+        method: "GET",
+      }),
+    }),
+    getUserById: builder.query<User, string>({
+      query: (id: string) => ({
+        url: `/user/${id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -104,4 +116,6 @@ export const {
   useRefreshTokenMutation,
   useRegisterMutation,
   useUpdateUserMutation,
+  useGetAllUserQuery,
+  useGetUserByIdQuery,
 } = userApi;

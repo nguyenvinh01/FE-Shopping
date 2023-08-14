@@ -6,7 +6,6 @@ import { routes } from "./routes";
 import { DefaultComponent } from "./components/DefaultComponent/DefaultComponent";
 import axios from "axios";
 import { API } from "./shared/Constants/Constants";
-import { useGetUserQuery } from "./redux/apis/apiUser";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { setUser } from "./redux/slice/userSlice";
