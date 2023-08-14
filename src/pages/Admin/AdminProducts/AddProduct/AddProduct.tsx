@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { Form, Input, Select, Upload, Button, message } from "antd";
+import { Form, Input, Select, Upload, Button, message, Modal } from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import type { UploadChangeParam } from "antd/es/upload";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useGetCategoriesQuery } from "../../../../redux/apis/apiCategory";
+import {
+  Category,
+  CategoryOptionData,
+  DataProductUpdate,
+  ProductFormValues,
+} from "../../../../interface/interface";
+import { useCreateProductMutation } from "../../../../redux/apis/apiProduct";
 
 const { Option } = Select;
 
@@ -16,82 +24,80 @@ const InputContent = styled.div`
 `;
 
 const UploadContainer = styled(Upload)`
-  .ant-upload-select {
+  .ant-upload {
+    width: 250px !important;
+    height: 250px !important;
+  }
+
+  .ant-upload-list {
     margin: 30px 30px 30px 30px;
   }
-  .ant-upload {
+  .ant-upload-list .ant-upload-list-item-container {
     width: 250px !important;
     height: 250px !important;
   }
 `;
 
-interface ProductFormValues {
-  imageUrl: string;
-  productName: string;
-  category: string[];
-  price: number;
-  quantity: number;
-  description: string;
-}
-
-interface OptionData {
-  key: string;
-  value: string;
-  children: string;
-}
-
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-};
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 export const AddProduct: React.FC = () => {
   const [formValues, setFormValues] = useState<ProductFormValues>({
-    imageUrl: "",
-    productName: "",
+    name: "",
     category: [],
     price: 0,
     quantity: 0,
     description: "",
   });
-  const [loading, setLoading] = useState(false);
   const navigator = useNavigate();
+  const { data: categoriesData } = useGetCategoriesQuery("");
+  const [createProduct] = useCreateProductMutation();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const handleImageUpload: UploadProps["onChange"] = (
-    info: UploadChangeParam<UploadFile>
-  ) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
+  const categoryOptions = () => {
+    if (!categoriesData) {
+      return null; //Hoặc hiển thị thông báo tải
     }
-    if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-        setFormValues({ ...formValues, imageUrl: url });
-      });
-    }
+    return categoriesData.map((category: Category) => (
+      <Option key={category.id} value={category.id}>
+        {category.label}
+      </Option>
+    ));
   };
 
   const uploadButton = (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <PlusOutlined />
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
+  const handleCancel = () => setPreviewOpen(false);
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    // console.log(fileList, "fileList");
+  };
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -100,7 +106,10 @@ export const AddProduct: React.FC = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const filterOption = (input: string, option: OptionData | undefined) => {
+  const filterOption = (
+    input: string,
+    option: CategoryOptionData | undefined
+  ) => {
     if (option?.children) {
       return option.children
         .toString()
@@ -116,7 +125,21 @@ export const AddProduct: React.FC = () => {
 
   const handleSubmit = (values: ProductFormValues) => {
     // Xử lý dữ liệu form khi người dùng nhấn nút Đăng ký sản phẩm
-    console.log("Submitted data:", values);
+    // console.log("Submitted data:", values);
+    if (fileList.length === 0) {
+      message.error("Vui lòng tải ảnh sản phẩm!");
+      return;
+    }
+
+    console.log(values);
+
+    const file = fileList[0].originFileObj;
+    const dataUpdate: DataProductUpdate = {
+      productImage: file,
+      productInformation: values,
+    };
+    console.log(11, dataUpdate);
+    createProduct(dataUpdate);
   };
 
   return (
@@ -134,53 +157,43 @@ export const AddProduct: React.FC = () => {
           }}
         >
           <div style={{ marginRight: "20px", flex: "1" }}>
-            <Form.Item
-              // label="Tải ảnh sản phẩm"
-              name="image"
-              rules={[
-                { required: true, message: "Vui lòng tải ảnh sản phẩm!" },
-              ]}
+            <UploadContainer
+              listType="picture-card"
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
             >
-              <UploadContainer
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                beforeUpload={beforeUpload}
-                onChange={handleImageUpload}
-              >
-                {formValues.imageUrl ? (
-                  <img
-                    src={formValues.imageUrl}
-                    alt="avatar"
-                    style={{ width: "100%" }}
-                  />
-                ) : (
-                  uploadButton
-                )}
-              </UploadContainer>
-            </Form.Item>
+              {fileList.length >= 1 ? null : uploadButton}
+            </UploadContainer>
+            <Modal
+              open={previewOpen}
+              title={previewTitle}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
           </div>
 
           <InputContent>
             <Form.Item
-              label="Tên sản phẩm"
-              name="productName"
+              label="Product Name"
+              name="name"
               rules={[
                 { required: true, message: "Vui lòng nhập tên sản phẩm!" },
               ]}
             >
               <Input
-                name="productName"
-                value={formValues.productName}
+                name="name"
+                value={formValues.name}
                 onChange={handleInputChange}
                 style={{ width: "100%", maxWidth: "400px" }}
               />
             </Form.Item>
 
             <Form.Item
-              label="Danh mục"
+              label="Category"
               name="category"
               rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
             >
@@ -193,21 +206,12 @@ export const AddProduct: React.FC = () => {
                 filterOption={filterOption} // Tìm kiếm danh mục theo tên
                 style={{ width: "100%", maxWidth: "400px" }}
               >
-                <Option key="1" value="category1">
-                  Danh mục 1
-                </Option>
-                <Option key="2" value="category2">
-                  Danh mục 2
-                </Option>
-                <Option key="3" value="category3">
-                  Category 3
-                </Option>
-                {/* Thêm danh sách danh mục khác nếu cần */}
+                {categoryOptions()}
               </Select>
             </Form.Item>
             <div style={{ display: "flex", gap: "1rem" }}>
               <Form.Item
-                label="Giá"
+                label="Price"
                 name="price"
                 rules={[
                   { required: true, message: "Vui lòng nhập giá sản phẩm!" },
@@ -227,7 +231,7 @@ export const AddProduct: React.FC = () => {
               </Form.Item>
 
               <Form.Item
-                label="Số lượng"
+                label="Quantity"
                 name="quantity"
                 rules={[
                   {
@@ -247,7 +251,7 @@ export const AddProduct: React.FC = () => {
             </div>
 
             <Form.Item
-              label="Mô tả"
+              label="Description"
               name="description"
               rules={[
                 { required: true, message: "Vui lòng nhập mô tả sản phẩm!" },

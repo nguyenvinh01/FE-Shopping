@@ -3,6 +3,8 @@ import { UserOutlined } from "@ant-design/icons";
 import React from "react";
 import { styled } from "styled-components";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
+import { useGetProductDetailQuery } from "../../../../redux/apis/apiProduct";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -12,6 +14,14 @@ const Container = styled.div`
 `;
 
 export const AdminProductDetail = () => {
+  const { id }: any = useParams();
+  const navigate = useNavigate();
+  const { data: productsData } = useGetProductDetailQuery(id);
+
+  const handleEditProduct = () => {
+    navigate(`/admin/products/edit/${id}`);
+  };
+
   const handleDeleteProduct = () => {
     alert("Xóa thành công");
   };
@@ -19,19 +29,26 @@ export const AdminProductDetail = () => {
     <>
       <HeaderAdmin pageName="Products Detail" />
       <Container>
-        <div style={{ margin: "0 20px", flex: "1" }}>
-          <Avatar size={200} icon={<UserOutlined />} />
+        <div style={{ marginLeft: "40px", flex: "1" }}>
+          <Avatar size={230} shape="square" src={productsData?.image_url} />
         </div>
         <div style={{ marginRight: "20px", flex: "2" }}>
           <Descriptions title="Product Info">
             <Descriptions.Item label="Product Name">
-              Zhou Maomao
+              {productsData?.name}
             </Descriptions.Item>
-            <Descriptions.Item label="category">
-              Hangzhou, Zhejiang
+            <Descriptions.Item label="Price">
+              {productsData?.price}
             </Descriptions.Item>
-            <Descriptions.Item label="price">10000000</Descriptions.Item>
-            <Descriptions.Item label="quantity">3000</Descriptions.Item>
+            <Descriptions.Item label="Quantity">
+              {productsData?.quantity}
+            </Descriptions.Item>
+            <Descriptions.Item label="Category" span={3}>
+              {productsData?.description}
+            </Descriptions.Item>
+            <Descriptions.Item label="Description" span={3}>
+              {productsData?.description}
+            </Descriptions.Item>
           </Descriptions>
           <div
             style={{
@@ -43,7 +60,7 @@ export const AdminProductDetail = () => {
           >
             <Button
               type="primary"
-              htmlType="submit"
+              onClick={handleEditProduct}
               style={{ minWidth: "150px" }}
             >
               Edit

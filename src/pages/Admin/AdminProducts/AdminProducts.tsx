@@ -6,7 +6,7 @@ import { ProductList } from "./ProductList";
 import { useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../../redux/apis/apiProduct";
-import { Category } from "../../../interface/interface";
+import { Category, CategoryOptionData } from "../../../interface/interface";
 
 const { Option } = Select;
 
@@ -33,22 +33,21 @@ const SearchContainer = styled.div`
   width: max-content;
 `;
 
-interface OptionData {
-  key: string;
-  value: string;
-  children: string;
-}
-
 export const AdminProducts = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("");
+  const [searchValue, setSearchValue] = React.useState("");
   const navigate = useNavigate();
 
   const { data: categoriesData } = useGetCategoriesQuery("");
+  const { data: productsData } = useGetProductsQuery({
+    categoryIds: selectedCategory,
+    name: searchValue,
+  });
 
   const handleSearch = (value: string) => {
     // Xử lý tìm kiếm theo giá trị value và danh mục category
     // Gọi hàm onSearch để truyền giá trị tìm kiếm và danh mục lên component cha
-    console.log(value, selectedCategory);
+    setSearchValue(value);
   };
 
   const categoryOptions = () => {
@@ -62,11 +61,15 @@ export const AdminProducts = () => {
     ));
   };
 
-  const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value);
+  const handleCategoryChange = (value: string[]) => {
+    setSelectedCategory(value.join(","));
+    // console.log(33, value.join(","));
   };
 
-  const filterOption = (input: string, option: OptionData | undefined) => {
+  const filterOption = (
+    input: string,
+    option: CategoryOptionData | undefined
+  ) => {
     if (option?.children) {
       return option.children
         .toString()
@@ -108,7 +111,7 @@ export const AdminProducts = () => {
             Add new product
           </Button>
         </TopContainer>
-        <ProductList category={selectedCategory} />
+        <ProductList productsData={productsData} />
       </AdminContainer>
     </>
   );

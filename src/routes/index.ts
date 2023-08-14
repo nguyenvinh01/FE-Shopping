@@ -85,7 +85,7 @@ export const dashboardAdmin = [
     page: AdminProducts,
   },
   {
-    path: "products/edit",
+    path: "products/edit/:id",
     page: EditProduct,
   },
   {
@@ -93,7 +93,7 @@ export const dashboardAdmin = [
     page: AddProduct,
   },
   {
-    path: "products/detail",
+    path: "products/detail/:id",
     page: AdminProductDetail,
   },
   {

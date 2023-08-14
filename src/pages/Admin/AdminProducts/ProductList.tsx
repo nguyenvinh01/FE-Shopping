@@ -2,64 +2,28 @@ import { Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import { ProductListType } from "../../../interface/interface";
-import { useGetProductsQuery } from "../../../redux/apis/apiProduct";
+import {
+  DataProductListType,
+  ProductListType,
+} from "../../../interface/interface";
 import { useEffect } from "react";
 
-interface DataType {
-  key: string;
-  id: string;
-  name: string;
-  category: string;
-  quantity: number;
-  price: number;
-  //   status: string;
-}
-
-const data: DataType[] = [
-  {
-    key: "1",
-    id: "1",
-    name: "Product1",
-    category: "Category1",
-    quantity: 100,
-    price: 10000,
-  },
-  {
-    key: "2",
-    id: "2",
-    name: "Product2",
-    category: "Category2",
-    quantity: 100,
-    price: 10000,
-  },
-  {
-    key: "3",
-    id: "3",
-    name: "Product3",
-    category: "Category3",
-    quantity: 100,
-    price: 10000,
-  },
-];
-
-export const ProductList: React.FC<ProductListType> = ({ category }) => {
-  const { data: productsData } = useGetProductsQuery({ category });
+export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {}, [category]);
+  // useEffect(() => {}, [category]);
 
   const handleDetail = (id: string) => {
-    navigate("/admin/products/detail");
+    navigate(`/admin/products/detail/${id}`);
   };
   const handleEdit = (id: string) => {
-    navigate("/admin/products/edit");
+    navigate(`/admin/products/edit/${id}`);
   };
   const handleDelete = (id: String) => {
     console.log(id);
   };
 
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<DataProductListType> = [
     {
       title: "Product Id",
       dataIndex: "id",
@@ -69,12 +33,6 @@ export const ProductList: React.FC<ProductListType> = ({ category }) => {
       title: "Product Name",
       dataIndex: "name",
       key: "name",
-      // render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
       // render: (text) => <a>{text}</a>,
     },
     {
