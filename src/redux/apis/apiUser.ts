@@ -1,5 +1,6 @@
 import {
   BaseQueryApi,
+  FetchBaseQueryError,
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
@@ -7,18 +8,16 @@ import {
 import jwt_decode from "jwt-decode";
 
 import { API } from "../../shared/Constants/Constants";
-import { AxiosHeaders, AxiosResponse } from "axios";
+import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import axiosInstance from "../../shared/services/http-clients";
 import { DataUserUpdate, LoginResponse, User } from "../../interface/interface";
+import { SerializedError } from "@reduxjs/toolkit";
 export interface LoginCredentials {
   email: string;
   password: string;
 }
-const data: LoginCredentials = {
-  email: "admin@gmail.com",
-  password: "Hieu12345",
-};
-interface DecodedTokenType {
+
+export interface DecodedTokenType {
   id: string;
   exp: number;
   iat: number;
@@ -26,23 +25,44 @@ interface DecodedTokenType {
   role: "BASIC" | "ADMIN";
 }
 
+export interface ResponseRefreshToken {
+  // data?: {
+  // };
+  success: boolean;
+  AccessToken: string;
+  // error?: FetchBaseQueryError | SerializedError;
+}
+export const prepareHeaders = async (headers: Headers) => {
+  const currentTime = new Date();
+  const token = localStorage.getItem("access_token");
+
+  if (token) {
+    const decoded_token: DecodedTokenType = jwt_decode(token);
+    if (decoded_token?.exp < currentTime.getTime() / 1000) {
+      // const refreshToken = userApi.endpoints.refreshToken;
+      // const refreshTokenResponse = await useRefreshTokenMutation();
+      // localStorage.setItem("access_token", refreshToken);
+      const tokenResponse: ResponseRefreshToken = await axios.post(
+        `http://localhost:3000/auth/refreshtoken`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(tokenResponse, "response");
+      headers.set("Authorization", `Bearer ${tokenResponse.AccessToken}`);
+    } else {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
+  return headers;
+};
 const baseQuery = fetchBaseQuery({
   baseUrl: API,
   credentials: "include",
-  prepareHeaders: async (headers, { getState }) => {
-    const currentTime = new Date();
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      const decoded_token: DecodedTokenType = jwt_decode(token);
-      if (decoded_token?.exp < currentTime.getTime() / 1000) {
-        const data = userApi.endpoints.refreshToken;
-        // localStorage.setItem("access_token", data.data.AccessToken);
-      } else {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-    }
-    return headers;
-  },
+  prepareHeaders: prepareHeaders,
 });
 export const userApi = createApi({
   reducerPath: "usersApi",
@@ -64,7 +84,7 @@ export const userApi = createApi({
         body: data,
       }),
     }),
-    refreshToken: builder.mutation({
+    refreshToken: builder.mutation<ResponseRefreshToken, void>({
       query: () => ({
         url: "/auth/refreshtoken",
         method: "POST",
