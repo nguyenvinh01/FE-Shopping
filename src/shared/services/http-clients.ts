@@ -24,11 +24,26 @@ axiosInstance.interceptors.request.use(
 
     const token = localStorage.getItem("access_token") || "";
     const decoded_token: DecodedTokenType = jwt_decode(token);
-    if (decoded_token?.exp < currentTime.getTime() / 1000) {
-    }
     if (token) {
+      const decoded_token: DecodedTokenType = jwt_decode(token);
+      if (decoded_token?.exp < currentTime.getTime() / 1000) {
+        // const refreshToken = await useRefreshTokenMutation();
+        // console.log(refreshToken.toString(), 123);
+        // localStorage.setItem("access_token", refreshToken.toString());
+        axiosInstance
+          .post("/auth/refreshtoken", null, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            console.log(res, "response");
+          });
+      } else {
+        config.headers.set("Authorization", `Bearer ${token}`);
+      }
     }
-    config.headers["Authorization"] = `Bearer ${token}`;
+    // config.headers["Authorization"] = `Bearer ${token}`;
     // config.headers["Content-Type"] = "multipart/form-data;";
     return config;
   },

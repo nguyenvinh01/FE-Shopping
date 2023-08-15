@@ -3,9 +3,19 @@ import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsFillClipboardFill, BsCart3 } from "react-icons/bs";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import { dashboardUser, routes } from "../../routes";
 import { useGetUserQuery } from "../../redux/apis/apiUser";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { User } from "../../interface/interface";
+import { InitialStateType } from "../../redux/slice/userSlice";
 
 const DashboardUserWrapper = styled.div`
   display: flex;
@@ -43,6 +53,14 @@ const options = [
 ];
 
 export const DashboardUser = () => {
+  const user = useSelector<RootState, User>((state) => state.user);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("access_token");
+
+  if (!token) {
+    navigate("/");
+  }
+  useEffect(() => {}, [user]);
   return (
     <DashboardUserWrapper>
       <DashboardUserSide>

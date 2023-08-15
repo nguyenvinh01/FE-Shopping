@@ -9,7 +9,27 @@ import { API } from "./shared/Constants/Constants";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { setUser } from "./redux/slice/userSlice";
+import { useRefreshTokenMutation } from "./redux/apis/apiUser";
 function App() {
+  // const [refreshToken] = useRefreshTokenMutation();
+  // refreshToken().then((res) => {
+  //   console.log(res);
+  // });
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
+    // axios.post(
+    //   `http://localhost:3000/auth/refreshtoken`,
+    //   null,
+
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     withCredentials: true,
+    //   }
+    // );
+  }, []);
   return (
     <Router>
       <Routes>

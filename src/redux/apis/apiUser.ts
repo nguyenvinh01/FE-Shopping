@@ -12,6 +12,8 @@ import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import axiosInstance from "../../shared/services/http-clients";
 import { DataUserUpdate, LoginResponse, User } from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
+import { prepareHeaders } from "../service/prepareHeaders";
+import { InitialStateType } from "../slice/userSlice";
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -26,39 +28,13 @@ export interface DecodedTokenType {
 }
 
 export interface ResponseRefreshToken {
-  // data?: {
-  // };
-  success: boolean;
-  AccessToken: string;
-  // error?: FetchBaseQueryError | SerializedError;
+  data?: {
+    success: boolean;
+    AccessToken: string;
+  };
+  error?: FetchBaseQueryError | SerializedError;
 }
-export const prepareHeaders = async (headers: Headers) => {
-  const currentTime = new Date();
-  const token = localStorage.getItem("access_token");
 
-  if (token) {
-    const decoded_token: DecodedTokenType = jwt_decode(token);
-    if (decoded_token?.exp < currentTime.getTime() / 1000) {
-      // const refreshToken = userApi.endpoints.refreshToken;
-      // const refreshTokenResponse = await useRefreshTokenMutation();
-      // localStorage.setItem("access_token", refreshToken);
-      const tokenResponse: ResponseRefreshToken = await axios.post(
-        `http://localhost:3000/auth/refreshtoken`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(tokenResponse, "response");
-      headers.set("Authorization", `Bearer ${tokenResponse.AccessToken}`);
-    } else {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
-  }
-  return headers;
-};
 const baseQuery = fetchBaseQuery({
   baseUrl: API,
   credentials: "include",
@@ -77,6 +53,13 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    logout: builder.mutation<void, void>({
+      invalidatesTags: ["User"],
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+    }),
     register: builder.mutation({
       query: (data) => ({
         url: "/auth/signup",
@@ -90,7 +73,7 @@ export const userApi = createApi({
         method: "POST",
       }),
     }),
-    getUser: builder.query<User, void>({
+    getUser: builder.query<InitialStateType, void>({
       query: () => ({
         url: "/user/me",
         method: "GET",
@@ -138,4 +121,5 @@ export const {
   useUpdateUserMutation,
   useGetAllUserQuery,
   useGetUserByIdQuery,
+  useLogoutMutation,
 } = userApi;

@@ -1,11 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { API } from "../../shared/Constants/Constants";
 import { DataProductUpdate, Product } from "../../interface/interface";
-import { prepareHeaders } from "./apiUser";
+import { prepareHeaders } from "../service/prepareHeaders";
+// import { prepareHeaders } from "./apiUser";
 
 export const productApi = createApi({
   reducerPath: "productsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: API, prepareHeaders }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: API,
+    credentials: "include",
+    prepareHeaders: prepareHeaders,
+  }),
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (arg) => ({
