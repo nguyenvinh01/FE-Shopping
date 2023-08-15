@@ -49,26 +49,27 @@ const getBase64 = (file: RcFile): Promise<string> =>
 
 export const AddProduct: React.FC = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState<ProductFormValues>({
     name: "",
-    category: [],
+    categories: [],
     price: 0,
     quantity: 0,
     description: "",
   });
   const navigator = useNavigate();
-  const { data } = useGetCategoriesQuery("");
-  const [createProduct] = useCreateProductMutation();
+  const { data: categories } = useGetCategoriesQuery({});
+  const [createProduct, { isError, data, error }] = useCreateProductMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const categoryOptions = () => {
-    if (!data) {
+    if (!categories) {
       return null; //Hoặc hiển thị thông báo tải
     }
-    return data.map((category: Category) => (
+    return categories.data?.map((category: Category) => (
       <Option key={category.id} value={category.id}>
         {category.label}
       </Option>
@@ -88,6 +89,7 @@ export const AddProduct: React.FC = () => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
     }
+    console.log(fileList, "fileList");
 
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
@@ -98,9 +100,11 @@ export const AddProduct: React.FC = () => {
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    // console.log(fileList, "fileList");
+    console.log(fileList, "fileList");
   };
-
+  const handleBeforeUpload = () => {
+    return false;
+  };
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -121,13 +125,13 @@ export const AddProduct: React.FC = () => {
     return false;
   };
 
-  const handleCategoryChange = (value: string[]) => {
-    setFormValues({ ...formValues, category: value });
+  const handleCategoryChange = (value: number[]) => {
+    setFormValues({ ...formValues, categories: value });
   };
 
   const handleSubmit = (values: ProductFormValues) => {
-    // Xử lý dữ liệu form khi người dùng nhấn nút Đăng ký sản phẩm
-    // console.log("Submitted data:", values);
+    console.log(fileList, "filelist");
+
     if (fileList.length === 0) {
       message.error("Vui lòng tải ảnh sản phẩm!");
       return;
@@ -136,7 +140,7 @@ export const AddProduct: React.FC = () => {
     // console.log(values);
     const productData = {
       name: form.getFieldValue("name"),
-      category: form.getFieldValue("category"),
+      categories: form.getFieldValue("category"),
       price: parseInt(form.getFieldValue("price")),
       quantity: parseInt(form.getFieldValue("quantity")),
       description: form.getFieldValue("description"),
@@ -148,6 +152,9 @@ export const AddProduct: React.FC = () => {
     };
     console.log(11, productData);
     createProduct(dataUpdate);
+    if (!isError) {
+      navigate("/admin/products");
+    }
   };
 
   return (
@@ -168,10 +175,10 @@ export const AddProduct: React.FC = () => {
           <div style={{ marginRight: "20px", flex: "1" }}>
             <UploadContainer
               listType="picture-card"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
               fileList={fileList}
               onPreview={handlePreview}
               onChange={handleChange}
+              beforeUpload={handleBeforeUpload}
             >
               {fileList.length >= 1 ? null : uploadButton}
             </UploadContainer>
@@ -208,7 +215,7 @@ export const AddProduct: React.FC = () => {
             >
               <Select
                 placeholder="Chọn danh mục"
-                value={formValues.category}
+                value={formValues.categories}
                 onChange={handleCategoryChange}
                 mode="multiple" // Cho phép chọn nhiều danh mục
                 showSearch // Hiển thị thanh tìm kiếm

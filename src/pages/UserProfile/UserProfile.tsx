@@ -78,7 +78,6 @@ export const UserProfile = () => {
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    console.log(fileList, "fileList");
   };
 
   const showModal = () => {
@@ -201,7 +200,7 @@ export const UserProfile = () => {
       </Modal>
       <Modal
         title="Xác nhận chỉnh sửa"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={onFinish}
         onCancel={handleCancelForm}
         okText="Đồng ý"

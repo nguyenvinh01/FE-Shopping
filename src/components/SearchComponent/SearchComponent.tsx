@@ -1,6 +1,8 @@
 import Search from "antd/es/input/Search";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import { setKeyWord } from "../../redux/slice/productSlice";
 const color = "red";
 const InputSearchComponent = styled.div`
   display: flex;
@@ -61,6 +63,10 @@ export const SearchComponent = ({
   color,
   ...rest
 }: InputSearchType) => {
+  const dispatch = useDispatch();
+  const handleSearch = (value: string) => {
+    dispatch(setKeyWord(value));
+  };
   return (
     // <div>
     <InputSearchComponent>
@@ -69,6 +75,7 @@ export const SearchComponent = ({
         enterButton={textButton}
         size="large"
         {...rest}
+        onSearch={(value: string) => handleSearch(value)}
       />
     </InputSearchComponent>
     // </div>

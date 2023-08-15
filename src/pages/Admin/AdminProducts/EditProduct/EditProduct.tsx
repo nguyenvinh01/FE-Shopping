@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { Form, Input, Select, Upload, Button, message } from "antd";
+import { Form, Input, Select, Upload, Button, message, Modal } from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import type { UploadChangeParam } from "antd/es/upload";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useEditProductMutation,
+  useGetProductDetailQuery,
+} from "../../../../redux/apis/apiProduct";
+import { useGetCategoriesQuery } from "../../../../redux/apis/apiCategory";
+import {
+  Category,
+  CategoryOptionData,
+  ProductResponse,
+  ProductUpdateDataType,
+} from "../../../../interface/interface";
 
 const { Option } = Select;
 
@@ -16,75 +27,72 @@ const InputContent = styled.div`
 `;
 
 const UploadContainer = styled(Upload)`
-  .ant-upload-select {
+  /* .ant-upload-select {
     margin: 30px 30px 30px 30px;
   }
   .ant-upload {
     width: 250px !important;
     height: 250px !important;
-  }
+  } */
 `;
-
-interface ProductFormValues {
-  imageUrl: string;
-  productName: string;
-  category: string[];
-  price: number;
-  quantity: number;
-  description: string;
-}
-
-interface OptionData {
-  key: string;
-  value: string;
-  children: string;
-}
-
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
+const ModalUploadImage = styled(Modal)`
+  /* .ant-upload-list {
+    margin: 30px 30px 30px 30px;
+    width: 250px !important;
+    height: 250px !important;
   }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-};
+  .ant-upload-list-item {
+    width: 250px !important;
+    height: 250px !important;
+  } */
+`;
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 export const EditProduct: React.FC = () => {
-  const [formValues, setFormValues] = useState<ProductFormValues>({
-    imageUrl: "",
-    productName: "",
-    category: [],
-    price: 0,
-    quantity: 0,
-    description: "",
-  });
+  const { id }: { id: string } = useParams() as { id: string };
+  const { data } = useGetProductDetailQuery(id);
+  const { data: categories } = useGetCategoriesQuery({});
+  const [form] = Form.useForm();
+  const [editProduct, { isError }] = useEditProductMutation();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState<UploadFile[]>([
+    // {
+    //   uid: "-1",
+    //   name: data?.data.image_url,
+    //   status: "done",
+    //   url: data?.data.image_url,
+    // },
+  ]);
   const [loading, setLoading] = useState(false);
   const navigator = useNavigate();
 
-  const handleImageUpload: UploadProps["onChange"] = (
-    info: UploadChangeParam<UploadFile>
-  ) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
+  const categoryOptions = () => {
+    if (!categories) {
+      return null; //Hoặc hiển thị thông báo tải
     }
-    if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-        setFormValues({ ...formValues, imageUrl: url });
-      });
-    }
+    return categories.data?.map((category: Category) => (
+      <Option key={category.id} value={category.id}>
+        {category.label}
+      </Option>
+    ));
   };
+
+  form.setFieldsValue({
+    imageUrl: data?.data.image_url,
+    productName: data?.data.name,
+    categories: data?.data.categories.map((item) => item.id),
+    price: data?.data.price,
+    quantity: data?.data.quantity,
+    description: data?.data.description,
+  });
 
   const uploadButton = (
     <div>
@@ -92,15 +100,13 @@ export const EditProduct: React.FC = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
   };
-
-  const filterOption = (input: string, option: OptionData | undefined) => {
+  const filterOption = (
+    input: string,
+    option: CategoryOptionData | undefined
+  ) => {
     if (option?.children) {
       return option.children
         .toString()
@@ -109,18 +115,43 @@ export const EditProduct: React.FC = () => {
     }
     return false;
   };
+  const handleCancel = () => setPreviewOpen(false);
 
-  const handleCategoryChange = (value: string[]) => {
-    setFormValues({ ...formValues, category: value });
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+    );
   };
-
+  const handleBeforeUpload = () => {
+    return false;
+  };
   const handleDeleteProduct = () => {
     alert("Xóa thành công");
   };
 
-  const handleSubmit = (values: ProductFormValues) => {
-    // Xử lý dữ liệu form khi người dùng nhấn nút Đăng ký sản phẩm
-    console.log("Submitted data:", values);
+  const handleSubmit = () => {
+    const dataUpdate: ProductUpdateDataType = {
+      productImage: fileList[0].originFileObj as Blob,
+      productInformation: {
+        name: form.getFieldValue("name"),
+        categories: form.getFieldValue("categories"),
+        price: form.getFieldValue("price"),
+        quantity: form.getFieldValue("quantity"),
+        description: form.getFieldValue("description"),
+      },
+    };
+    console.log(form.getFieldValue("categories"));
+
+    editProduct({ data: dataUpdate, id: data?.data.id });
+    if (!isError) {
+      navigator("/admin/products");
+    }
   };
 
   return (
@@ -129,6 +160,7 @@ export const EditProduct: React.FC = () => {
       <div>
         <Form
           onFinish={handleSubmit}
+          form={form}
           layout="vertical"
           style={{
             display: "flex",
@@ -146,24 +178,26 @@ export const EditProduct: React.FC = () => {
               ]}
             >
               <UploadContainer
-                name="avatar"
                 listType="picture-card"
                 className="avatar-uploader"
-                showUploadList={false}
-                // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                beforeUpload={beforeUpload}
-                onChange={handleImageUpload}
+                beforeUpload={handleBeforeUpload}
+                onPreview={handlePreview}
+                onChange={handleChange}
               >
-                {formValues.imageUrl ? (
-                  <img
-                    src={formValues.imageUrl}
-                    alt="avatar"
-                    style={{ width: "100%" }}
-                  />
-                ) : (
-                  uploadButton
-                )}
+                {fileList.length >= 1 ? null : uploadButton}
               </UploadContainer>
+              <ModalUploadImage
+                className="modal"
+                open={previewOpen}
+                title={previewTitle}
+                onCancel={handleCancel}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
+              </ModalUploadImage>
             </Form.Item>
           </div>
 
@@ -177,36 +211,23 @@ export const EditProduct: React.FC = () => {
             >
               <Input
                 name="productName"
-                value={formValues.productName}
-                onChange={handleInputChange}
                 style={{ width: "100%", maxWidth: "400px" }}
               />
             </Form.Item>
 
             <Form.Item
               label="Danh mục"
-              name="category"
+              name="categories"
               rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
             >
               <Select
                 placeholder="Chọn danh mục"
-                value={formValues.category}
-                onChange={handleCategoryChange}
                 mode="multiple" // Cho phép chọn nhiều danh mục
                 showSearch // Hiển thị thanh tìm kiếm
-                filterOption={filterOption} // Tìm kiếm danh mục theo tên
+                filterOption={filterOption}
                 style={{ width: "100%", maxWidth: "400px" }}
               >
-                <Option key="1" value="category1">
-                  Danh mục 1
-                </Option>
-                <Option key="2" value="category2">
-                  Danh mục 2
-                </Option>
-                <Option key="3" value="category3">
-                  Category 3
-                </Option>
-                {/* Thêm danh sách danh mục khác nếu cần */}
+                {categoryOptions()}
               </Select>
             </Form.Item>
             <div style={{ display: "flex", gap: "1rem" }}>
@@ -220,8 +241,6 @@ export const EditProduct: React.FC = () => {
                 <Input
                   type="number"
                   name="price"
-                  value={formValues.price}
-                  onChange={handleInputChange}
                   style={{
                     width: "100%",
                     maxWidth: "200px",
@@ -243,8 +262,7 @@ export const EditProduct: React.FC = () => {
                 <Input
                   type="number"
                   name="quantity"
-                  value={formValues.quantity}
-                  onChange={handleInputChange}
+                  // value={formValues.quantity}
                   style={{ width: "100%", maxWidth: "175px" }}
                 />
               </Form.Item>
@@ -259,8 +277,7 @@ export const EditProduct: React.FC = () => {
             >
               <Input.TextArea
                 name="description"
-                value={formValues.description}
-                onChange={handleInputChange}
+                // value={formValues.description}
                 style={{ width: "100%", maxWidth: "400px" }}
               />
             </Form.Item>

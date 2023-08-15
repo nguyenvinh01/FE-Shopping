@@ -102,9 +102,6 @@ export const AccountList = ({ data, isFetch }: AccountListProps) => {
               <a onClick={() => handleDetail(useData.id)}>
                 <AiOutlineEye />
               </a>
-              <a onClick={() => handleEdit(useData.id)}>
-                <AiOutlineEdit />
-              </a>
               <a onClick={() => handleDelete(useData.id)}>
                 <AiOutlineDelete />
               </a>

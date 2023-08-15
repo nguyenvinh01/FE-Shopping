@@ -19,6 +19,10 @@ export const prepareHeaders = async (headers: Headers) => {
           withCredentials: true,
         }
       );
+      localStorage.setItem(
+        "access_token",
+        `${tokenResponse.data?.AccessToken}`
+      );
       headers.set("Authorization", `Bearer ${tokenResponse.data?.AccessToken}`);
     } else {
       headers.set("Authorization", `Bearer ${token}`);

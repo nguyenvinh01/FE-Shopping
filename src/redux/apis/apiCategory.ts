@@ -2,7 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { API } from "../../shared/Constants/Constants";
 import { url } from "inspector";
 import { prepareHeaders } from "../service/prepareHeaders";
-import { Category } from "../../interface/interface";
+import {
+  Category,
+  CategoryResponse,
+  QueryParams,
+} from "../../interface/interface";
 
 export const categoryApi = createApi({
   reducerPath: "categoriesApi",
@@ -12,7 +16,7 @@ export const categoryApi = createApi({
     prepareHeaders: prepareHeaders,
   }),
   endpoints: (builder) => ({
-    getCategories: builder.query({
+    getCategories: builder.query<CategoryResponse, QueryParams>({
       query: (arg) => ({
         url: "/category",
         method: "GET",
