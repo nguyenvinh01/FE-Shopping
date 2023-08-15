@@ -58,13 +58,14 @@ const onFinishFailed = (errorInfo: any) => {
 export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [regiser] = useRegisterMutation();
+  const [regiser, { isError }] = useRegisterMutation();
   const navigate = useNavigate();
   const handleSubmit = async (values: any) => {
-    const response: Response = await regiser(values);
-    if (response.data?.success) {
+    regiser(values);
+    if (!isError) {
       navigate("/sign-in");
     }
+    // console.log(data, '');
   };
   return (
     <>

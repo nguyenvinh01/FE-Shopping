@@ -60,6 +60,15 @@ export interface Category {
   description: string;
   image_url: string;
 }
+export interface CategoryResponse {
+  success: boolean;
+  data: Category[];
+  metadata: {
+    take: string;
+    skip: string;
+    count: string;
+  };
+}
 
 export interface CategoryOptionData {
   key: string;
@@ -79,10 +88,18 @@ export interface Product {
     label: string;
   }[];
 }
+export interface ProductResponse {
+  success: boolean;
+  data: Product;
+}
 
+export interface ProductUpdateDataType {
+  productImage: Blob;
+  productInformation: ProductFormValues;
+}
 export interface ProductFormValues {
   name: string;
-  category: string[];
+  categories: number[];
   price: number;
   quantity: number;
   description: string;
@@ -119,7 +136,7 @@ export interface DataProductUpdate {
   productImage?: Blob;
   productInformation?: {
     name: string;
-    category: string[];
+    categories: number[];
     price: number;
     quantity: number;
     description: string;
@@ -127,7 +144,7 @@ export interface DataProductUpdate {
 }
 
 export interface CategoryListType {
-  categoriesData: Category[];
+  categoriesData?: Category[];
 }
 
 export interface CategoryModel {
@@ -152,6 +169,13 @@ interface DataResponse {
 }
 // export interface
 export interface Response {
-  data?: DataResponse;
-  error?: FetchBaseQueryError | SerializedError;
+  success: boolean;
+  metadata: string;
+  // error?: FetchBaseQueryError | SerializedError;
+}
+// export interface R
+export interface QueryParams {
+  limit?: string;
+  page?: string;
+  name?: string;
 }

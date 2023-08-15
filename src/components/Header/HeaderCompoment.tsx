@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-// import Cookies from "js-cookie";
 import { InitialStateType, resetUser } from "../../redux/slice/userSlice";
 import { User } from "../../interface/interface";
 import { useLoginMutation, useLogoutMutation } from "../../redux/apis/apiUser";
@@ -40,7 +39,7 @@ const itemsMenu: MenuItem[] = [
   {
     key: "product",
     label: "Product",
-    path: "/",
+    path: "/products",
   },
 ];
 
@@ -65,8 +64,6 @@ const HeaderLayout = styled.div`
   }
 `;
 export const HeaderCompoment = () => {
-  const dataCart = useSelector<RootState>((state) => state.cart);
-  const user = useSelector<RootState, User>((state) => state.user);
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -77,7 +74,7 @@ export const HeaderCompoment = () => {
     navigate("/");
   };
   const token = localStorage.getItem("access_token");
-  const items: MenuProps["items"] = [
+  const items = [
     {
       key: "1",
       label: (
@@ -107,7 +104,13 @@ export const HeaderCompoment = () => {
   return (
     <HeaderLayout>
       <Header>
-        <Image src={Logo} preview={false}>
+        <Image
+          src={Logo}
+          preview={false}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           Image
         </Image>
         <Menu mode="horizontal">
@@ -123,19 +126,12 @@ export const HeaderCompoment = () => {
           ))}
         </Menu>
 
-        <SearchComponent
-          placeholder="search text"
-          textButton="Search"
-          color="red"
-        />
         {token ? (
           <AvatarProfile>
             <Space>
-              {/* <Link to={"/dashboard/cart"}> */}
-              <span onClick={() => dispatch(resetUser(""))}>
+              <Link to={"/dashboard/cart"}>
                 <BsCart4 size={25} />
-              </span>
-              {/* </Link> */}
+              </Link>
               <Dropdown menu={{ items }} placement="bottomRight" arrow>
                 <Avatar src={AvatarUser} size={40}></Avatar>
               </Dropdown>
@@ -166,7 +162,6 @@ export const HeaderCompoment = () => {
             </Space>
           </div>
         )}
-        {/*  */}
       </Header>
     </HeaderLayout>
   );

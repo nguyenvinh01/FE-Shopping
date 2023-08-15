@@ -17,6 +17,7 @@ export const AdminProductDetail = () => {
   const { id }: any = useParams();
   const navigate = useNavigate();
   const { data: productsData } = useGetProductDetailQuery(id);
+  console.log(productsData, "data product");
 
   const handleEditProduct = () => {
     navigate(`/admin/products/edit/${id}`);
@@ -30,24 +31,28 @@ export const AdminProductDetail = () => {
       <HeaderAdmin pageName="Products Detail" />
       <Container>
         <div style={{ marginLeft: "40px", flex: "1" }}>
-          <Avatar size={230} shape="square" src={productsData?.image_url} />
+          <Avatar
+            size={230}
+            shape="square"
+            src={productsData?.data.image_url}
+          />
         </div>
         <div style={{ marginRight: "20px", flex: "2" }}>
           <Descriptions title="Product Info">
             <Descriptions.Item label="Product Name">
-              {productsData?.name}
+              {productsData?.data.name}
             </Descriptions.Item>
             <Descriptions.Item label="Price">
-              {productsData?.price}
+              {productsData?.data.price}
             </Descriptions.Item>
             <Descriptions.Item label="Quantity">
-              {productsData?.quantity}
+              {productsData?.data.quantity}
             </Descriptions.Item>
             <Descriptions.Item label="Category" span={3}>
-              {productsData?.description}
+              {productsData?.data.description}
             </Descriptions.Item>
             <Descriptions.Item label="Description" span={3}>
-              {productsData?.description}
+              {productsData?.data.description}
             </Descriptions.Item>
           </Descriptions>
           <div

@@ -31,23 +31,24 @@ const DescProduct = styled.div`
 export const ProductDetail = () => {
   const { id }: any = useParams();
   const { data } = useGetProductDetailQuery(id);
+
   return (
     <ProductDetailWrapper>
       <DetailProduct>
         <Space size={50}>
           <ImageProduct>
-            <Image src={data?.image_url} width={450} height={450} />
+            <Image src={data?.data.image_url} width={450} height={450} />
           </ImageProduct>
           <DescProduct>
             <div>
-              <h2>{data?.name}</h2>
+              <h2>{data?.data.name}</h2>
             </div>
             <div>
-              <p>{data?.price} VNĐ</p>
+              <p>{data?.data.price} VNĐ</p>
             </div>
             <div>
               <h4>Description</h4>
-              <p>{data?.description}</p>
+              <p>{data?.data.description}</p>
             </div>
             <div>
               <Button size={"large"} type="primary">

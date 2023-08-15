@@ -7,6 +7,7 @@ import thunk from "redux-thunk";
 import { userApi } from "./apis/apiUser";
 import { categoryApi } from "./apis/apiCategory";
 import { productApi } from "./apis/apiProduct";
+import { productReducer } from "./slice/productSlice";
 
 const persistConfig = {
   key: "cart",
@@ -19,6 +20,7 @@ export const store = configureStore({
   reducer: {
     user: userReducer,
     cart: persistedCartReducer,
+    products: productReducer,
     [userApi.reducerPath]: userApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
     [productApi.reducerPath]: productApi.reducer,

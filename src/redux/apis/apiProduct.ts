@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { API } from "../../shared/Constants/Constants";
-import { DataProductUpdate, Product } from "../../interface/interface";
+import {
+  DataProductUpdate,
+  Product,
+  ProductFormValues,
+  ProductResponse,
+  ProductUpdateDataType,
+} from "../../interface/interface";
 import { prepareHeaders } from "../service/prepareHeaders";
 // import { prepareHeaders } from "./apiUser";
 
@@ -20,16 +26,14 @@ export const productApi = createApi({
       }),
     }),
 
-    getProductDetail: builder.query<Product, string>({
+    getProductDetail: builder.query<ProductResponse, string>({
       query: (id: string) => ({
         url: `/product/${id}`,
         method: "GET",
       }),
-      transformResponse: (response: { data: Product }, meta, arg) =>
-        response.data,
     }),
 
-    createProduct: builder.mutation({
+    createProduct: builder.mutation<void, DataProductUpdate>({
       // invalidatesTags: ["Product"],
       query: (data: DataProductUpdate) => {
         const formData = new FormData();
@@ -47,6 +51,24 @@ export const productApi = createApi({
         };
       },
     }),
+    editProduct: builder.mutation<
+      void,
+      { data: ProductUpdateDataType; id: string | undefined }
+    >({
+      query: ({ data, id }) => {
+        const formData = new FormData();
+        formData.append("productImage", data.productImage);
+        formData.append(
+          "productInformation",
+          JSON.stringify(data.productInformation)
+        );
+        return {
+          url: `/product/${id}`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+    }),
   }),
 });
 
@@ -54,4 +76,5 @@ export const {
   useGetProductsQuery,
   useGetProductDetailQuery,
   useCreateProductMutation,
+  useEditProductMutation,
 } = productApi;

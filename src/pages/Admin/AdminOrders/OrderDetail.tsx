@@ -45,7 +45,7 @@ export const Orderdetail = ({
   return (
     <div>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         onOk={onOk}
         footer={null}

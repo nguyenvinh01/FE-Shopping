@@ -10,7 +10,12 @@ import jwt_decode from "jwt-decode";
 import { API } from "../../shared/Constants/Constants";
 import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import axiosInstance from "../../shared/services/http-clients";
-import { DataUserUpdate, LoginResponse, User } from "../../interface/interface";
+import {
+  DataUserUpdate,
+  LoginResponse,
+  Response,
+  User,
+} from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
 import { prepareHeaders } from "../service/prepareHeaders";
 import { InitialStateType } from "../slice/userSlice";
@@ -60,7 +65,7 @@ export const userApi = createApi({
         method: "POST",
       }),
     }),
-    register: builder.mutation({
+    register: builder.mutation<Response, string>({
       query: (data) => ({
         url: "/auth/signup",
         method: "POST",

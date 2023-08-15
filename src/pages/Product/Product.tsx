@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { styled } from "styled-components";
 import { CardProduct } from "../../components/CardProduct/CardProduct";
 import { SearchList } from "../../components/SearchList/SearchList";
-import { Button, Checkbox, Select, Slider } from "antd";
+import { Button, Checkbox, Pagination, Select, Slider } from "antd";
 import { useGetCategoriesQuery } from "../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../redux/apis/apiProduct";
 import { Category, Product } from "../../interface/interface";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
+import { SearchComponent } from "../../components/SearchComponent/SearchComponent";
 
 const ProductContent = styled.div`
   display: flex;
@@ -78,7 +79,7 @@ export const Products = () => {
   const [filterPrice, setFilterPrice] = useState(0);
   const [priceSort, setPriceSort] = useState(0);
 
-  const { data: categoriesData } = useGetCategoriesQuery("");
+  const { data: categoriesData } = useGetCategoriesQuery({});
   const { data: productsData } = useGetProductsQuery("");
 
   const HandleChangePriceFilter = (newValue: number) => {
@@ -93,66 +94,72 @@ export const Products = () => {
     console.log("checked = ", checkedValues);
   };
 
-  const categoryOptions = categoriesData?.map((category: Category) => ({
-    value: category.id,
-    label: category.label,
-  }));
+  // const categoryOptions = categoriesData?.map((category: Category) => ({
+  //   value: category.id,
+  //   label: category.label,
+  // }));
 
   const renderProductList = () => {
     if (!productsData) {
       return null; //Hoặc hiển thị thông báo tải
     }
-    return productsData?.map((product: Product) => (
-      <CardProduct
-        key={product.id}
-        name={product.name}
-        price={product.price}
-        // desc={product.description}
-        img_url={product.image_url}
-      />
-    ));
+    // return productsData?.map((product: Product) => (
+    //   <CardProduct
+    //     key={product.id}
+    //     name={product.name}
+    //     price={product.price}
+    //     // desc={product.description}
+    //     img_url={product.image_url}
+    //   />
+    // ));
   };
 
   return (
-    <ProductContent>
-      <ProductFilter>
-        <FilterHeader>
-          <h3>Filter</h3>
-          <Button type="default" shape="default">
-            Reset
-          </Button>
-        </FilterHeader>
-        <FilterSlider>
-          <h3>Price</h3>
-          <Slider
-            min={0}
-            max={20000}
-            onChange={HandleChangePriceFilter}
-            value={typeof filterPrice === "number" ? filterPrice : 0}
-            step={1000}
-          />
-          <p>Max price {filterPrice}</p>
+    <>
+      <SearchComponent
+        placeholder="search text"
+        textButton="Search"
+        color="red"
+      />
+      <ProductContent>
+        <ProductFilter>
+          <FilterHeader>
+            <h3>Filter</h3>
+            <Button type="default" shape="default">
+              Reset
+            </Button>
+          </FilterHeader>
+          <FilterSlider>
+            <h3>Price</h3>
+            <Slider
+              min={0}
+              max={20000}
+              onChange={HandleChangePriceFilter}
+              value={typeof filterPrice === "number" ? filterPrice : 0}
+              step={1000}
+            />
+            <p>Max price {filterPrice}</p>
 
-          <Select
-            defaultValue={1}
-            style={{ width: 200 }}
-            onChange={handleChangePriceSort}
-            options={priceOptions}
-          />
-        </FilterSlider>
-        {/* // <SearchList></SearchList>
+            <Select
+              defaultValue={1}
+              style={{ width: 200 }}
+              onChange={handleChangePriceSort}
+              options={priceOptions}
+            />
+          </FilterSlider>
+          {/* // <SearchList></SearchList>
         // <SearchList></SearchList> */}
-        <CategorySearch>
-          <h3>Categories</h3>
-          <Checkbox.Group
-            options={categoryOptions}
-            onChange={onCheckBoxChange}
-            style={{ flexDirection: "column" }}
-          />
-        </CategorySearch>
-      </ProductFilter>
-
-      <ProductItems>{renderProductList()}</ProductItems>
-    </ProductContent>
+          <CategorySearch>
+            <h3>Categories</h3>
+            <Checkbox.Group
+              // options={categoryOptions}
+              onChange={onCheckBoxChange}
+              style={{ flexDirection: "column" }}
+            />
+          </CategorySearch>
+        </ProductFilter>
+        <ProductItems>{renderProductList()}</ProductItems>;
+      </ProductContent>
+    </>
   );
 };

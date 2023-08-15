@@ -2,7 +2,7 @@ import { List, Menu } from "antd";
 import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import { AiOutlineUser } from "react-icons/ai";
-import { BsFillClipboardFill, BsCart3 } from "react-icons/bs";
+import { BsCart3 } from "react-icons/bs";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,12 +10,10 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
-import { dashboardUser, routes } from "../../routes";
-import { useGetUserQuery } from "../../redux/apis/apiUser";
+import { dashboardUser } from "../../routes";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { User } from "../../interface/interface";
-import { InitialStateType } from "../../redux/slice/userSlice";
 
 const DashboardUserWrapper = styled.div`
   display: flex;
@@ -76,11 +74,6 @@ export const DashboardUser = () => {
             </List.Item>
           )}
         />
-        {/* <Menu mode="vertical" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1">Tai khoan</Menu.Item>
-          <Menu.Item key="2">Tai khoan</Menu.Item>
-          <Menu.Item key="3">Tai khoan</Menu.Item>
-        </Menu> */}
       </DashboardUserSide>
       <DashboardUserContent>
         <Routes>

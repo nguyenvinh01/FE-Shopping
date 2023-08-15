@@ -38,7 +38,7 @@ export const AdminProducts = () => {
   const [searchValue, setSearchValue] = React.useState("");
   const navigate = useNavigate();
 
-  const { data: categoriesData } = useGetCategoriesQuery("");
+  const { data: categoriesData } = useGetCategoriesQuery({});
   const { data: productsData } = useGetProductsQuery({
     categoryIds: selectedCategory,
     name: searchValue,
@@ -46,13 +46,14 @@ export const AdminProducts = () => {
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
+    console.log("search product", value, searchValue);
   };
 
   const categoryOptions = () => {
     if (!categoriesData) {
       return null;
     }
-    return categoriesData.data.map((category: Category) => (
+    return categoriesData?.data.map((category: Category) => (
       <Option key={category.id} value={category.id}>
         {category.label}
       </Option>
@@ -61,7 +62,6 @@ export const AdminProducts = () => {
 
   const handleCategoryChange = (value: string[]) => {
     setSelectedCategory(value.join(","));
-    // console.log(33, value.join(","));
   };
 
   const filterOption = (
@@ -90,15 +90,13 @@ export const AdminProducts = () => {
             />
             <Select
               placeholder="Chọn danh mục"
-              // value={formValues.category}
               onChange={handleCategoryChange}
-              mode="multiple" // Cho phép chọn nhiều danh mục
-              showSearch // Hiển thị thanh tìm kiếm
-              filterOption={filterOption} // Tìm kiếm danh mục theo tên
+              mode="multiple"
+              showSearch
+              filterOption={filterOption}
               style={{ width: "300px" }}
             >
               {categoryOptions()}
-              {/* Thêm danh sách danh mục khác nếu cần */}
             </Select>
           </SearchContainer>
 
