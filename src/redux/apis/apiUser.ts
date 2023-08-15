@@ -103,6 +103,7 @@ export const userApi = createApi({
         url: "/user",
         method: "GET",
       }),
+      // transformResponse: (response: { data: User }, meta, arg) => response.data,
     }),
     getUserById: builder.query<User, string>({
       query: (id: string) => ({

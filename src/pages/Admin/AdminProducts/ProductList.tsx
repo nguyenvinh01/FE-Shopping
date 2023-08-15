@@ -1,4 +1,4 @@
-import { Space, Table } from "antd";
+import { Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,6 @@ export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
       title: "Product Name",
       dataIndex: "name",
       key: "name",
-      // render: (text) => <a>{text}</a>,
     },
     {
       title: "Quantity",
@@ -44,6 +43,22 @@ export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
       title: "Price",
       dataIndex: "price",
       key: "price",
+    },
+    {
+      title: "Category",
+      dataIndex: "categories",
+      key: "categories",
+      render: (_, categories) => (
+        <>
+          {categories.categories.map((category) => {
+            return (
+              <Tag color="blue" key={category.id}>
+                {category.label.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
     },
     {
       title: "Actions",

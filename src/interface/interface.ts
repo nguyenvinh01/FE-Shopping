@@ -57,7 +57,7 @@ export interface User {
 export interface Category {
   id: number;
   label: string;
-  desc: string;
+  description: string;
   image_url: string;
 }
 
@@ -74,6 +74,10 @@ export interface Product {
   description: string;
   quantity: number;
   image_url: string;
+  categories: {
+    id: number;
+    label: string;
+  }[];
 }
 
 export interface ProductFormValues {
@@ -101,6 +105,10 @@ export interface DataProductListType {
   category: string;
   quantity: number;
   price: number;
+  categories: {
+    id: number;
+    label: string;
+  }[];
   //   status: string;
 }
 export interface ProductListType {
@@ -116,6 +124,17 @@ export interface DataProductUpdate {
     quantity: number;
     description: string;
   };
+}
+
+export interface CategoryListType {
+  categoriesData: Category[];
+}
+
+export interface CategoryModel {
+  visible: boolean;
+  onCancel: () => void;
+  onEdit: (id: number) => void;
+  id: number;
 }
 export interface DataUserUpdate {
   userImage?: Blob;

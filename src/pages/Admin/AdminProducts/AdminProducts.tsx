@@ -45,16 +45,14 @@ export const AdminProducts = () => {
   });
 
   const handleSearch = (value: string) => {
-    // Xử lý tìm kiếm theo giá trị value và danh mục category
-    // Gọi hàm onSearch để truyền giá trị tìm kiếm và danh mục lên component cha
     setSearchValue(value);
   };
 
   const categoryOptions = () => {
     if (!categoriesData) {
-      return null; //Hoặc hiển thị thông báo tải
+      return null;
     }
-    return categoriesData.map((category: Category) => (
+    return categoriesData.data.map((category: Category) => (
       <Option key={category.id} value={category.id}>
         {category.label}
       </Option>
@@ -111,7 +109,7 @@ export const AdminProducts = () => {
             Add new product
           </Button>
         </TopContainer>
-        <ProductList productsData={productsData} />
+        <ProductList productsData={productsData?.data} />
       </AdminContainer>
     </>
   );
