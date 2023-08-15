@@ -99,6 +99,11 @@ const items = [
     label: "Products",
   },
   {
+    key: "/admin/categories",
+    icon: <BsBox2 />,
+    label: "Categories",
+  },
+  {
     key: "/admin/orders",
     icon: <BsLayoutTextSidebarReverse />,
     label: "Orders",

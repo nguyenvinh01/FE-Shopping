@@ -16,6 +16,7 @@ import { AdminProductDetail } from "../pages/Admin/AdminProducts/AdminProductDet
 import { AdminAccounts } from "../pages/Admin/AdminAccounts/AdminAccounts";
 import { Products } from "../pages/Product/Product";
 import { ProductDetail } from "../pages/ProductDetail/ProductDetail";
+import { AdminCategories } from "../pages/Admin/AdminCategories/AdminCategories";
 
 export const routes = [
   {
@@ -95,6 +96,10 @@ export const dashboardAdmin = [
   {
     path: "products/detail/:id",
     page: AdminProductDetail,
+  },
+  {
+    path: "categories",
+    page: AdminCategories,
   },
   {
     path: "orders",

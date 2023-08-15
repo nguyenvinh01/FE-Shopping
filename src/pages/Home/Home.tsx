@@ -36,47 +36,47 @@ export const Home: React.FC = () => {
 
   useEffect(() => {}, []);
 
-  // console.log("categoriesData: ", categoriesData);
-  // console.log("productsData: ", productsData);
+  console.log("categoriesData: ", categoriesData);
+  console.log("productsData: ", productsData);
 
-  // const renderCategoryList = () => {
-  //   if (!categoriesData) {
-  //     return null; // Hoặc hiển thị thông báo tải hoặc xử lý khác
-  //   }
-  //   return categoriesData.map((category: Category) => (
-  //     <CardCategory
-  //       key={category.id}
-  //       name={category.label}
-  //       img_url={category.image_url}
-  //     />
-  //   ));
-  // };
+  const renderCategoryList = () => {
+    if (!categoriesData) {
+      return null; // Hoặc hiển thị thông báo tải hoặc xử lý khác
+    }
+    return categoriesData.data.map((category: Category) => (
+      <CardCategory
+        key={category.id}
+        name={category.label}
+        img_url={category.image_url}
+      />
+    ));
+  };
 
-  // const renderProductList = () => {
-  //   if (!productsData) {
-  //     return null; //Hoặc hiển thị thông báo tải
-  //   }
-  //   return productsData.map((product: Product) => (
-  //     <CardProduct
-  //       key={product.id}
-  //       name={product.name}
-  //       price={product.price}
-  //       desc={product.description}
-  //       img_url={product.image_url}
-  //     />
-  //   ));
-  // };
+  const renderProductList = () => {
+    if (!productsData) {
+      return null; //Hoặc hiển thị thông báo tải
+    }
+    return productsData.data.map((product: Product) => (
+      <CardProduct
+        key={product.id}
+        name={product.name}
+        price={product.price}
+        desc={product.description}
+        img_url={product.image_url}
+      />
+    ));
+  };
 
   return (
     <HomePage>
       <ContentWrapper>
         <ContentTitle>Shop Our Top Categories</ContentTitle>
-        {/* <HomeItems>{renderCategoryList()}</HomeItems> */}
+        <HomeItems>{renderCategoryList()}</HomeItems>
       </ContentWrapper>
 
       <ContentWrapper>
         <ContentTitle>Best Deals For You!</ContentTitle>
-        {/* <HomeItems>{renderProductList()}</HomeItems> */}
+        <HomeItems>{renderProductList()}</HomeItems>
       </ContentWrapper>
     </HomePage>
   );

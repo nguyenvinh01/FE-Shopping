@@ -10,7 +10,7 @@ export const AdminAccounts = () => {
   return (
     <>
       <HeaderAdmin pageName="Accounts" />
-      <AccountList data={userList} isFetch={isFetching} />
+      <AccountList data={userList?.data} isFetch={isFetching} />
     </>
   );
 };

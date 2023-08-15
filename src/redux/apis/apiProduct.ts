@@ -25,6 +25,8 @@ export const productApi = createApi({
         url: `/product/${id}`,
         method: "GET",
       }),
+      transformResponse: (response: { data: Product }, meta, arg) =>
+        response.data,
     }),
 
     createProduct: builder.mutation({
