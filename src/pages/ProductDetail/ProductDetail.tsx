@@ -43,7 +43,7 @@ export const ProductDetail = () => {
               <h2>{data?.name}</h2>
             </div>
             <div>
-              <h3>{data?.price}</h3>
+              <p>{data?.price} VNĐ</p>
             </div>
             <div>
               <h4>Description</h4>

@@ -2,32 +2,28 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { User } from "../../interface/interface";
 // import Cookies from "js-cookie";
 
-const initialState: InitialStateType = {
-  user: {
-    id: "",
-    email: "",
-    fullname: "",
-    address: "",
-    phone: "",
-    role: 0,
-    image_url: "",
-  },
+const initialState: User = {
+  id: "",
+  email: "",
+  fullname: "",
+  address: "",
+  phone: "",
+  role: 0,
+  image_url: "",
 };
 export interface InitialStateType {
-  user: User;
+  success: boolean;
+  data: User;
 }
 const userSlice = createSlice({
   name: "users",
   initialState: initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload;
-      console.log(action.payload, state, "user");
+      state = Object.assign(state, action.payload);
     },
-    resetUser: (state, action) => {
-      state.user = action.payload;
-      localStorage.clear();
-      // Cookies.set("RefreshToken", "");
+    resetUser: (state = initialState, action) => {
+      state = Object.assign(state, initialState);
     },
   },
 });

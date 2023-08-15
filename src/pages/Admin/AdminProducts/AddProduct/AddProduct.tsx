@@ -14,6 +14,7 @@ import {
   ProductFormValues,
 } from "../../../../interface/interface";
 import { useCreateProductMutation } from "../../../../redux/apis/apiProduct";
+import { useForm } from "antd/es/form/Form";
 
 const { Option } = Select;
 
@@ -47,6 +48,7 @@ const getBase64 = (file: RcFile): Promise<string> =>
   });
 
 export const AddProduct: React.FC = () => {
+  const [form] = Form.useForm();
   const [formValues, setFormValues] = useState<ProductFormValues>({
     name: "",
     category: [],
@@ -55,7 +57,7 @@ export const AddProduct: React.FC = () => {
     description: "",
   });
   const navigator = useNavigate();
-  const { data: categoriesData } = useGetCategoriesQuery("");
+  const { data } = useGetCategoriesQuery("");
   const [createProduct] = useCreateProductMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -63,10 +65,10 @@ export const AddProduct: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const categoryOptions = () => {
-    if (!categoriesData) {
+    if (!data) {
       return null; //Hoặc hiển thị thông báo tải
     }
-    return categoriesData.map((category: Category) => (
+    return data.map((category: Category) => (
       <Option key={category.id} value={category.id}>
         {category.label}
       </Option>
@@ -131,14 +133,20 @@ export const AddProduct: React.FC = () => {
       return;
     }
 
-    console.log(values);
-
+    // console.log(values);
+    const productData = {
+      name: form.getFieldValue("name"),
+      category: form.getFieldValue("category"),
+      price: parseInt(form.getFieldValue("price")),
+      quantity: parseInt(form.getFieldValue("quantity")),
+      description: form.getFieldValue("description"),
+    };
     const file = fileList[0].originFileObj;
     const dataUpdate: DataProductUpdate = {
       productImage: file,
-      productInformation: values,
+      productInformation: productData,
     };
-    console.log(11, dataUpdate);
+    console.log(11, productData);
     createProduct(dataUpdate);
   };
 
@@ -147,6 +155,7 @@ export const AddProduct: React.FC = () => {
       <HeaderAdmin pageName="Add New Product" />
       <div>
         <Form
+          form={form}
           onFinish={handleSubmit}
           layout="vertical"
           style={{

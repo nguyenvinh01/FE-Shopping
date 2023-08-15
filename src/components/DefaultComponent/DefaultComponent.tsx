@@ -4,18 +4,26 @@ import { FooterComponent } from "../Footer/FooterComponent";
 import "../../App.css";
 import { useGetUserQuery } from "../../redux/apis/apiUser";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/slice/userSlice";
+import { resetUser, setUser } from "../../redux/slice/userSlice";
 
 type DefaultComponentType = {
   children: React.ReactNode;
 };
 export const DefaultComponent = ({ children }: DefaultComponentType) => {
-  const { data, isLoading } = useGetUserQuery();
+  const { data, isLoading, isError } = useGetUserQuery();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setUser(data));
-  }, [data]);
+    if (data?.data) {
+      console.log("error data", isError);
+      dispatch(setUser(data.data));
+    }
+    if (isError) {
+      console.log("error", isError);
+
+      dispatch(resetUser({}));
+    }
+  }, [data, isError]);
   return (
     <div className="App">
       <div className="header">

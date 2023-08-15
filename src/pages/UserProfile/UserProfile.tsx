@@ -43,9 +43,7 @@ const uploadButton = (
   </div>
 );
 export const UserProfile = () => {
-  const userData = useSelector<RootState, InitialStateType>(
-    (state) => state.user
-  );
+  const userData = useSelector<RootState, User>((state) => state.user);
   const [updateUser] = useUpdateUserMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -54,12 +52,12 @@ export const UserProfile = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([
-    // {
-    //   uid: "-1",
-    //   name: "image.png",
-    //   status: "done",
-    //   url: userData.user?.image_url,
-    // },
+    {
+      uid: "-1",
+      name: userData?.image_url,
+      status: "done",
+      url: userData?.image_url,
+    },
   ]);
   const formData = new FormData();
   const [form] = Form.useForm();
@@ -88,20 +86,16 @@ export const UserProfile = () => {
   };
 
   const handleOk = () => {
-    // setIsModalOpen(false);
     setIsModalVisible(true);
-  };
-  const handleOkForm = () => {
-    setIsModalOpen(false);
-    setIsModalVisible(false);
   };
   const handleCancelModal = () => {
     setIsModalOpen(false);
-    // setIsModalVisible(false);
   };
   const handleCancelForm = () => {
-    // setIsModalOpen(false);
     setIsModalVisible(false);
+  };
+  const handleBeforeUpload = () => {
+    return false;
   };
   const onFinish = () => {
     const file = fileList[0].originFileObj;
@@ -119,16 +113,7 @@ export const UserProfile = () => {
       userInformation: userInformation,
     };
     updateUser(dataUpdate);
-    const userInformationBlob = new Blob([JSON.stringify(userInformation)]);
 
-    // formData.append("userImage", data.userImage as Blob);
-    formData.append(
-      "userInformation",
-      JSON.stringify(dataUpdate.userInformation)
-    );
-    console.log(userInformationBlob);
-
-    // axiosInstance.patch("http://localhost:3000/user", formData);
     setIsModalOpen(false);
     setIsModalVisible(false);
   };
@@ -137,7 +122,7 @@ export const UserProfile = () => {
       <Space size={"large"}>
         <div className="avatar-user">
           <Avatar
-            src={userData.user?.image_url}
+            src={userData?.image_url}
             style={{ width: "300px", height: "300px" }}
           />
         </div>
@@ -145,17 +130,17 @@ export const UserProfile = () => {
           <Descriptions title="Ho so cua toi" layout="vertical">
             {/* <Descriptions.Item label="Username">User</Descriptions.Item> */}
             <Descriptions.Item label="Fullname">
-              {userData.user?.fullname}
+              {userData?.fullname}
             </Descriptions.Item>
             <Descriptions.Item label="Email">
-              {userData.user?.email}
+              {userData?.email}
             </Descriptions.Item>
             {/* <Descriptions.Item label="Role">Admin</Descriptions.Item> */}
             <Descriptions.Item label="Address">
-              {userData.user?.address}
+              {userData?.address}
             </Descriptions.Item>
             <Descriptions.Item label="Phone Number">
-              {userData.user?.phone}
+              {userData?.phone}
             </Descriptions.Item>
           </Descriptions>
           <div>
@@ -176,6 +161,7 @@ export const UserProfile = () => {
           <Upload
             listType="picture-circle"
             fileList={fileList}
+            beforeUpload={handleBeforeUpload}
             onPreview={handlePreview}
             onChange={handleChange}
           >
@@ -195,7 +181,7 @@ export const UserProfile = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
-          initialValues={userData.user}
+          initialValues={userData}
           style={{ maxWidth: 600 }}
           onFinish={onFinish}
         >

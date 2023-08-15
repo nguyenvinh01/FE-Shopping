@@ -21,33 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 // import Cookies from "js-cookie";
 import { InitialStateType, resetUser } from "../../redux/slice/userSlice";
-
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    label: (
-      <Link to={"/dashboard"}>
-        <span>Thông tin cá nhân</span>
-      </Link>
-    ),
-  },
-  {
-    key: "2",
-    label: (
-      <Link to={"/dashboard/order"}>
-        <span>Đơn hàng</span>
-      </Link>
-    ),
-  },
-  {
-    key: "3",
-    label: (
-      <Link to={"/"}>
-        <span>Đăng xuất</span>
-      </Link>
-    ),
-  },
-];
+import { User } from "../../interface/interface";
+import { useLoginMutation, useLogoutMutation } from "../../redux/apis/apiUser";
 
 const { Item } = Menu;
 const { Header } = Layout;
@@ -91,21 +66,44 @@ const HeaderLayout = styled.div`
 `;
 export const HeaderCompoment = () => {
   const dataCart = useSelector<RootState>((state) => state.cart);
+  const user = useSelector<RootState, User>((state) => state.user);
+  const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
-  const user = useSelector<RootState, InitialStateType>((state) => state.user);
   const navigate = useNavigate();
-  console.log(dataCart);
-  const logOut = () => {
-    // localStorage.clear();
-    // Cookies.set("RefreshToken", "", {
-    //   path: "/",
-    //   expires: new Date(0),
-    //   httpOnly: false,
-    // });
+  const logOut = async () => {
     dispatch(resetUser({}));
+    localStorage.clear();
+    await logout();
     navigate("/");
   };
-  useEffect(() => {}, [user]);
+  const token = localStorage.getItem("access_token");
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <a onClick={() => navigate("/dashboard")}>
+          <span>Thông tin cá nhân</span>
+        </a>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <a onClick={() => navigate("/dashboard/order")}>
+          <span>Đơn hàng</span>
+        </a>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <a onClick={() => logOut()}>
+          <span>Đăng xuất</span>
+        </a>
+      ),
+    },
+  ];
+
   return (
     <HeaderLayout>
       <Header>
@@ -130,7 +128,7 @@ export const HeaderCompoment = () => {
           textButton="Search"
           color="red"
         />
-        {user.user?.id ? (
+        {token ? (
           <AvatarProfile>
             <Space>
               {/* <Link to={"/dashboard/cart"}> */}
