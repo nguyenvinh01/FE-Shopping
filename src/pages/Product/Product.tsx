@@ -76,11 +76,15 @@ const priceOptions = [
 ];
 
 export const Products = () => {
-  const [filterPrice, setFilterPrice] = useState(0);
+  const [filterPrice, setFilterPrice] = useState(10000000);
   const [priceSort, setPriceSort] = useState(0);
+  const [selectedCategory, setSelectedCategory] = React.useState("");
 
   const { data: categoriesData } = useGetCategoriesQuery({});
-  const { data: productsData } = useGetProductsQuery("");
+  const { data: productsData } = useGetProductsQuery({
+    categoryIds: selectedCategory,
+    maxPrice: filterPrice,
+  });
 
   const HandleChangePriceFilter = (newValue: number) => {
     setFilterPrice(newValue);
@@ -91,27 +95,28 @@ export const Products = () => {
   };
 
   const onCheckBoxChange = (checkedValues: CheckboxValueType[]) => {
-    console.log("checked = ", checkedValues);
+    setSelectedCategory(checkedValues.join(","));
+    console.log("checked = ", selectedCategory);
   };
 
-  // const categoryOptions = categoriesData?.map((category: Category) => ({
-  //   value: category.id,
-  //   label: category.label,
-  // }));
+  const categoryOptions = categoriesData?.data.map((category: Category) => ({
+    value: category.id,
+    label: category.label,
+  }));
 
   const renderProductList = () => {
     if (!productsData) {
       return null; //Hoặc hiển thị thông báo tải
     }
-    // return productsData?.map((product: Product) => (
-    //   <CardProduct
-    //     key={product.id}
-    //     name={product.name}
-    //     price={product.price}
-    //     // desc={product.description}
-    //     img_url={product.image_url}
-    //   />
-    // ));
+    return productsData?.data.map((product: Product) => (
+      <CardProduct
+        key={product.id}
+        name={product.name}
+        price={product.price}
+        // desc={product.description}
+        img_url={product.image_url}
+      />
+    ));
   };
 
   return (
@@ -133,10 +138,10 @@ export const Products = () => {
             <h3>Price</h3>
             <Slider
               min={0}
-              max={20000}
+              max={10000000}
               onChange={HandleChangePriceFilter}
-              value={typeof filterPrice === "number" ? filterPrice : 0}
-              step={1000}
+              value={typeof filterPrice === "number" ? filterPrice : 10000000}
+              step={10000}
             />
             <p>Max price {filterPrice}</p>
 
@@ -147,12 +152,11 @@ export const Products = () => {
               options={priceOptions}
             />
           </FilterSlider>
-          {/* // <SearchList></SearchList>
-        // <SearchList></SearchList> */}
+
           <CategorySearch>
             <h3>Categories</h3>
             <Checkbox.Group
-              // options={categoryOptions}
+              options={categoryOptions}
               onChange={onCheckBoxChange}
               style={{ flexDirection: "column" }}
             />

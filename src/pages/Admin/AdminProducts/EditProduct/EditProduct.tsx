@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Select, Upload, Button, message, Modal } from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
@@ -27,25 +27,20 @@ const InputContent = styled.div`
 `;
 
 const UploadContainer = styled(Upload)`
-  /* .ant-upload-select {
-    margin: 30px 30px 30px 30px;
-  }
   .ant-upload {
     width: 250px !important;
     height: 250px !important;
-  } */
-`;
-const ModalUploadImage = styled(Modal)`
-  /* .ant-upload-list {
+  }
+
+  .ant-upload-list {
     margin: 30px 30px 30px 30px;
+  }
+  .ant-upload-list .ant-upload-list-item-container {
     width: 250px !important;
     height: 250px !important;
   }
-  .ant-upload-list-item {
-    width: 250px !important;
-    height: 250px !important;
-  } */
 `;
+
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -63,16 +58,30 @@ export const EditProduct: React.FC = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    // {
-    //   uid: "-1",
-    //   name: data?.data.image_url,
-    //   status: "done",
-    //   url: data?.data.image_url,
-    // },
-  ]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [loading, setLoading] = useState(false);
   const navigator = useNavigate();
+
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue({
+        imageUrl: data?.data.image_url,
+        name: data?.data.name,
+        categories: data?.data.categories.map((item) => item.id),
+        price: data?.data.price,
+        quantity: data?.data.quantity,
+        description: data?.data.description,
+      });
+      setFileList([
+        {
+          uid: "-1",
+          name: data?.data?.image_url,
+          status: "done",
+          url: data?.data?.image_url,
+        },
+      ]);
+    }
+  }, [data]);
 
   const categoryOptions = () => {
     if (!categories) {
@@ -84,15 +93,6 @@ export const EditProduct: React.FC = () => {
       </Option>
     ));
   };
-
-  form.setFieldsValue({
-    imageUrl: data?.data.image_url,
-    productName: data?.data.name,
-    categories: data?.data.categories.map((item) => item.id),
-    price: data?.data.price,
-    quantity: data?.data.quantity,
-    description: data?.data.description,
-  });
 
   const uploadButton = (
     <div>
@@ -136,17 +136,23 @@ export const EditProduct: React.FC = () => {
   };
 
   const handleSubmit = () => {
+    if (fileList.length === 0) {
+      message.error("Vui lòng tải ảnh sản phẩm!");
+      return;
+    }
+
     const dataUpdate: ProductUpdateDataType = {
       productImage: fileList[0].originFileObj as Blob,
       productInformation: {
         name: form.getFieldValue("name"),
         categories: form.getFieldValue("categories"),
-        price: form.getFieldValue("price"),
-        quantity: form.getFieldValue("quantity"),
+        price: parseInt(form.getFieldValue("price")),
+        quantity: parseInt(form.getFieldValue("quantity")),
         description: form.getFieldValue("description"),
       },
     };
-    console.log(form.getFieldValue("categories"));
+    // console.log("Category: ", form.getFieldValue("categories"));
+    // console.log("Data: ", dataUpdate);
 
     editProduct({ data: dataUpdate, id: data?.data.id });
     if (!isError) {
@@ -170,49 +176,35 @@ export const EditProduct: React.FC = () => {
           }}
         >
           <div style={{ marginRight: "20px", flex: "1" }}>
-            <Form.Item
-              // label="Tải ảnh sản phẩm"
-              name="image"
-              rules={[
-                { required: true, message: "Vui lòng tải ảnh sản phẩm!" },
-              ]}
+            <UploadContainer
+              listType="picture-card"
+              className="avatar-uploader"
+              beforeUpload={handleBeforeUpload}
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
             >
-              <UploadContainer
-                listType="picture-card"
-                className="avatar-uploader"
-                beforeUpload={handleBeforeUpload}
-                onPreview={handlePreview}
-                onChange={handleChange}
-              >
-                {fileList.length >= 1 ? null : uploadButton}
-              </UploadContainer>
-              <ModalUploadImage
-                className="modal"
-                open={previewOpen}
-                title={previewTitle}
-                onCancel={handleCancel}
-              >
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={previewImage}
-                />
-              </ModalUploadImage>
-            </Form.Item>
+              {fileList.length >= 1 ? null : uploadButton}
+            </UploadContainer>
+            <Modal
+              open={previewOpen}
+              title={previewTitle}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
           </div>
 
           <InputContent>
             <Form.Item
               label="Tên sản phẩm"
-              name="productName"
+              name="name"
               rules={[
                 { required: true, message: "Vui lòng nhập tên sản phẩm!" },
               ]}
             >
-              <Input
-                name="productName"
-                style={{ width: "100%", maxWidth: "400px" }}
-              />
+              <Input name="name" style={{ width: "100%", maxWidth: "400px" }} />
             </Form.Item>
 
             <Form.Item
@@ -291,10 +283,10 @@ export const EditProduct: React.FC = () => {
                 }}
               >
                 <Button type="primary" htmlType="submit">
-                  Đăng ký sản phẩm
+                  Update
                 </Button>
                 <Button onClick={() => navigator("/admin/products")}>
-                  Huỷ
+                  Cancel
                 </Button>
                 <Button danger onClick={handleDeleteProduct}>
                   Delete
