@@ -1,5 +1,5 @@
 import { createSlice, current } from "@reduxjs/toolkit";
-import { User } from "../../interface/interface";
+import { ROLE, User } from "../../interface/interface";
 // import Cookies from "js-cookie";
 
 const initialState: User = {
@@ -8,7 +8,7 @@ const initialState: User = {
   fullname: "",
   address: "",
   phone: "",
-  role: 0,
+  role: ROLE.BASIC,
   image_url: "",
 };
 export interface InitialStateType {

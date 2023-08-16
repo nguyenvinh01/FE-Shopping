@@ -8,13 +8,18 @@ import {
   Modal,
   Space,
   Upload,
+  notification,
 } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { RootState } from "../../redux/store";
-import { DataUserUpdate, User } from "../../interface/interface";
+import {
+  DataUserUpdate,
+  MessageResponse,
+  User,
+} from "../../interface/interface";
 import { InitialStateType } from "../../redux/slice/userSlice";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
@@ -44,7 +49,7 @@ const uploadButton = (
 );
 export const UserProfile = () => {
   const userData = useSelector<RootState, User>((state) => state.user);
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser, result] = useUpdateUserMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -59,6 +64,16 @@ export const UserProfile = () => {
       url: userData?.image_url,
     },
   ]);
+  useEffect(() => {
+    setFileList([
+      {
+        uid: "-1",
+        name: "",
+        status: "done",
+        url: userData?.image_url,
+      },
+    ]);
+  }, []);
   const formData = new FormData();
   const [form] = Form.useForm();
 
@@ -71,9 +86,9 @@ export const UserProfile = () => {
 
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
-    );
+    // setPreviewTitle(
+    //   file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+    // );
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
@@ -96,11 +111,8 @@ export const UserProfile = () => {
   const handleBeforeUpload = () => {
     return false;
   };
-  const onFinish = () => {
+  const onFinish = async () => {
     const file = fileList[0].originFileObj;
-    if (file) {
-      console.log("co anh", file);
-    }
     const userInformation = {
       fullname: form.getFieldValue("fullname"),
       // email: form.getFieldValue("email"),
@@ -111,10 +123,19 @@ export const UserProfile = () => {
       userImage: file,
       userInformation: userInformation,
     };
-    updateUser(dataUpdate);
+    // const res: MessageResponse<User> = await updateUser(dataUpdate);
+    // if (res.data?.success) {
+    //   setIsModalOpen(false);
+    //   setIsModalVisible(false);
+    //   notification.success({
+    //     message: "Thành công",
+    //     description: "Update thành công",
+    //   });
+    // } else {
+    //   console.log(res.data?.metadata.message);
+    // }
 
-    setIsModalOpen(false);
-    setIsModalVisible(false);
+    // console.log("error", result, );
   };
   return (
     <UserProfileWrapper>
@@ -127,14 +148,12 @@ export const UserProfile = () => {
         </div>
         <div className="profile-user">
           <Descriptions title="Ho so cua toi" layout="vertical">
-            {/* <Descriptions.Item label="Username">User</Descriptions.Item> */}
             <Descriptions.Item label="Fullname">
               {userData?.fullname}
             </Descriptions.Item>
             <Descriptions.Item label="Email">
               {userData?.email}
             </Descriptions.Item>
-            {/* <Descriptions.Item label="Role">Admin</Descriptions.Item> */}
             <Descriptions.Item label="Address">
               {userData?.address}
             </Descriptions.Item>

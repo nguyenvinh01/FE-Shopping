@@ -20,7 +20,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { InitialStateType, resetUser } from "../../redux/slice/userSlice";
-import { User } from "../../interface/interface";
+import { ROLE, User } from "../../interface/interface";
 import { useLoginMutation, useLogoutMutation } from "../../redux/apis/apiUser";
 
 const { Item } = Menu;
@@ -65,6 +65,7 @@ const HeaderLayout = styled.div`
 `;
 export const HeaderCompoment = () => {
   const [logout] = useLogoutMutation();
+  const user = useSelector<RootState, User>((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logOut = async () => {
@@ -99,6 +100,29 @@ export const HeaderCompoment = () => {
         </a>
       ),
     },
+    // {
+    //   key: "4",
+    //   label:
+    //     user.role === ROLE.ADMIN ? (
+    //       <a onClick={() => navigate("/admin")}>
+    //         <span>Quản lý</span>
+    //       </a>
+    //     ) : (
+    //       true
+    //     ),
+    // },
+    ...(user.role === ROLE.ADMIN
+      ? [
+          {
+            key: "4",
+            label: (
+              <a onClick={() => navigate("/admin")}>
+                <span>Quản lý</span>
+              </a>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (

@@ -1,9 +1,9 @@
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 
-enum ROLE {
-  BASIC,
-  ADMIN,
+export enum ROLE {
+  BASIC = "BASIC",
+  ADMIN = "ADMIN",
 }
 
 export interface CheckoutItemType {
@@ -173,15 +173,22 @@ interface DataResponse {
   AccessToken?: string;
   success: boolean;
 }
-// export interface
-export interface Response {
+export interface Response<T> {
   success: boolean;
-  metadata: string;
-  // error?: FetchBaseQueryError | SerializedError;
+  metadata: { message: string };
+  data: T;
 }
-// export interface R
+
 export interface QueryParams {
   limit?: string;
   page?: string;
   name?: string;
+}
+
+export interface MessageResponse<T> {
+  data?: T;
+  error?:
+    | FetchBaseQueryError
+    | SerializedError
+    | { metadata: { data: { message: string } } };
 }
