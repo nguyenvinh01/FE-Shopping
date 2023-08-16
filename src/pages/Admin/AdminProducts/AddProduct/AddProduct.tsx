@@ -12,6 +12,7 @@ import {
   CategoryOptionData,
   DataProductUpdate,
   ProductFormValues,
+  ProductUpdateDataType,
 } from "../../../../interface/interface";
 import { useCreateProductMutation } from "../../../../redux/apis/apiProduct";
 import { useForm } from "antd/es/form/Form";
@@ -100,7 +101,7 @@ export const AddProduct: React.FC = () => {
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    console.log(fileList, "fileList");
+    // console.log(fileList, "fileList");
   };
   const handleBeforeUpload = () => {
     return false;
@@ -130,7 +131,7 @@ export const AddProduct: React.FC = () => {
   };
 
   const handleSubmit = (values: ProductFormValues) => {
-    console.log(fileList, "filelist");
+    // console.log(fileList, "filelist");
 
     if (fileList.length === 0) {
       message.error("Vui lòng tải ảnh sản phẩm!");
@@ -138,19 +139,18 @@ export const AddProduct: React.FC = () => {
     }
 
     // console.log(values);
-    const productData = {
-      name: form.getFieldValue("name"),
-      categories: form.getFieldValue("category"),
-      price: parseInt(form.getFieldValue("price")),
-      quantity: parseInt(form.getFieldValue("quantity")),
-      description: form.getFieldValue("description"),
+    const dataUpdate: ProductUpdateDataType = {
+      productImage: fileList[0].originFileObj as Blob,
+      productInformation: {
+        name: form.getFieldValue("name"),
+        categories: form.getFieldValue("categories"),
+        price: parseInt(form.getFieldValue("price")),
+        quantity: parseInt(form.getFieldValue("quantity")),
+        description: form.getFieldValue("description"),
+      },
     };
-    const file = fileList[0].originFileObj;
-    const dataUpdate: DataProductUpdate = {
-      productImage: file,
-      productInformation: productData,
-    };
-    console.log(11, productData);
+
+    // console.log(11, productData);
     createProduct(dataUpdate);
     if (!isError) {
       navigate("/admin/products");

@@ -17,6 +17,7 @@ export const productApi = createApi({
     credentials: "include",
     prepareHeaders: prepareHeaders,
   }),
+  tagTypes: ["Products"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (arg) => ({
@@ -24,6 +25,7 @@ export const productApi = createApi({
         method: "GET",
         params: { ...arg },
       }),
+      providesTags: ["Products"],
     }),
 
     getProductDetail: builder.query<ProductResponse, string>({
@@ -42,7 +44,7 @@ export const productApi = createApi({
           "productInformation",
           JSON.stringify(data.productInformation)
         );
-        console.log(JSON.stringify(data.productInformation), "conver");
+        // console.log(JSON.stringify(data.productInformation), "conver");
 
         return {
           url: "/product",
@@ -50,6 +52,7 @@ export const productApi = createApi({
           body: formData,
         };
       },
+      invalidatesTags: ["Products"],
     }),
     editProduct: builder.mutation<
       void,
@@ -68,6 +71,7 @@ export const productApi = createApi({
           body: formData,
         };
       },
+      invalidatesTags: ["Products"],
     }),
   }),
 });
