@@ -65,7 +65,7 @@ export const userApi = createApi({
         method: "POST",
       }),
     }),
-    register: builder.mutation<Response, string>({
+    register: builder.mutation<Response<any>, string>({
       query: (data) => ({
         url: "/auth/signup",
         method: "POST",
@@ -85,7 +85,7 @@ export const userApi = createApi({
       }),
       providesTags: ["User"],
     }),
-    updateUser: builder.mutation({
+    updateUser: builder.mutation<Response<User>, DataUserUpdate>({
       invalidatesTags: ["User"],
       query: (data: DataUserUpdate) => {
         const formData = new FormData();
