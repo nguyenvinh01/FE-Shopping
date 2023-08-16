@@ -8,7 +8,7 @@ import {
   useLoginMutation,
 } from "../../redux/apis/apiUser";
 import { AxiosResponse } from "axios";
-import { LoginResponse } from "../../interface/interface";
+import { LoginResponse, MessageResponse } from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { useDispatch, useSelector } from "react-redux";
@@ -69,10 +69,10 @@ const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
 
-interface Response {
-  data?: LoginResponse;
-  error?: FetchBaseQueryError | SerializedError;
-}
+// interface Response {
+//   data?: LoginResponse;
+//   error?: FetchBaseQueryError | SerializedError;
+// }
 export const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -86,17 +86,32 @@ export const SignIn = () => {
       password: password,
     };
     // const dataLoginResponse: ResponseLogin = await login(dataLogin)
-    login(dataLogin).then((res: Response) => {
-      if (res.data) {
-        localStorage.setItem("access_token", res.data.AccessToken);
-        navigate("/dashboard");
-      } else {
-        notification.open({
-          message: "Error",
-          description: "Error",
-        });
-      }
-    });
+    const response: MessageResponse<LoginResponse> = await login(dataLogin);
+    console.log(response, response.data);
+
+    if (response.data?.success) {
+      localStorage.setItem("access_token", response.data.AccessToken);
+      notification.success({
+        message: "Thành công",
+        description: "Đăng nhập thành công",
+      });
+      navigate("/dashboard");
+    } else {
+      // const errorMessage = response.error?.data?.metadata?.message || response.error?.message || 'Unknown error';
+      // notification.error({
+      //   message: "Lỗi",
+      //   description: `${response.error?.data?.metadata?.message}`,
+      // });
+    }
+    // console.log(response.error);
+
+    // if (response.data) {
+    // } else {
+    //   notification.open({
+    //     message: "Error",
+    //     description: "Error",
+    //   });
+    // }
   };
 
   return (
