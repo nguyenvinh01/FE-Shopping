@@ -136,6 +136,7 @@ export interface DataProductListType {
 }
 export interface ProductListType {
   productsData: DataProductListType[];
+  isFetching: boolean;
 }
 
 export interface DataProductUpdate {
