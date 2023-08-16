@@ -55,7 +55,7 @@ export interface User {
 }
 
 export interface Category {
-  id: number;
+  id: string;
   label: string;
   description: string;
   image_url: string;
@@ -69,7 +69,13 @@ export interface CategoryResponse {
     count: string;
   };
 }
-
+export interface CreateCategoryDataType {
+  categoryImage: Blob;
+  categoryInformation: {
+    label: string;
+    description: string;
+  };
+}
 export interface CategoryOptionData {
   key: string;
   value: string;
@@ -150,8 +156,8 @@ export interface CategoryListType {
 export interface CategoryModel {
   visible: boolean;
   onCancel: () => void;
-  onEdit: (id: number) => void;
-  id: number;
+  onEdit: (id: string) => void;
+  id: string;
 }
 export interface DataUserUpdate {
   userImage?: Blob;

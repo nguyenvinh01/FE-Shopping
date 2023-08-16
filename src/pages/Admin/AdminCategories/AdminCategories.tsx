@@ -7,6 +7,7 @@ import { useGetCategoriesQuery } from "../../../redux/apis/apiCategory";
 import { CategoryList } from "./CategoryList";
 import { AddCategory } from "./AddCategory/AddCategory";
 import { useState } from "react";
+import { EditCategory } from "./EditCategory/EditCategory";
 
 const AdminContainer = styled.div`
   background-color: #ffffff;

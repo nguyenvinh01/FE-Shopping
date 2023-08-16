@@ -5,19 +5,22 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Category, CategoryListType } from "../../../interface/interface";
 import { CategoryDetail } from "./CategoryDetail/CategoryDetail";
+import { EditCategory } from "./EditCategory/EditCategory";
 
 export const CategoryList = ({ categoriesData }: CategoryListType) => {
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
-  const [id, setId] = useState(0);
+  const [id, setId] = useState<string>("");
   const navigate = useNavigate();
 
   const hideModal = () => {
     setVisibleDetail(false);
+    setVisibleEdit(false);
+    setVisibleDelete(false);
   };
 
-  const handleDetail = (id: number) => {
+  const handleDetail = (id: string) => {
     setVisibleDetail(true);
     setId(id);
   };
@@ -27,10 +30,12 @@ export const CategoryList = ({ categoriesData }: CategoryListType) => {
     hideModal();
   };
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
+    setVisibleEdit(true);
+    setId(id);
     console.log("id: ", id);
   };
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     console.log(id);
   };
 
@@ -79,6 +84,12 @@ export const CategoryList = ({ categoriesData }: CategoryListType) => {
       <Table columns={columns} dataSource={categoriesData} />
       <CategoryDetail
         visible={visibleDetail}
+        onCancel={handleCancel}
+        id={id}
+        onEdit={handleEdit}
+      />
+      <EditCategory
+        visible={visibleEdit}
         onCancel={handleCancel}
         id={id}
         onEdit={handleEdit}
