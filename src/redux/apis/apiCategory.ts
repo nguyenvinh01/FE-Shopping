@@ -5,6 +5,7 @@ import { prepareHeaders } from "../service/prepareHeaders";
 import {
   Category,
   CategoryResponse,
+  CreateCategoryDataType,
   QueryParams,
 } from "../../interface/interface";
 
@@ -23,16 +24,55 @@ export const categoryApi = createApi({
         params: { ...arg },
       }),
     }),
-
-    getCategoryDetail: builder.query<Category, number>({
-      query: (id: number) => ({
+    getCategoryDetail: builder.query<Category, string>({
+      query: (id: string) => ({
         url: `/category/${id}`,
         method: "GET",
       }),
       transformResponse: (response: { data: Category }, meta, arg) =>
         response.data,
     }),
+    createCategory: builder.mutation<void, CreateCategoryDataType>({
+      query: (data) => {
+        const formData = new FormData();
+        formData.append("categoryImage", data.categoryImage);
+        formData.append(
+          "categoryInformation",
+          JSON.stringify(data.categoryInformation)
+        );
+
+        return {
+          url: "/category",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
+    editCategory: builder.mutation<
+      void,
+      { data: CreateCategoryDataType; id: string }
+    >({
+      query: ({ data, id }) => {
+        const formData = new FormData();
+        formData.append("categoryImage", data.categoryImage);
+        formData.append(
+          "categoryInformation",
+          JSON.stringify(data.categoryInformation)
+        );
+
+        return {
+          url: `/category/${id}`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useGetCategoryDetailQuery } = categoryApi;
+export const {
+  useGetCategoriesQuery,
+  useGetCategoryDetailQuery,
+  useCreateCategoryMutation,
+  useEditCategoryMutation,
+} = categoryApi;

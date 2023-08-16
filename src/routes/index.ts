@@ -17,6 +17,7 @@ import { AdminAccounts } from "../pages/Admin/AdminAccounts/AdminAccounts";
 import { Products } from "../pages/Product/Product";
 import { ProductDetail } from "../pages/ProductDetail/ProductDetail";
 import { AdminCategories } from "../pages/Admin/AdminCategories/AdminCategories";
+import { EditCategory } from "../pages/Admin/AdminCategories/EditCategory/EditCategory";
 
 export const routes = [
   {

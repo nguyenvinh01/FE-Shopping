@@ -1,5 +1,5 @@
 import { Avatar, Button, Descriptions, Form, Input, Modal, Upload } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import {
   CategoryModel,
@@ -7,6 +7,7 @@ import {
 } from "../../../../interface/interface";
 import {
   useCreateCategoryMutation,
+  useEditCategoryMutation,
   useGetCategoryDetailQuery,
 } from "../../../../redux/apis/apiCategory";
 import type { UploadFile } from "antd/es/upload/interface";
@@ -31,18 +32,40 @@ const uploadButton = (
     <div style={{ marginTop: 8 }}>Upload</div>
   </div>
 );
-export const AddCategory = ({
+export const EditCategory = ({
   visible,
+  onEdit,
+  id,
   onCancel,
-}: Omit<CategoryModel, "id" | "onEdit">) => {
+}: CategoryModel) => {
   const handleCancel = () => setPreviewOpen(false);
   const [form] = useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [createCategory, { isError, error }] = useCreateCategoryMutation();
   const navigate = useNavigate();
+
+  const [editCategory] = useEditCategoryMutation();
+  const { data } = useGetCategoryDetailQuery(id);
+
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue({
+        label: data?.label,
+        description: data?.description,
+      });
+      setFileList([
+        {
+          uid: "-1",
+          name: data?.image_url,
+          status: "done",
+          url: data?.image_url,
+        },
+      ]);
+    }
+  }, [data]);
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
@@ -66,11 +89,8 @@ export const AddCategory = ({
       categoryImage: fileList[0].originFileObj as File,
       categoryInformation: form.getFieldsValue(),
     };
-    createCategory(data);
-    if (!isError) {
-      // navigate("/admin/categories");
-      onCancel();
-    }
+
+    editCategory({ data, id });
   };
   const footermodel = (
     <>
@@ -78,7 +98,7 @@ export const AddCategory = ({
         Cancel
       </Button>
       <Button key="submit" type="primary" onClick={handleOk}>
-        Add
+        Edit
       </Button>
     </>
   );
