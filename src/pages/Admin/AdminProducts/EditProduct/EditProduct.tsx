@@ -151,10 +151,8 @@ export const EditProduct: React.FC = () => {
         description: form.getFieldValue("description"),
       },
     };
-    // console.log("Category: ", form.getFieldValue("categories"));
-    // console.log("Data: ", dataUpdate);
 
-    editProduct({ data: dataUpdate, id: data?.data.id });
+    editProduct({ data: dataUpdate, id: id });
     if (!isError) {
       navigator("/admin/products");
     }

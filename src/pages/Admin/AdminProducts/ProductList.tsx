@@ -1,17 +1,16 @@
-import { Space, Table, Tag } from "antd";
+import { Pagination, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import {
   DataProductListType,
+  Product,
   ProductListType,
 } from "../../../interface/interface";
 import { useEffect } from "react";
 
-export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
+export const ProductList = ({ productsData }: ProductListType) => {
   const navigate = useNavigate();
-
-  // useEffect(() => {}, [category]);
 
   const handleDetail = (id: string) => {
     navigate(`/admin/products/detail/${id}`);
@@ -23,7 +22,7 @@ export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
     console.log(id);
   };
 
-  const columns: ColumnsType<DataProductListType> = [
+  const columns: ColumnsType<Product> = [
     {
       title: "Product Id",
       dataIndex: "id",
@@ -86,7 +85,7 @@ export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={productsData} />
+      <Table columns={columns} dataSource={productsData} pagination={false} />
     </>
   );
 };

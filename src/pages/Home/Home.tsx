@@ -32,7 +32,7 @@ const HomeItems = styled.div`
 
 export const Home: React.FC = () => {
   const { data: categoriesData } = useGetCategoriesQuery({});
-  const { data: productsData } = useGetProductsQuery("");
+  const { data: productsData } = useGetProductsQuery({});
 
   useEffect(() => {}, []);
 
