@@ -1,4 +1,4 @@
-import { Space, Table } from "antd";
+import { Skeleton, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,14 @@ import { Category, CategoryListType } from "../../../interface/interface";
 import { CategoryDetail } from "./CategoryDetail/CategoryDetail";
 import { EditCategory } from "./EditCategory/EditCategory";
 
-export const CategoryList = ({ categoriesData }: CategoryListType) => {
+export const CategoryList = ({
+  categoriesData,
+  isFetching,
+}: CategoryListType) => {
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [id, setId] = useState<string>("");
-  const navigate = useNavigate();
 
   const hideModal = () => {
     setVisibleDetail(false);
@@ -26,14 +28,18 @@ export const CategoryList = ({ categoriesData }: CategoryListType) => {
   };
 
   const handleCancel = () => {
-    // Xử lý khi người dùng bấm nút Cancel (nếu cần)
+    hideModal();
+  };
+
+  const handleOk = () => {
+    // Xử lý khi người dùng bấm nút OK (nếu cần)
     hideModal();
   };
 
   const handleEdit = (id: string) => {
     setVisibleEdit(true);
     setId(id);
-    console.log("id: ", id);
+    // console.log("id: ", id);
   };
   const handleDelete = (id: string) => {
     console.log(id);
@@ -81,7 +87,15 @@ export const CategoryList = ({ categoriesData }: CategoryListType) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={categoriesData} />
+      {!isFetching ? (
+        <Table
+          columns={columns}
+          dataSource={categoriesData}
+          pagination={false}
+        />
+      ) : (
+        <Skeleton active />
+      )}
       <CategoryDetail
         visible={visibleDetail}
         onCancel={handleCancel}
@@ -92,7 +106,7 @@ export const CategoryList = ({ categoriesData }: CategoryListType) => {
         visible={visibleEdit}
         onCancel={handleCancel}
         id={id}
-        onEdit={handleEdit}
+        onOk={handleOk}
       />
     </>
   );

@@ -16,8 +16,11 @@ const Container = styled.div`
 export const AdminProductDetail = () => {
   const { id }: any = useParams();
   const navigate = useNavigate();
-  const { data: productsData } = useGetProductDetailQuery(id);
-  console.log(productsData, "data product");
+  const { data: productsData, error } = useGetProductDetailQuery(id);
+
+  if (error) {
+    console.log("error is: ", error);
+  }
 
   const handleEditProduct = () => {
     navigate(`/admin/products/edit/${id}`);

@@ -64,9 +64,9 @@ export interface CategoryResponse {
   success: boolean;
   data: Category[];
   metadata: {
-    take: string;
-    skip: string;
-    count: string;
+    take: number;
+    skip: number;
+    count: number;
   };
 }
 export interface CreateCategoryDataType {
@@ -166,12 +166,14 @@ export interface DataProductUpdate {
 
 export interface CategoryListType {
   categoriesData?: Category[];
+  isFetching: boolean;
 }
 
 export interface CategoryModel {
   visible: boolean;
   onCancel: () => void;
   onEdit: (id: string) => void;
+  onOk: () => void;
   id: string;
 }
 export interface DataUserUpdate {
