@@ -64,6 +64,7 @@ export const EditCategory = ({
   id,
   onCancel,
   onOk,
+  loaded,
 }: Omit<CategoryModel, "onEdit">) => {
   const [form] = useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -71,7 +72,7 @@ export const EditCategory = ({
   const [previewTitle, setPreviewTitle] = useState("");
 
   const [editCategory] = useEditCategoryMutation();
-  const { data } = useGetCategoryDetailQuery(id);
+  const { data } = useGetCategoryDetailQuery(id, { skip: loaded });
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 

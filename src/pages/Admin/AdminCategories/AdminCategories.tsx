@@ -70,7 +70,6 @@ export const AdminCategories = () => {
     current,
     pageSize
   ) => {
-    // console.log(current, pageSize);
     setLimit(pageSize);
   };
 
@@ -98,10 +97,14 @@ export const AdminCategories = () => {
         </TopContainer>
 
         <CategoryList
-          categoriesData={categoriesData?.data}
+          categoriesData={categoriesData}
           isFetching={isFetching}
+          page={page}
+          limit={limit}
+          onShowSizeChange={onShowSizeChange}
+          handleChangePage={handleChangePage}
         />
-        <Pagination
+        {/* <Pagination
           showSizeChanger
           // current={1}
           onShowSizeChange={onShowSizeChange}
@@ -109,7 +112,7 @@ export const AdminCategories = () => {
           pageSize={limit}
           total={categoriesData?.metadata?.count}
           onChange={(value) => handleChangePage(value)}
-        />
+        /> */}
 
         <AddCategory
           visible={visible}

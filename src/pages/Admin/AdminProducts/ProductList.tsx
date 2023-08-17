@@ -8,8 +8,26 @@ import {
   ProductListType,
 } from "../../../interface/interface";
 
-export const ProductList = ({ productsData, isFetching }: ProductListType) => {
+export const ProductList = ({
+  productsData,
+  isFetching,
+  page,
+  limit,
+  onShowSizeChange,
+  handleChangePage,
+}: ProductListType) => {
   const navigate = useNavigate();
+
+  const paginationConfig = {
+    showSizeChanger: true,
+    onShowSizeChange: onShowSizeChange,
+    onChange: (page: number) => {
+      handleChangePage(page);
+    },
+    pageSize: limit,
+    current: page,
+    total: productsData?.metadata?.count,
+  };
 
   const handleDetail = (id: string) => {
     navigate(`/admin/products/detail/${id}`);
@@ -85,7 +103,11 @@ export const ProductList = ({ productsData, isFetching }: ProductListType) => {
   return (
     <>
       {!isFetching ? (
-        <Table columns={columns} dataSource={productsData} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={productsData?.data}
+          pagination={paginationConfig}
+        />
       ) : (
         <Skeleton active />
       )}
