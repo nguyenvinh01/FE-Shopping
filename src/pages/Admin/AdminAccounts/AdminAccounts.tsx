@@ -4,7 +4,7 @@ import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 import { useGetAllUserQuery } from "../../../redux/apis/apiUser";
 
 export const AdminAccounts = () => {
-  const { data: userList, isFetching } = useGetAllUserQuery({});
+  const { data: userList, isFetching } = useGetAllUserQuery();
   console.log(isFetching, "Admin");
 
   return (

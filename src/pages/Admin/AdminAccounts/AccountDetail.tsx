@@ -4,13 +4,7 @@ import React from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../../assets/images/lap 1.png";
 import { useGetUserByIdQuery } from "../../../redux/apis/apiUser";
-export interface OrderModalType {
-  visible: boolean;
-  onCancel: () => void;
-  onOk: () => void;
-  idOrder: string;
-  idUser: string;
-}
+import { OrderModalType } from "../../../interface/interface";
 
 const UserDetailWrapper = styled.div`
   display: flex;
@@ -51,8 +45,9 @@ export const AccountDetail = ({
   onOk,
   idOrder,
   idUser,
+  loaded,
 }: OrderModalType) => {
-  const { data } = useGetUserByIdQuery(idUser);
+  const { data } = useGetUserByIdQuery(idUser, { skip: loaded });
   return (
     <div>
       <Modal

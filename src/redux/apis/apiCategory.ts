@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { API } from "../../shared/Constants/Constants";
 import { url } from "inspector";
-import { prepareHeaders } from "../service/prepareHeaders";
+import { prepareHeaders } from "../../utility/PrepareHeaders";
 import {
   Category,
   CategoryResponse,

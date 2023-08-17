@@ -42,7 +42,7 @@ export const OrderModal = ({
   onCancel,
   onOk,
   idOrder,
-}: OrderModalType) => {
+}: Omit<OrderModalType, "idUser">) => {
   return (
     <div>
       <Modal

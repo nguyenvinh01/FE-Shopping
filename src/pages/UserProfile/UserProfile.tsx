@@ -26,6 +26,7 @@ import type { UploadFile } from "antd/es/upload/interface";
 import { useUpdateUserMutation } from "../../redux/apis/apiUser";
 import axios from "axios";
 import axiosInstance from "../../shared/services/http-clients";
+import { handleResponse } from "../../utility/HandleResponse";
 const UserProfileWrapper = styled.div`
   display: flex;
   .profile-user {
@@ -86,9 +87,6 @@ export const UserProfile = () => {
 
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
-    // setPreviewTitle(
-    //   file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
-    // );
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
@@ -123,19 +121,24 @@ export const UserProfile = () => {
       userImage: file,
       userInformation: userInformation,
     };
-    // const res: MessageResponse<User> = await updateUser(dataUpdate);
-    // if (res.data?.success) {
-    //   setIsModalOpen(false);
-    //   setIsModalVisible(false);
-    //   notification.success({
-    //     message: "Thành công",
-    //     description: "Update thành công",
-    //   });
-    // } else {
-    //   console.log(res.data?.metadata.message);
-    // }
+    updateUser(dataUpdate).then((response: MessageResponse<User>) => {
+      const { messageResponse, isError } = handleResponse(response);
+      console.log(response, response.error, messageResponse);
 
-    // console.log("error", result, );
+      if (isError) {
+        notification.error({
+          message: messageResponse,
+          description: "Có lỗi xảy ra, vui lòng thử lại",
+        });
+      } else {
+        notification.success({
+          message: "Thành công",
+          description: "Cập nhật thành công thành công",
+        });
+        setIsModalOpen(false);
+        setIsModalVisible(false);
+      }
+    });
   };
   return (
     <UserProfileWrapper>

@@ -15,14 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/slice/userSlice";
 import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
+import { handleResponse } from "../../utility/HandleResponse";
 
 const LoginBg = styled.div`
   height: 100vh;
-  /* width: 100vw; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
 
   .ant-image {
     margin: 2rem 0;
@@ -61,22 +60,13 @@ type FieldType = {
   username?: string;
   password?: string;
 };
-const handleSubmit = (values: any) => {
-  console.log("Success:", values);
-};
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
 
-// interface Response {
-//   data?: LoginResponse;
-//   error?: FetchBaseQueryError | SerializedError;
-// }
 export const SignIn = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector<RootState>((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, { isSuccess, isError, error }] = useLoginMutation();
@@ -86,24 +76,34 @@ export const SignIn = () => {
       password: password,
     };
 
-    const response: MessageResponse<LoginResponse> = await login(dataLogin);
-    // console.log(response, response.error);
+    login(dataLogin).then((response: MessageResponse<LoginResponse>) => {
+      const { messageResponse, isError } = handleResponse(response);
+      console.log(response, response.error, messageResponse);
 
-    if (response.data?.success) {
-      localStorage.setItem("access_token", response.data?.AccessToken);
-      notification.success({
-        message: "Thành công",
-        description: "Đăng nhập thành công",
-      });
-      navigate("/dashboard");
-    }
-    if (error) {
-      notification.error({
-        message: "Lỗi",
-        description: `${JSON.stringify(error)}`,
-      });
-    }
+      if (isError) {
+        notification.error({
+          message: messageResponse,
+          description: "Có lỗi xảy ra, vui lòng thử lại",
+        });
+      } else {
+        if (response.data) {
+          localStorage.setItem("access_token", response.data.AccessToken);
+        }
+        notification.success({
+          message: "Thành công",
+          description: "Đăng nhập thành công",
+        });
+        navigate("/dashboard");
+      }
+    });
   };
+
+  useEffect(() => {
+    const access_token = localStorage.getItem("access_token");
+    if (access_token) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>

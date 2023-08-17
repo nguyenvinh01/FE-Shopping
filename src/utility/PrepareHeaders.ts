@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DecodedTokenType, ResponseRefreshToken } from "../apis/apiUser";
+import { DecodedTokenType, ResponseRefreshToken } from "../redux/apis/apiUser";
 import jwt_decode from "jwt-decode";
 
 export const prepareHeaders = async (headers: Headers) => {

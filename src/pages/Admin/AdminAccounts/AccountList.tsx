@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 import { AccountDetail } from "./AccountDetail";
+import { User } from "../../../interface/interface";
 
 interface DataType {
   // key?: string;
@@ -18,22 +19,27 @@ interface DataType {
 }
 
 interface AccountListProps {
-  data: DataType[];
+  data: User[];
   isFetch: boolean;
 }
 export const AccountList = ({ data, isFetch }: AccountListProps) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [idOrder, setIdOrder] = useState("");
-  const [idUser, setIdUser] = useState("");
+  const [idUser, setIdUser] = useState<string>("");
+  const [loaded, setLoaded] = useState<boolean>(true);
 
   const showModal = (id: string) => {
     setIsVisible(true);
     setIdUser(id);
+    setLoaded(!loaded);
+    console.log(loaded, "asdasdsad111");
   };
 
   const hideModal = () => {
     setIsVisible(false);
+    setLoaded(!loaded);
+    console.log(loaded, "asdasdsad");
   };
 
   const handleOk = () => {
@@ -126,6 +132,7 @@ export const AccountList = ({ data, isFetch }: AccountListProps) => {
         onOk={handleOk}
         idOrder={idOrder}
         idUser={idUser}
+        loaded={loaded}
       />
     </>
   );

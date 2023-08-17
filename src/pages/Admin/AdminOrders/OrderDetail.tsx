@@ -2,12 +2,13 @@ import { Descriptions, Modal, Image, List } from "antd";
 import React from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
-export interface OrderModalType {
-  visible: boolean;
-  onCancel: () => void;
-  onOk: () => void;
-  idOrder: string;
-}
+import { OrderModalType } from "../../../interface/interface";
+// export interface OrderModalType {
+//   visible: boolean;
+//   onCancel: () => void;
+//   onOk: () => void;
+//   idOrder: string;
+// }
 
 const DescriptionOrderWrapper = styled.div`
   border-bottom: 1px solid #978686a8;

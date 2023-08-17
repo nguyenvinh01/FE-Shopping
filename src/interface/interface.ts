@@ -21,6 +21,8 @@ export interface OrderModalType {
   onCancel: () => void;
   onOk: () => void;
   idOrder: string;
+  idUser: string;
+  loaded?: boolean;
 }
 
 export interface CartItemType {
@@ -146,7 +148,6 @@ export interface DataProductListType {
     id: number;
     label: string;
   }[];
-  //   status: string;
 }
 export interface ProductListType {
   productsData?: Product[];
@@ -184,12 +185,6 @@ export interface DataUserUpdate {
     phone: string;
   };
 }
-export interface Response<T> {
-  success: boolean;
-  metadata: { message: string };
-  data: T;
-}
-
 export interface QueryParams {
   limit?: number;
   page?: number;
@@ -203,5 +198,3 @@ export interface MessageResponse<T> {
   data?: T;
   error?: FetchBaseQueryError | SerializedError;
 }
-
-export interface ResponseType {}

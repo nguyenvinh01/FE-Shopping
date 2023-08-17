@@ -63,6 +63,7 @@ export const Home: React.FC = () => {
         price={product.price}
         desc={product.description}
         img_url={product.image_url}
+        idProduct={product.id}
       />
     ));
   };
