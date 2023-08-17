@@ -7,7 +7,6 @@ import {
   Product,
   ProductListType,
 } from "../../../interface/interface";
-import { useEffect } from "react";
 
 export const ProductList = ({ productsData, isFetching }: ProductListType) => {
   const navigate = useNavigate();

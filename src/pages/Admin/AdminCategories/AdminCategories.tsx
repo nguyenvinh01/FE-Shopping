@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, Button } from "antd";
+import { Input, Select, Button, PaginationProps, Pagination } from "antd";
 import styled from "styled-components";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 import { useNavigate } from "react-router-dom";
@@ -35,9 +35,14 @@ const SearchContainer = styled.div`
 export const AdminCategories = () => {
   const [searchValue, setSearchValue] = React.useState("");
   const [visible, setVisible] = useState(false);
-  const navigate = useNavigate();
+  const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(5);
 
-  const { data: categoriesData } = useGetCategoriesQuery({ name: searchValue });
+  const { data: categoriesData, isFetching } = useGetCategoriesQuery({
+    name: searchValue,
+    page: page,
+    limit: limit,
+  });
 
   const hideModal = () => {
     setVisible(false);
@@ -47,6 +52,11 @@ export const AdminCategories = () => {
     setVisible(true);
   };
 
+  const handleOk = () => {
+    // Xử lý khi người dùng bấm nút OK (nếu cần)
+    hideModal();
+  };
+
   const handleCancel = () => {
     // Xử lý khi người dùng bấm nút Cancel (nếu cần)
     hideModal();
@@ -54,6 +64,19 @@ export const AdminCategories = () => {
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
+  };
+
+  const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
+    current,
+    pageSize
+  ) => {
+    // console.log(current, pageSize);
+    setLimit(pageSize);
+  };
+
+  const handleChangePage = (value: number) => {
+    // console.log("page", value);
+    setPage(value);
   };
 
   return (
@@ -73,8 +96,26 @@ export const AdminCategories = () => {
             Add new category
           </Button>
         </TopContainer>
-        <CategoryList categoriesData={categoriesData?.data} />
-        <AddCategory visible={visible} onCancel={handleCancel} />
+
+        <CategoryList
+          categoriesData={categoriesData?.data}
+          isFetching={isFetching}
+        />
+        <Pagination
+          showSizeChanger
+          // current={1}
+          onShowSizeChange={onShowSizeChange}
+          defaultCurrent={1}
+          pageSize={limit}
+          total={categoriesData?.metadata?.count}
+          onChange={(value) => handleChangePage(value)}
+        />
+
+        <AddCategory
+          visible={visible}
+          onCancel={handleCancel}
+          onOk={handleOk}
+        />
       </AdminContainer>
     </>
   );

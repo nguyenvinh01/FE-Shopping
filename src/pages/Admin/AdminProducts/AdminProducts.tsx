@@ -54,11 +54,9 @@ export const AdminProducts = () => {
     limit: limit,
   });
 
-  useEffect(() => {
-    if (error) {
-      console.log("error is: ", error);
-    }
-  }, [productsData]);
+  if (error) {
+    console.log("error is: ", error);
+  }
 
   const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
     current,
@@ -68,14 +66,16 @@ export const AdminProducts = () => {
     setLimit(pageSize);
   };
 
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-    // console.log("search product", value, searchValue);
-  };
   const handleChangePage = (value: number) => {
     console.log("page", value);
     setPage(value);
   };
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+    // console.log("search product", value, searchValue);
+  };
+
   const categoryOptions = () => {
     if (!categoriesData) {
       return null;
@@ -103,7 +103,7 @@ export const AdminProducts = () => {
     }
     return false;
   };
-  console.log(productsData, "product");
+  // console.log(productsData, "product");
 
   return (
     <>
@@ -148,7 +148,6 @@ export const AdminProducts = () => {
           total={productsData?.metadata.count}
           onChange={(value) => handleChangePage(value)}
         />
-        ;
       </AdminContainer>
     </>
   );

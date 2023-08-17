@@ -11,7 +11,6 @@ import {
 } from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
-import type { UploadChangeParam } from "antd/es/upload";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -19,15 +18,12 @@ import { useGetCategoriesQuery } from "../../../../redux/apis/apiCategory";
 import {
   Category,
   CategoryOptionData,
-  DataProductUpdate,
   MessageResponse,
   Product,
   ProductFormValues,
   ProductUpdateDataType,
 } from "../../../../interface/interface";
 import { useCreateProductMutation } from "../../../../redux/apis/apiProduct";
-import { useForm } from "antd/es/form/Form";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { handleResponse } from "../../../../utility/HandleResponse";
 
 const { Option } = Select;
@@ -73,7 +69,7 @@ export const AddProduct: React.FC = () => {
   });
   const navigator = useNavigate();
   const { data: categories } = useGetCategoriesQuery({});
-  const [createProduct, { isError, data, error }] = useCreateProductMutation();
+  const [createProduct] = useCreateProductMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");

@@ -16,13 +16,23 @@ export const categoryApi = createApi({
     credentials: "include",
     prepareHeaders: prepareHeaders,
   }),
+  tagTypes: ["Category"],
+
   endpoints: (builder) => ({
     getCategories: builder.query<CategoryResponse, QueryParams>({
-      query: (arg) => ({
-        url: "/category",
-        method: "GET",
-        params: { ...arg },
-      }),
+      query: (arg) => {
+        const params = {
+          name: arg.name,
+          page: arg.page,
+          limit: arg.limit,
+        };
+        return {
+          url: "/category",
+          // method: "GET",
+          params: { ...params },
+        };
+      },
+      providesTags: ["Category"],
     }),
     getCategoryDetail: builder.query<Category, string>({
       query: (id: string) => ({
@@ -32,7 +42,7 @@ export const categoryApi = createApi({
       transformResponse: (response: { data: Category }, meta, arg) =>
         response.data,
     }),
-    createCategory: builder.mutation<void, CreateCategoryDataType>({
+    createCategory: builder.mutation<Category, CreateCategoryDataType>({
       query: (data) => {
         const formData = new FormData();
         formData.append("categoryImage", data.categoryImage);
@@ -47,9 +57,10 @@ export const categoryApi = createApi({
           body: formData,
         };
       },
+      invalidatesTags: ["Category"],
     }),
     editCategory: builder.mutation<
-      void,
+      Category,
       { data: CreateCategoryDataType; id: string }
     >({
       query: ({ data, id }) => {
@@ -66,6 +77,7 @@ export const categoryApi = createApi({
           body: formData,
         };
       },
+      invalidatesTags: ["Category"],
     }),
   }),
 });
