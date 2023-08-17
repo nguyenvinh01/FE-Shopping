@@ -141,6 +141,7 @@ export const AdminProducts = () => {
         />
         <Pagination
           showSizeChanger
+          current={page}
           onShowSizeChange={onShowSizeChange}
           defaultCurrent={1}
           pageSize={limit}

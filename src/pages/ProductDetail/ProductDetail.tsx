@@ -42,10 +42,12 @@ export const ProductDetail = () => {
           </ImageProduct>
           <DescProduct>
             <div>
-              <h2>{data?.data.name}</h2>
+              <span>
+                Tên sản phẩm: <h2>{data?.data.name}</h2>
+              </span>
             </div>
             <div>
-              <p>{data?.data.price} VNĐ</p>
+              <p>Giá: {data?.data.price} VNĐ</p>
             </div>
             <div>
               <h4>Description</h4>

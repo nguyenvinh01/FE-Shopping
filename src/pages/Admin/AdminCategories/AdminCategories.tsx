@@ -58,7 +58,7 @@ export const AdminCategories = () => {
 
   return (
     <>
-      <HeaderAdmin pageName="AdminProducts" />
+      <HeaderAdmin pageName="AdminCategories" />
       <AdminContainer>
         <TopContainer>
           <SearchContainer>

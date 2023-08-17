@@ -12,14 +12,9 @@ import jwt_decode from "jwt-decode";
 import { API } from "../../shared/Constants/Constants";
 import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import axiosInstance from "../../shared/services/http-clients";
-import {
-  DataUserUpdate,
-  LoginResponse,
-  Response,
-  User,
-} from "../../interface/interface";
+import { DataUserUpdate, LoginResponse, User } from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
-import { prepareHeaders } from "../service/prepareHeaders";
+import { prepareHeaders } from "../../utility/PrepareHeaders";
 import { InitialStateType } from "../slice/userSlice";
 export interface LoginCredentials {
   email: string;
@@ -72,7 +67,7 @@ export const userApi = createApi({
         method: "POST",
       }),
     }),
-    register: builder.mutation<Response<any>, string>({
+    register: builder.mutation<any, string>({
       query: (data) => ({
         url: "/auth/signup",
         method: "POST",
@@ -109,18 +104,22 @@ export const userApi = createApi({
         };
       },
     }),
-    getAllUser: builder.query({
-      query: (filter) => ({
+    getAllUser: builder.query<any, void>({
+      query: () => ({
         url: "/user",
         method: "GET",
       }),
       // transformResponse: (response: { data: User }, meta, arg) => response.data,
     }),
     getUserById: builder.query<User, string>({
-      query: (id: string) => ({
-        url: `/user/${id}`,
-        method: "GET",
-      }),
+      query: (id: string) => {
+        if (!id) {
+        }
+        return {
+          url: `/user/${id}`,
+          method: "GET",
+        };
+      },
     }),
   }),
 });

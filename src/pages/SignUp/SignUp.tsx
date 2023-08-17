@@ -1,17 +1,16 @@
-import { Button, Form, Image, Input, Row } from "antd";
-import React, { useState } from "react";
+import { Button, Form, Image, Input, Row, notification } from "antd";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/sanakilogo1.png";
 import { styled } from "styled-components";
 import { useRegisterMutation } from "../../redux/apis/apiUser";
-import { Response } from "../../interface/interface";
+import { MessageResponse } from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
+import { handleResponse } from "../../utility/HandleResponse";
 const LoginBg = styled.div`
   height: 100vh;
-  /* width: 100vw; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
 
   .ant-image {
     margin: 2rem 0;
@@ -61,12 +60,32 @@ export const SignUp = () => {
   const [regiser, { isError }] = useRegisterMutation();
   const navigate = useNavigate();
   const handleSubmit = async (values: any) => {
-    regiser(values);
+    regiser(values).then((response: MessageResponse<any>) => {
+      const { messageResponse, isError } = handleResponse(response);
+      console.log(response, response.error, messageResponse);
+
+      if (isError) {
+        notification.error({
+          message: messageResponse,
+          description: "Có lỗi xảy ra, vui lòng thử lại",
+        });
+      } else {
+        notification.success({
+          message: "Thành công",
+          description: "Đăng ký thành công thành công",
+        });
+        navigate("/sign-in");
+      }
+    });
     if (!isError) {
-      navigate("/sign-in");
     }
-    // console.log(data, '');
   };
+  useEffect(() => {
+    const access_token = localStorage.getItem("access_token");
+    if (access_token) {
+      navigate("/");
+    }
+  }, []);
   return (
     <>
       <LoginBg>
@@ -175,11 +194,10 @@ export const SignUp = () => {
                   message: "Please input your password!",
                 },
                 {
-                  pattern: new RegExp(
-                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$/
-                  ),
+                  pattern:
+                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{5,20}$/,
                   message:
-                    " Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character!",
+                    "Password should be 5-20 characters and include at least 1 letter, 1 number and 1 special character!",
                 },
               ]}
             >
@@ -208,12 +226,18 @@ export const SignUp = () => {
                     );
                   },
                 },
+                {
+                  pattern:
+                    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{5,20}$/,
+                  message:
+                    "Password should be 5-20 characters and include at least 1 letter, 1 number and 1 special character!",
+                },
               ]}
             >
               <Input.Password
                 placeholder="Enter password"
                 id="password"
-                // onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
 

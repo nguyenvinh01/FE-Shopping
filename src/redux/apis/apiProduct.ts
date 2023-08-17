@@ -9,7 +9,7 @@ import {
   ProductUpdateDataType,
   QueryParams,
 } from "../../interface/interface";
-import { prepareHeaders } from "../service/prepareHeaders";
+import { prepareHeaders } from "../../utility/PrepareHeaders";
 // import { prepareHeaders } from "./apiUser";
 
 export const productApi = createApi({
