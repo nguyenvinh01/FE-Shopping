@@ -31,6 +31,7 @@ const DescProduct = styled.div`
 export const ProductDetail = () => {
   const { id }: any = useParams();
   const { data } = useGetProductDetailQuery(id);
+  console.log(data?.data);
 
   return (
     <ProductDetailWrapper>

@@ -1,5 +1,7 @@
 import {
   BaseQueryApi,
+  BaseQueryFn,
+  FetchArgs,
   FetchBaseQueryError,
   createApi,
   fetchBaseQuery,
@@ -12,6 +14,7 @@ import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import axiosInstance from "../../shared/services/http-clients";
 import {
   DataUserUpdate,
+  ErrorResponse,
   LoginResponse,
   Response,
   User,
@@ -39,7 +42,12 @@ export interface ResponseRefreshToken {
   };
   error?: FetchBaseQueryError | SerializedError;
 }
-
+// : BaseQueryFn<
+//   string | FetchArgs,
+//   unknown,
+//   ErrorResponse | FetchBaseQueryError,
+//   {}
+// >
 const baseQuery = fetchBaseQuery({
   baseUrl: API,
   credentials: "include",
@@ -85,7 +93,7 @@ export const userApi = createApi({
       }),
       providesTags: ["User"],
     }),
-    updateUser: builder.mutation<Response<User>, DataUserUpdate>({
+    updateUser: builder.mutation<User, DataUserUpdate>({
       invalidatesTags: ["User"],
       query: (data: DataUserUpdate) => {
         const formData = new FormData();
@@ -94,7 +102,6 @@ export const userApi = createApi({
           "userInformation",
           JSON.stringify(data.userInformation)
         );
-        console.log(JSON.stringify(data.userInformation), "conver");
 
         return {
           url: "/user",

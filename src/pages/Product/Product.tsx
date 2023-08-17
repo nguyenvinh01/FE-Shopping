@@ -82,7 +82,7 @@ export const Products = () => {
 
   const { data: categoriesData } = useGetCategoriesQuery({});
   const { data: productsData } = useGetProductsQuery({
-    categoryIds: selectedCategory,
+    id: selectedCategory,
     maxPrice: filterPrice,
   });
 
@@ -113,8 +113,8 @@ export const Products = () => {
         key={product.id}
         name={product.name}
         price={product.price}
-        // desc={product.description}
         img_url={product.image_url}
+        idProduct={product.id}
       />
     ));
   };

@@ -8,7 +8,11 @@ import {
   useLoginMutation,
 } from "../../redux/apis/apiUser";
 import { AxiosResponse } from "axios";
-import { LoginResponse, MessageResponse } from "../../interface/interface";
+import {
+  ErrorResponse,
+  LoginResponse,
+  MessageResponse,
+} from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { useDispatch, useSelector } from "react-redux";
@@ -79,39 +83,30 @@ export const SignIn = () => {
   const user = useSelector<RootState>((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { isSuccess, isError }] = useLoginMutation();
+  const [login, { isSuccess, isError, error }] = useLoginMutation();
   const handleLogin = async () => {
     const dataLogin: LoginCredentials = {
       email: email,
       password: password,
     };
-    // const dataLoginResponse: ResponseLogin = await login(dataLogin)
+
     const response: MessageResponse<LoginResponse> = await login(dataLogin);
-    console.log(response, response.data);
+    // console.log(response, response.error);
 
     if (response.data?.success) {
-      localStorage.setItem("access_token", response.data.AccessToken);
+      localStorage.setItem("access_token", response.data?.AccessToken);
       notification.success({
         message: "Thành công",
         description: "Đăng nhập thành công",
       });
       navigate("/dashboard");
-    } else {
-      // const errorMessage = response.error?.data?.metadata?.message || response.error?.message || 'Unknown error';
-      // notification.error({
-      //   message: "Lỗi",
-      //   description: `${response.error?.data?.metadata?.message}`,
-      // });
     }
-    // console.log(response.error);
-
-    // if (response.data) {
-    // } else {
-    //   notification.open({
-    //     message: "Error",
-    //     description: "Error",
-    //   });
-    // }
+    if (error) {
+      notification.error({
+        message: "Lỗi",
+        description: `${JSON.stringify(error)}`,
+      });
+    }
   };
 
   return (
