@@ -35,7 +35,7 @@ export const productApi = createApi({
       }),
     }),
 
-    createProduct: builder.mutation<void, DataProductUpdate>({
+    createProduct: builder.mutation<Product, DataProductUpdate>({
       // invalidatesTags: ["Product"],
       query: (data: DataProductUpdate) => {
         const formData = new FormData();

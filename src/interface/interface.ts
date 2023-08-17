@@ -188,8 +188,5 @@ export interface QueryParams {
 
 export interface MessageResponse<T> {
   data?: T;
-  error?:
-    | FetchBaseQueryError
-    | SerializedError
-    | { metadata: { data: { message: string } } };
+  error?: FetchBaseQueryError | SerializedError;
 }

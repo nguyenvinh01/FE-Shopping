@@ -79,7 +79,7 @@ export const dashboardUser = [
 
 export const dashboardAdmin = [
   {
-    path: "/",
+    path: "dashboard",
     page: AdminPage,
   },
   {

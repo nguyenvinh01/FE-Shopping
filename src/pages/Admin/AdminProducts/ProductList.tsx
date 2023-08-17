@@ -1,4 +1,4 @@
-import { Space, Table, Tag } from "antd";
+import { Skeleton, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,10 @@ import {
 } from "../../../interface/interface";
 import { useEffect } from "react";
 
-export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
+export const ProductList: React.FC<ProductListType> = ({
+  productsData,
+  isFetching,
+}) => {
   const navigate = useNavigate();
 
   // useEffect(() => {}, [category]);
@@ -86,7 +89,11 @@ export const ProductList: React.FC<ProductListType> = ({ productsData }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={productsData} />
+      {!isFetching ? (
+        <Table columns={columns} dataSource={productsData} />
+      ) : (
+        <Skeleton active />
+      )}
     </>
   );
 };

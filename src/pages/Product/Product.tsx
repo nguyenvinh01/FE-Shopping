@@ -66,7 +66,7 @@ const ProductItems = styled.div`
   flex-wrap: wrap;
   align-items: stretch;
   margin-top: 10px;
-  gap: 1rem;
+  gap: 1.5rem;
 `;
 
 const priceOptions = [

@@ -6,7 +6,13 @@ import { FaUserAlt } from "react-icons/fa";
 import { FiLogOut, FiHome } from "react-icons/fi";
 import { BsBox2, BsLayoutTextSidebarReverse } from "react-icons/bs";
 import { HiOutlineUserGroup } from "react-icons/hi";
+import { TbCategory } from "react-icons/tb";
 import { useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { User } from "../../interface/interface";
 
 const { Sider } = Layout;
 
@@ -89,7 +95,7 @@ const siderStyle: React.CSSProperties = {
 
 const items = [
   {
-    key: "/admin",
+    key: "/admin/dashboard",
     icon: <FiHome />,
     label: "Dashboard",
   },
@@ -100,7 +106,7 @@ const items = [
   },
   {
     key: "/admin/categories",
-    icon: <BsBox2 />,
+    icon: <TbCategory />,
     label: "Categories",
   },
   {
@@ -116,7 +122,19 @@ const items = [
 ];
 
 export const SideBar = () => {
+  const userData = useSelector<RootState, User>((state) => state.user);
+  const [selectedKeys, setSelectedKeys] = useState([""]);
+  const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const matchingItem = items.find((item) => currentPath.includes(item.key));
+    if (matchingItem) {
+      setSelectedKeys([matchingItem.key]);
+    } else setSelectedKeys([""]);
+    // console.log(userData);
+  }, [location]);
 
   return (
     <AdminSideBar style={siderStyle} width={230}>
@@ -131,27 +149,27 @@ export const SideBar = () => {
           <Logo
             src={logo}
             onClick={() => {
-              navigate("/admin");
+              navigate("/");
             }}
           />
         </div>
         <Menu
           onClick={(item) => {
             navigate(item.key);
-            // setSelectedKeys([item.key]);
+            setSelectedKeys([item.key]);
           }}
           mode="inline"
-          // inlineCollapsed={collapsed}
+          selectedKeys={selectedKeys}
           items={items}
         />
       </div>
       <AdminProfile>
         <p style={{}}>Profile</p>
         <AdminIcon>
-          <Avatar size={60} icon={<FaUserAlt />} />
+          <Avatar size={60} icon={<FaUserAlt />} src={userData.image_url} />
           <div style={{ marginLeft: 15 }}>
-            <p className="adminName">Name</p>
-            <span>role</span>
+            <p className="adminName">{userData.fullname}</p>
+            <span>{userData.role}</span>
           </div>
         </AdminIcon>
         <LogoutButton type="primary">
