@@ -14,7 +14,6 @@ import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import axiosInstance from "../../shared/services/http-clients";
 import {
   DataUserUpdate,
-  ErrorResponse,
   LoginResponse,
   Response,
   User,

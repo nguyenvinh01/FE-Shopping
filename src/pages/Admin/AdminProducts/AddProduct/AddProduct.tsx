@@ -28,6 +28,7 @@ import {
 import { useCreateProductMutation } from "../../../../redux/apis/apiProduct";
 import { useForm } from "antd/es/form/Form";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+import { handleResponse } from "../../../../utility/HandleResponse";
 
 const { Option } = Select;
 
@@ -163,22 +164,17 @@ export const AddProduct: React.FC = () => {
     };
 
     const response: MessageResponse<Product> = await createProduct(dataUpdate);
-
-    if ("error" in response) {
-      if (response.error) {
-        const fetchError = response.error as FetchBaseQueryError;
-        if (fetchError) {
-          if ("status" in fetchError) {
-            notification.error({
-              message: fetchError.data?.metadata.message,
-              description: "Có lỗi xảy ra, vui lòng thử lại",
-            });
-          }
-        }
-      } else
-        notification.success({
-          message: "Tạo thành công",
-        });
+    const { messageResponse, isError } = handleResponse(response);
+    if (isError) {
+      notification.error({
+        message: messageResponse,
+        description: "Có lỗi xảy ra, vui lòng thử lại",
+      });
+    } else {
+      notification.success({
+        message: "Tạo thành công",
+      });
+      navigate("/admin/products");
     }
   };
 

@@ -8,11 +8,7 @@ import {
   useLoginMutation,
 } from "../../redux/apis/apiUser";
 import { AxiosResponse } from "axios";
-import {
-  ErrorResponse,
-  LoginResponse,
-  MessageResponse,
-} from "../../interface/interface";
+import { LoginResponse, MessageResponse } from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { useDispatch, useSelector } from "react-redux";
