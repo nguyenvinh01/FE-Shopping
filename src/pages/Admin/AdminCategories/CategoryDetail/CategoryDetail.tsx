@@ -14,8 +14,9 @@ export const CategoryDetail = ({
   onCancel,
   onEdit,
   id,
+  loaded,
 }: Omit<CategoryModel, "onOk">) => {
-  const { data } = useGetCategoryDetailQuery(id);
+  const { data } = useGetCategoryDetailQuery(id, { skip: loaded });
 
   const footermodel = (
     <>

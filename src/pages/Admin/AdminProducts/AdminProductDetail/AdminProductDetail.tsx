@@ -1,10 +1,11 @@
-import { Avatar, Button, Descriptions } from "antd";
+import { Avatar, Button, Descriptions, Tag } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import React from "react";
 import { styled } from "styled-components";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import { useGetProductDetailQuery } from "../../../../redux/apis/apiProduct";
 import { useNavigate, useParams } from "react-router-dom";
+import { Product } from "../../../../interface/interface";
 
 const Container = styled.div`
   display: flex;
@@ -52,7 +53,9 @@ export const AdminProductDetail = () => {
               {productsData?.data.quantity}
             </Descriptions.Item>
             <Descriptions.Item label="Category" span={3}>
-              {productsData?.data.description}
+              {productsData?.data.categories.map((category) => {
+                return <Tag key={category.id}>{category.label}</Tag>;
+              })}
             </Descriptions.Item>
             <Descriptions.Item label="Description" span={3}>
               {productsData?.data.description}

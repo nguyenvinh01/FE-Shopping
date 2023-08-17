@@ -10,20 +10,38 @@ import { EditCategory } from "./EditCategory/EditCategory";
 export const CategoryList = ({
   categoriesData,
   isFetching,
+  page,
+  limit,
+  onShowSizeChange,
+  handleChangePage,
 }: CategoryListType) => {
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
+  const [loaded, setLoaded] = useState<boolean>(true);
   const [id, setId] = useState<string>("");
+
+  const paginationConfig = {
+    showSizeChanger: true,
+    onShowSizeChange: onShowSizeChange,
+    onChange: (page: number) => {
+      handleChangePage(page);
+    },
+    pageSize: limit,
+    current: page,
+    total: categoriesData?.metadata?.count,
+  };
 
   const hideModal = () => {
     setVisibleDetail(false);
     setVisibleEdit(false);
     setVisibleDelete(false);
+    setLoaded(!loaded);
   };
 
   const handleDetail = (id: string) => {
     setVisibleDetail(true);
+    setLoaded(!loaded);
     setId(id);
   };
 
@@ -90,8 +108,8 @@ export const CategoryList = ({
       {!isFetching ? (
         <Table
           columns={columns}
-          dataSource={categoriesData}
-          pagination={false}
+          dataSource={categoriesData?.data}
+          pagination={paginationConfig}
         />
       ) : (
         <Skeleton active />
@@ -99,12 +117,14 @@ export const CategoryList = ({
       <CategoryDetail
         visible={visibleDetail}
         onCancel={handleCancel}
+        loaded={loaded}
         id={id}
         onEdit={handleEdit}
       />
       <EditCategory
         visible={visibleEdit}
         onCancel={handleCancel}
+        loaded={loaded}
         id={id}
         onOk={handleOk}
       />

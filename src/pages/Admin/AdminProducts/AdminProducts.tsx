@@ -136,10 +136,14 @@ export const AdminProducts = () => {
           </Button>
         </TopContainer>
         <ProductList
-          productsData={productsData?.data}
+          productsData={productsData}
           isFetching={isFetching}
+          page={page}
+          limit={limit}
+          onShowSizeChange={onShowSizeChange}
+          handleChangePage={handleChangePage}
         />
-        <Pagination
+        {/* <Pagination
           showSizeChanger
           current={page}
           onShowSizeChange={onShowSizeChange}
@@ -147,7 +151,7 @@ export const AdminProducts = () => {
           pageSize={limit}
           total={productsData?.metadata.count}
           onChange={(value) => handleChangePage(value)}
-        />
+        /> */}
       </AdminContainer>
     </>
   );
