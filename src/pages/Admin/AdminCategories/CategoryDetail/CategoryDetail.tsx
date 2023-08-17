@@ -31,7 +31,7 @@ export const CategoryDetail = ({
   return (
     <div>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         // onEdit={onEdit}
         footer={footermodel}

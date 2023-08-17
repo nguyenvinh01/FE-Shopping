@@ -150,7 +150,7 @@ export const EditCategory = ({
   return (
     <div>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         footer={footermodel}
         width={800}
