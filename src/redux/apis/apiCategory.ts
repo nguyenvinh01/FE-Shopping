@@ -28,7 +28,7 @@ export const categoryApi = createApi({
         };
         return {
           url: "/category",
-          // method: "GET",
+          method: "GET",
           params: { ...params },
         };
       },

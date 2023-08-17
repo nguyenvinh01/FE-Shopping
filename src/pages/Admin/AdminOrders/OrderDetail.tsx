@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
 import { OrderModalType } from "../../../interface/interface";
 
+
 const DescriptionOrderWrapper = styled.div`
   border-bottom: 1px solid #978686a8;
 `;
