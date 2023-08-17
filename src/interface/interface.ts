@@ -150,8 +150,12 @@ export interface DataProductListType {
   }[];
 }
 export interface ProductListType {
-  productsData?: Product[];
+  productsData?: ProductResponse;
   isFetching: boolean;
+  page: number;
+  limit: number;
+  onShowSizeChange: (current: number, size: number) => void;
+  handleChangePage: (page: number) => void;
 }
 
 export interface DataProductUpdate {
@@ -166,8 +170,12 @@ export interface DataProductUpdate {
 }
 
 export interface CategoryListType {
-  categoriesData?: Category[];
+  categoriesData?: CategoryResponse;
   isFetching: boolean;
+  page: number;
+  limit: number;
+  onShowSizeChange: (current: number, size: number) => void;
+  handleChangePage: (page: number) => void;
 }
 
 export interface CategoryModel {
@@ -176,6 +184,7 @@ export interface CategoryModel {
   onEdit: (id: string) => void;
   onOk: () => void;
   id: string;
+  loaded?: boolean;
 }
 export interface DataUserUpdate {
   userImage?: Blob;
