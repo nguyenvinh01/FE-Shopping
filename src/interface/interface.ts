@@ -201,3 +201,5 @@ export interface MessageResponse<T> {
   data?: T;
   error?: FetchBaseQueryError | SerializedError;
 }
+
+export interface ResponseType {}
