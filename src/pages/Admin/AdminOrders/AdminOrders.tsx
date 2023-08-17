@@ -114,7 +114,7 @@ export const AdminOrders = () => {
     <>
       <HeaderAdmin pageName="Order" />
       <div>
-        <Table columns={columns} dataSource={data} />;
+        <Table columns={columns} dataSource={data} />
       </div>
       <OrderModal
         visible={isVisible}

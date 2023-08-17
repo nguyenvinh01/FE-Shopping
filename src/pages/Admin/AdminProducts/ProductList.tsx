@@ -1,4 +1,4 @@
-import { Pagination, Space, Table, Tag } from "antd";
+import { Skeleton, Pagination, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import {
 } from "../../../interface/interface";
 import { useEffect } from "react";
 
-export const ProductList = ({ productsData }: ProductListType) => {
+export const ProductList = ({ productsData, isFetching }: ProductListType) => {
   const navigate = useNavigate();
 
   const handleDetail = (id: string) => {
@@ -85,7 +85,11 @@ export const ProductList = ({ productsData }: ProductListType) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={productsData} pagination={false} />
+      {!isFetching ? (
+        <Table columns={columns} dataSource={productsData} pagination={false} />
+      ) : (
+        <Skeleton active />
+      )}
     </>
   );
 };

@@ -1,5 +1,14 @@
-import React, { useState } from "react";
-import { Form, Input, Select, Upload, Button, message, Modal } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+  Form,
+  Input,
+  Select,
+  Upload,
+  Button,
+  message,
+  Modal,
+  notification,
+} from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import type { UploadChangeParam } from "antd/es/upload";
@@ -11,11 +20,14 @@ import {
   Category,
   CategoryOptionData,
   DataProductUpdate,
+  MessageResponse,
+  Product,
   ProductFormValues,
   ProductUpdateDataType,
 } from "../../../../interface/interface";
 import { useCreateProductMutation } from "../../../../redux/apis/apiProduct";
 import { useForm } from "antd/es/form/Form";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 
 const { Option } = Select;
 
@@ -130,7 +142,7 @@ export const AddProduct: React.FC = () => {
     setFormValues({ ...formValues, categories: value });
   };
 
-  const handleSubmit = (values: ProductFormValues) => {
+  const handleSubmit = async (values: ProductFormValues) => {
     // console.log(fileList, "filelist");
 
     if (fileList.length === 0) {
@@ -150,10 +162,23 @@ export const AddProduct: React.FC = () => {
       },
     };
 
-    // console.log(11, productData);
-    createProduct(dataUpdate);
-    if (!isError) {
-      navigate("/admin/products");
+    const response: MessageResponse<Product> = await createProduct(dataUpdate);
+
+    if ("error" in response) {
+      if (response.error) {
+        const fetchError = response.error as FetchBaseQueryError;
+        if (fetchError) {
+          if ("status" in fetchError) {
+            notification.error({
+              message: fetchError.data?.metadata.message,
+              description: "Có lỗi xảy ra, vui lòng thử lại",
+            });
+          }
+        }
+      } else
+        notification.success({
+          message: "Tạo thành công",
+        });
     }
   };
 
@@ -210,7 +235,7 @@ export const AddProduct: React.FC = () => {
 
             <Form.Item
               label="Category"
-              name="category"
+              name="categories"
               rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
             >
               <Select

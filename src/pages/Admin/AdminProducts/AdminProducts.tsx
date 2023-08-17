@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../../redux/apis/apiProduct";
 import { Category, CategoryOptionData } from "../../../interface/interface";
+import { useEffect } from "react";
 import type { PaginationProps } from "antd";
 
 const { Option } = Select;
@@ -42,12 +43,23 @@ export const AdminProducts = () => {
   const navigate = useNavigate();
 
   const { data: categoriesData } = useGetCategoriesQuery({});
-  const { data: productsData } = useGetProductsQuery({
+  const {
+    data: productsData,
+    isFetching,
+    error,
+  } = useGetProductsQuery({
     id: selectedCategory,
     name: searchValue,
     page: page,
     limit: limit,
   });
+
+  useEffect(() => {
+    if (error) {
+      console.log("error is: ", error);
+    }
+  }, [productsData]);
+
   const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
     current,
     pageSize
@@ -55,9 +67,10 @@ export const AdminProducts = () => {
     console.log(current, pageSize);
     setLimit(pageSize);
   };
+
   const handleSearch = (value: string) => {
     setSearchValue(value);
-    console.log("search product", value, searchValue);
+    // console.log("search product", value, searchValue);
   };
   const handleChangePage = (value: number) => {
     console.log("page", value);
@@ -122,7 +135,10 @@ export const AdminProducts = () => {
             Add new product
           </Button>
         </TopContainer>
-        <ProductList productsData={productsData?.data} />
+        <ProductList
+          productsData={productsData?.data}
+          isFetching={isFetching}
+        />
         <Pagination
           showSizeChanger
           onShowSizeChange={onShowSizeChange}

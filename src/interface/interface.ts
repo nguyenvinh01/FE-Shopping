@@ -150,6 +150,7 @@ export interface DataProductListType {
 }
 export interface ProductListType {
   productsData?: Product[];
+  isFetching: boolean;
 }
 
 export interface DataProductUpdate {
@@ -198,17 +199,5 @@ export interface QueryParams {
 
 export interface MessageResponse<T> {
   data?: T;
-  error?:
-    | FetchBaseQueryError
-    | SerializedError
-    | { metadata: { message: string } };
-}
-export interface ErrorResponse {
-  error:
-    | {
-        status?: number; // Optional, if available in the actual error
-        data?: { metadata: { message: string } };
-      }
-    | FetchBaseQueryError
-    | SerializedError;
+  error?: FetchBaseQueryError | SerializedError;
 }

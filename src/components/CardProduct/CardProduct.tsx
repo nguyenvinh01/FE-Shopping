@@ -8,7 +8,7 @@ const { Meta } = Card;
 
 const ProductCard = styled.div`
   /* margin: 10px 5px; */
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   .ant-card:hover {
     transform: translateY(-5px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
