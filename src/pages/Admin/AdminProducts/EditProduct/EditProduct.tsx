@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, Upload, Button, message, Modal } from "antd";
+import {
+  Form,
+  Input,
+  Select,
+  Upload,
+  Button,
+  message,
+  Modal,
+  notification,
+} from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import type { UploadChangeParam } from "antd/es/upload";
@@ -14,9 +23,12 @@ import { useGetCategoriesQuery } from "../../../../redux/apis/apiCategory";
 import {
   Category,
   CategoryOptionData,
+  MessageResponse,
+  Product,
   ProductResponse,
   ProductUpdateDataType,
 } from "../../../../interface/interface";
+import { handleResponse } from "../../../../utility/HandleResponse";
 
 const { Option } = Select;
 
@@ -49,18 +61,18 @@ const getBase64 = (file: RcFile): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-export const EditProduct: React.FC = () => {
+export const EditProduct = () => {
   const { id }: { id: string } = useParams() as { id: string };
   const { data } = useGetProductDetailQuery(id);
   const { data: categories } = useGetCategoriesQuery({});
   const [form] = Form.useForm();
-  const [editProduct, { isError }] = useEditProductMutation();
+  const [editProduct] = useEditProductMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [loading, setLoading] = useState(false);
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
@@ -135,7 +147,7 @@ export const EditProduct: React.FC = () => {
     alert("Xóa thành công");
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (fileList.length === 0) {
       message.error("Vui lòng tải ảnh sản phẩm!");
       return;
@@ -152,9 +164,21 @@ export const EditProduct: React.FC = () => {
       },
     };
 
-    editProduct({ data: dataUpdate, id: id });
-    if (!isError) {
-      navigator("/admin/products");
+    const response: MessageResponse<Product> = await editProduct({
+      data: dataUpdate,
+      id: id,
+    });
+    const { messageResponse, isError } = handleResponse(response);
+    if (isError) {
+      notification.error({
+        message: messageResponse,
+        description: "Có lỗi xảy ra, vui lòng thử lại",
+      });
+    } else {
+      notification.success({
+        message: "Chỉnh sửa thành công",
+      });
+      navigate("/admin/products");
     }
   };
 
@@ -283,7 +307,7 @@ export const EditProduct: React.FC = () => {
                 <Button type="primary" htmlType="submit">
                   Update
                 </Button>
-                <Button onClick={() => navigator("/admin/products")}>
+                <Button onClick={() => navigate("/admin/products")}>
                   Cancel
                 </Button>
                 <Button danger onClick={handleDeleteProduct}>

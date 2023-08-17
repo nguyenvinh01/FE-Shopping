@@ -1,12 +1,22 @@
-import { Avatar, Button, Descriptions, Form, Input, Modal, Upload } from "antd";
+import {
+  Avatar,
+  Button,
+  Descriptions,
+  Form,
+  Input,
+  Modal,
+  Upload,
+  notification,
+} from "antd";
 import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import {
+  Category,
   CategoryModel,
   CreateCategoryDataType,
+  MessageResponse,
 } from "../../../../interface/interface";
 import {
-  useCreateCategoryMutation,
   useEditCategoryMutation,
   useGetCategoryDetailQuery,
 } from "../../../../redux/apis/apiCategory";
@@ -14,11 +24,28 @@ import type { UploadFile } from "antd/es/upload/interface";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import { useForm } from "antd/es/form/Form";
 import { useNavigate } from "react-router-dom";
+import { handleResponse } from "../../../../utility/HandleResponse";
 
 const CategoryWapper = styled.div`
   display: flex;
   border-bottom: 1px solid #978686a8;
 `;
+
+const UploadContainer = styled(Upload)`
+  .ant-upload {
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  .ant-upload-list {
+    /* margin: 30px 30px 30px 30px; */
+  }
+  .ant-upload-list .ant-upload-list-item-container {
+    width: 150px !important;
+    height: 150px !important;
+  }
+`;
+
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -34,16 +61,14 @@ const uploadButton = (
 );
 export const EditCategory = ({
   visible,
-  onEdit,
   id,
   onCancel,
-}: CategoryModel) => {
-  const handleCancel = () => setPreviewOpen(false);
+  onOk,
+}: Omit<CategoryModel, "onEdit">) => {
   const [form] = useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const navigate = useNavigate();
 
   const [editCategory] = useEditCategoryMutation();
   const { data } = useGetCategoryDetailQuery(id);
@@ -66,6 +91,9 @@ export const EditCategory = ({
       ]);
     }
   }, [data]);
+
+  const handleCancel = () => setPreviewOpen(false);
+
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
@@ -84,13 +112,29 @@ export const EditCategory = ({
   const handleBeforeUpload = () => {
     return false;
   };
-  const handleOk = () => {
+  const handleOk = async () => {
     const data: CreateCategoryDataType = {
       categoryImage: fileList[0].originFileObj as File,
       categoryInformation: form.getFieldsValue(),
     };
 
-    editCategory({ data, id });
+    const response: MessageResponse<Category> = await editCategory({
+      data,
+      id,
+    });
+
+    const { messageResponse, isError } = handleResponse(response);
+    if (isError) {
+      notification.error({
+        message: messageResponse,
+        description: "Có lỗi xảy ra, vui lòng thử lại",
+      });
+    } else {
+      notification.success({
+        message: "Update thành công",
+      });
+    }
+    onOk();
   };
   const footermodel = (
     <>
@@ -114,7 +158,7 @@ export const EditCategory = ({
       >
         <CategoryWapper>
           <div style={{ marginRight: "10px", flex: "1" }}>
-            <Upload
+            <UploadContainer
               listType="picture-card"
               fileList={fileList}
               beforeUpload={handleBeforeUpload}
@@ -122,7 +166,15 @@ export const EditCategory = ({
               onChange={handleChange}
             >
               {fileList.length >= 1 ? null : uploadButton}
-            </Upload>
+            </UploadContainer>
+            <Modal
+              open={previewOpen}
+              title={previewTitle}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
           </div>
           <div style={{ flex: "2" }}>
             <Form layout="vertical" form={form}>

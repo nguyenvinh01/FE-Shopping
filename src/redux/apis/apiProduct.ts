@@ -63,7 +63,7 @@ export const productApi = createApi({
       invalidatesTags: ["Products"],
     }),
     editProduct: builder.mutation<
-      void,
+      Product,
       { data: ProductUpdateDataType; id: string | undefined }
     >({
       query: ({ data, id }) => {
