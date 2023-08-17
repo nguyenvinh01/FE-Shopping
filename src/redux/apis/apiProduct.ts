@@ -3,9 +3,11 @@ import { API } from "../../shared/Constants/Constants";
 import {
   DataProductUpdate,
   Product,
+  ProductDetailResponse,
   ProductFormValues,
   ProductResponse,
   ProductUpdateDataType,
+  QueryParams,
 } from "../../interface/interface";
 import { prepareHeaders } from "../service/prepareHeaders";
 // import { prepareHeaders } from "./apiUser";
@@ -19,16 +21,24 @@ export const productApi = createApi({
   }),
   tagTypes: ["Products"],
   endpoints: (builder) => ({
-    getProducts: builder.query({
-      query: (arg) => ({
-        url: "/product",
-        method: "GET",
-        params: { ...arg },
-      }),
+    getProducts: builder.query<ProductResponse, QueryParams>({
+      query: (arg) => {
+        const params = {
+          categoryIds: arg.id,
+          name: arg.name,
+          page: arg.page,
+          limit: arg.limit,
+        };
+        return {
+          url: "/product",
+          method: "GET",
+          params: { ...params },
+        };
+      },
       providesTags: ["Products"],
     }),
 
-    getProductDetail: builder.query<ProductResponse, string>({
+    getProductDetail: builder.query<ProductDetailResponse, string>({
       query: (id: string) => ({
         url: `/product/${id}`,
         method: "GET",
@@ -44,8 +54,6 @@ export const productApi = createApi({
           "productInformation",
           JSON.stringify(data.productInformation)
         );
-        // console.log(JSON.stringify(data.productInformation), "conver");
-
         return {
           url: "/product",
           method: "POST",

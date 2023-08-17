@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, Button } from "antd";
+import { Input, Select, Button, Pagination } from "antd";
 import styled from "styled-components";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 import { ProductList } from "./ProductList";
@@ -8,6 +8,7 @@ import { useGetCategoriesQuery } from "../../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../../redux/apis/apiProduct";
 import { Category, CategoryOptionData } from "../../../interface/interface";
 import { useEffect } from "react";
+import type { PaginationProps } from "antd";
 
 const { Option } = Select;
 
@@ -37,6 +38,8 @@ const SearchContainer = styled.div`
 export const AdminProducts = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("");
   const [searchValue, setSearchValue] = React.useState("");
+  const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(10);
   const navigate = useNavigate();
 
   const { data: categoriesData } = useGetCategoriesQuery({});
@@ -45,8 +48,10 @@ export const AdminProducts = () => {
     isFetching,
     error,
   } = useGetProductsQuery({
-    categoryIds: selectedCategory,
+    id: selectedCategory,
     name: searchValue,
+    page: page,
+    limit: limit,
   });
 
   useEffect(() => {
@@ -55,11 +60,22 @@ export const AdminProducts = () => {
     }
   }, [productsData]);
 
+  const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
+    current,
+    pageSize
+  ) => {
+    console.log(current, pageSize);
+    setLimit(pageSize);
+  };
+
   const handleSearch = (value: string) => {
     setSearchValue(value);
     // console.log("search product", value, searchValue);
   };
-
+  const handleChangePage = (value: number) => {
+    console.log("page", value);
+    setPage(value);
+  };
   const categoryOptions = () => {
     if (!categoriesData) {
       return null;
@@ -87,6 +103,7 @@ export const AdminProducts = () => {
     }
     return false;
   };
+  console.log(productsData, "product");
 
   return (
     <>
@@ -122,6 +139,15 @@ export const AdminProducts = () => {
           productsData={productsData?.data}
           isFetching={isFetching}
         />
+        <Pagination
+          showSizeChanger
+          onShowSizeChange={onShowSizeChange}
+          defaultCurrent={1}
+          pageSize={limit}
+          total={productsData?.metadata.count}
+          onChange={(value) => handleChangePage(value)}
+        />
+        ;
       </AdminContainer>
     </>
   );

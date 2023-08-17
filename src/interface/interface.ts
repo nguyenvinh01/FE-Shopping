@@ -96,9 +96,22 @@ export interface Product {
 }
 export interface ProductResponse {
   success: boolean;
-  data: Product;
+  data: Product[];
+  metadata: {
+    take: number;
+    skip: number;
+    count: number;
+  };
 }
-
+export interface ProductDetailResponse {
+  success: boolean;
+  data: Product;
+  metadata: {
+    take: number;
+    skip: number;
+    count: number;
+  };
+}
 export interface ProductUpdateDataType {
   productImage: Blob;
   productInformation: ProductFormValues;
@@ -116,6 +129,7 @@ export interface CardProductType {
   price?: number;
   desc?: string;
   img_url?: string;
+  idProduct?: string;
 }
 export interface cardCategoryType {
   name?: string;
@@ -135,7 +149,7 @@ export interface DataProductListType {
   //   status: string;
 }
 export interface ProductListType {
-  productsData: DataProductListType[];
+  productsData?: Product[];
   isFetching: boolean;
 }
 
@@ -168,12 +182,6 @@ export interface DataUserUpdate {
     phone: string;
   };
 }
-interface DataResponse {
-  statusCode?: string;
-  message?: string;
-  AccessToken?: string;
-  success: boolean;
-}
 export interface Response<T> {
   success: boolean;
   metadata: { message: string };
@@ -181,9 +189,12 @@ export interface Response<T> {
 }
 
 export interface QueryParams {
-  limit?: string;
-  page?: string;
+  limit?: number;
+  page?: number;
   name?: string;
+  id?: string;
+  maxPrice?: number;
+  minPrice?: number;
 }
 
 export interface MessageResponse<T> {
