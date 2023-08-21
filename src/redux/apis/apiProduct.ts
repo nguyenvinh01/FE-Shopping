@@ -8,6 +8,8 @@ import {
   ProductResponse,
   ProductUpdateDataType,
   QueryParams,
+  inventoryDataUpdate,
+  inventoryResponse,
 } from "../../interface/interface";
 import { prepareHeaders } from "../../utility/PrepareHeaders";
 // import { prepareHeaders } from "./apiUser";
@@ -19,7 +21,7 @@ export const productApi = createApi({
     credentials: "include",
     prepareHeaders: prepareHeaders,
   }),
-  tagTypes: ["Products"],
+  tagTypes: ["AllProducts", "Product"],
   endpoints: (builder) => ({
     getProducts: builder.query<ProductResponse, QueryParams>({
       query: (arg) => {
@@ -35,7 +37,7 @@ export const productApi = createApi({
           params: { ...params },
         };
       },
-      providesTags: ["Products"],
+      providesTags: ["AllProducts"],
     }),
 
     getProductDetail: builder.query<ProductDetailResponse, string>({
@@ -43,6 +45,7 @@ export const productApi = createApi({
         url: `/product/${id}`,
         method: "GET",
       }),
+      providesTags: ["Product"],
     }),
 
     createProduct: builder.mutation<Product, DataProductUpdate>({
@@ -60,8 +63,9 @@ export const productApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: ["Products"],
+      invalidatesTags: ["AllProducts"],
     }),
+
     editProduct: builder.mutation<
       Product,
       { data: ProductUpdateDataType; id: string | undefined }
@@ -79,7 +83,25 @@ export const productApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: ["Products"],
+      invalidatesTags: ["AllProducts", "Product"],
+    }),
+
+    getInventory: builder.query<inventoryResponse, string>({
+      query: (id) => ({
+        url: `/inventory/${id}`,
+        method: "GET",
+      }),
+    }),
+
+    updateInventory: builder.mutation<
+      inventoryResponse,
+      { data: inventoryDataUpdate; id: string }
+    >({
+      query: ({ data, id }) => ({
+        url: `/inventory/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
     }),
   }),
 });
@@ -89,4 +111,6 @@ export const {
   useGetProductDetailQuery,
   useCreateProductMutation,
   useEditProductMutation,
+  useGetInventoryQuery,
+  useUpdateInventoryMutation,
 } = productApi;

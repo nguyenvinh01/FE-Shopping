@@ -3,7 +3,10 @@ import { UserOutlined } from "@ant-design/icons";
 import React from "react";
 import { styled } from "styled-components";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
-import { useGetProductDetailQuery } from "../../../../redux/apis/apiProduct";
+import {
+  useGetInventoryQuery,
+  useGetProductDetailQuery,
+} from "../../../../redux/apis/apiProduct";
 import { useNavigate, useParams } from "react-router-dom";
 import { Product } from "../../../../interface/interface";
 
@@ -18,6 +21,7 @@ export const AdminProductDetail = () => {
   const { id }: any = useParams();
   const navigate = useNavigate();
   const { data: productsData, error } = useGetProductDetailQuery(id);
+  const { data: inventoryData } = useGetInventoryQuery(id);
 
   if (error) {
     console.log("error is: ", error);
@@ -46,17 +50,21 @@ export const AdminProductDetail = () => {
             <Descriptions.Item label="Product Name">
               {productsData?.data.name}
             </Descriptions.Item>
+            <Descriptions.Item label="Category" span={2}>
+              {productsData?.data.categories.map((category) => {
+                return <Tag key={category.id}>{category.label}</Tag>;
+              })}
+            </Descriptions.Item>
+            <Descriptions.Item label="Import Price">
+              {inventoryData?.data.import_price}
+            </Descriptions.Item>
             <Descriptions.Item label="Price">
               {productsData?.data.price}
             </Descriptions.Item>
             <Descriptions.Item label="Quantity">
               {productsData?.data.quantity}
             </Descriptions.Item>
-            <Descriptions.Item label="Category" span={3}>
-              {productsData?.data.categories.map((category) => {
-                return <Tag key={category.id}>{category.label}</Tag>;
-              })}
-            </Descriptions.Item>
+
             <Descriptions.Item label="Description" span={3}>
               {productsData?.data.description}
             </Descriptions.Item>

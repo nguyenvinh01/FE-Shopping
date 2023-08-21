@@ -17,7 +17,9 @@ import { styled } from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useEditProductMutation,
+  useGetInventoryQuery,
   useGetProductDetailQuery,
+  useUpdateInventoryMutation,
 } from "../../../../redux/apis/apiProduct";
 import { useGetCategoriesQuery } from "../../../../redux/apis/apiCategory";
 import {
@@ -27,8 +29,10 @@ import {
   Product,
   ProductResponse,
   ProductUpdateDataType,
+  inventoryDataUpdate,
 } from "../../../../interface/interface";
 import { handleResponse } from "../../../../utility/HandleResponse";
+import { error } from "console";
 
 const { Option } = Select;
 
@@ -63,15 +67,18 @@ const getBase64 = (file: RcFile): Promise<string> =>
 
 export const EditProduct = () => {
   const { id }: { id: string } = useParams() as { id: string };
-  const { data } = useGetProductDetailQuery(id);
-  const { data: categories } = useGetCategoriesQuery({});
-  const [form] = Form.useForm();
-  const [editProduct] = useEditProductMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+
+  const { data } = useGetProductDetailQuery(id);
+  const { data: categories } = useGetCategoriesQuery({});
+  const { data: inventoryData } = useGetInventoryQuery(id);
+  const [editProduct] = useEditProductMutation();
+  const [updateInventory] = useUpdateInventoryMutation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -80,6 +87,7 @@ export const EditProduct = () => {
         imageUrl: data?.data.image_url,
         name: data?.data.name,
         categories: data?.data.categories.map((item) => item.id),
+        import_price: inventoryData?.data.import_price,
         price: data?.data.price,
         quantity: data?.data.quantity,
         description: data?.data.description,
@@ -93,7 +101,7 @@ export const EditProduct = () => {
         },
       ]);
     }
-  }, [data]);
+  }, [data, inventoryData]);
 
   const categoryOptions = () => {
     if (!categories) {
@@ -153,33 +161,48 @@ export const EditProduct = () => {
       return;
     }
 
-    const dataUpdate: ProductUpdateDataType = {
+    const dataProductUpdate: ProductUpdateDataType = {
       productImage: fileList[0].originFileObj as Blob,
       productInformation: {
         name: form.getFieldValue("name"),
         categories: form.getFieldValue("categories"),
-        price: parseInt(form.getFieldValue("price")),
-        quantity: parseInt(form.getFieldValue("quantity")),
         description: form.getFieldValue("description"),
       },
     };
 
-    const response: MessageResponse<Product> = await editProduct({
-      data: dataUpdate,
-      id: id,
-    });
-    const { messageResponse, isError } = handleResponse(response);
-    if (isError) {
-      notification.error({
-        message: messageResponse,
-        description: "Có lỗi xảy ra, vui lòng thử lại",
+    const dataInventoryUpdate: inventoryDataUpdate = {
+      import_price: parseInt(form.getFieldValue("import_price")),
+      price: parseInt(form.getFieldValue("price")),
+      quantity: parseInt(form.getFieldValue("quantity")),
+    };
+
+    await updateInventory({ data: dataInventoryUpdate, id })
+      .unwrap()
+      .then(async () => {
+        const responseProduct: MessageResponse<Product> = await editProduct({
+          data: dataProductUpdate,
+          id: id,
+        });
+        const { messageResponse, isError } = handleResponse(responseProduct);
+        if (isError) {
+          notification.error({
+            message: messageResponse,
+            description: "Có lỗi xảy ra, vui lòng thử lại",
+          });
+        } else {
+          notification.success({
+            message: "Chỉnh sửa thành công",
+          });
+          navigate(`/admin/products/detail/${id}`);
+        }
+      })
+      .catch((error) => {
+        // console.log(error.data.message);
+        notification.error({
+          message: error.data.message,
+          description: "Có lỗi xảy ra, vui lòng thử lại",
+        });
       });
-    } else {
-      notification.success({
-        message: "Chỉnh sửa thành công",
-      });
-      navigate("/admin/products");
-    }
   };
 
   return (
@@ -220,7 +243,7 @@ export const EditProduct = () => {
 
           <InputContent>
             <Form.Item
-              label="Tên sản phẩm"
+              label="Product Name"
               name="name"
               rules={[
                 { required: true, message: "Vui lòng nhập tên sản phẩm!" },
@@ -230,7 +253,7 @@ export const EditProduct = () => {
             </Form.Item>
 
             <Form.Item
-              label="Danh mục"
+              label="Category"
               name="categories"
               rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
             >
@@ -246,44 +269,86 @@ export const EditProduct = () => {
             </Form.Item>
             <div style={{ display: "flex", gap: "1rem" }}>
               <Form.Item
-                label="Giá"
-                name="price"
-                rules={[
-                  { required: true, message: "Vui lòng nhập giá sản phẩm!" },
-                ]}
-              >
-                <Input
-                  type="number"
-                  name="price"
-                  style={{
-                    width: "100%",
-                    maxWidth: "200px",
-                    marginRight: "25px",
-                  }}
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Số lượng"
-                name="quantity"
+                label="Import Price"
+                name="import_price"
+                style={{
+                  width: "100%",
+                  maxWidth: "190px",
+                  marginRight: "15px",
+                }}
                 rules={[
                   {
                     required: true,
-                    message: "Vui lòng nhập số lượng sản phẩm!",
+                    message: "Vui lòng nhập giá nhập khẩu của sản phẩm!",
+                  },
+                  {
+                    validator: (_, value) => {
+                      if (value > 0) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error("Giá nhập khẩu phải lớn hơn 0!")
+                      );
+                    },
                   },
                 ]}
               >
-                <Input
-                  type="number"
-                  name="quantity"
-                  // value={formValues.quantity}
-                  style={{ width: "100%", maxWidth: "175px" }}
-                />
+                <Input type="number" name="import_price" />
+              </Form.Item>
+              <Form.Item
+                label="Price"
+                name="price"
+                style={{
+                  width: "100%",
+                  maxWidth: "185px",
+                  marginRight: "25px",
+                }}
+                rules={[
+                  { required: true, message: "Vui lòng nhập giá sản phẩm!" },
+                  {
+                    validator: (_, value) => {
+                      if (value > 0) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error("Giá sản phẩm phải lớn hơn 0!")
+                      );
+                    },
+                  },
+                ]}
+              >
+                <Input type="number" name="price" />
               </Form.Item>
             </div>
+            <Form.Item
+              label="Quantity"
+              name="quantity"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập số lượng sản phẩm!",
+                },
+                {
+                  validator: (_, value) => {
+                    if (value > 0) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Số lượng sản phẩm phải lớn hơn 0!")
+                    );
+                  },
+                },
+              ]}
+            >
+              <Input
+                type="number"
+                name="quantity"
+                style={{ width: "100%", maxWidth: "400px" }}
+              />
+            </Form.Item>
 
             <Form.Item
-              label="Mô tả"
+              label="Description"
               name="description"
               rules={[
                 { required: true, message: "Vui lòng nhập mô tả sản phẩm!" },
