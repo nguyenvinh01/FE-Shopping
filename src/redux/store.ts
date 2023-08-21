@@ -8,6 +8,7 @@ import { userApi } from "./apis/apiUser";
 import { categoryApi } from "./apis/apiCategory";
 import { productApi } from "./apis/apiProduct";
 import { productReducer } from "./slice/productSlice";
+import { cartApi } from "./apis/apiCart";
 
 const persistConfig = {
   key: "cart",
@@ -24,12 +25,14 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
+    [cartApi.reducerPath]: cartApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       userApi.middleware,
       categoryApi.middleware,
-      productApi.middleware
+      productApi.middleware,
+      cartApi.middleware
     ),
 });
 

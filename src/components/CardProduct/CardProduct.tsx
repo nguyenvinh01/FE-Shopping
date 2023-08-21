@@ -3,6 +3,7 @@ import { styled } from "styled-components";
 import { Button, Card } from "antd";
 import { CardProductType } from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
+import { useAddToCartMutation } from "../../redux/apis/apiCart";
 
 const { Meta } = Card;
 
@@ -63,6 +64,10 @@ export const CardProduct: React.FC<CardProductType> = ({
   idProduct,
 }) => {
   const navigate = useNavigate();
+  const [addToCart] = useAddToCartMutation();
+  const handleAddToCart = () => {
+    addToCart(idProduct);
+  };
   return (
     <ProductCard>
       <Card
@@ -82,13 +87,7 @@ export const CardProduct: React.FC<CardProductType> = ({
         <p>{price}</p>
 
         <Meta style={{ marginBlockEnd: 0 }} description={desc} />
-        <Button
-          type="primary"
-          shape="round"
-          onClick={() => {
-            console.log("click");
-          }}
-        >
+        <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
           Add to card
         </Button>
       </Card>

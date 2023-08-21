@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { BsCart4 } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { useGetProductDetailQuery } from "../../redux/apis/apiProduct";
+import { useAddToCartMutation } from "../../redux/apis/apiCart";
 
 const ProductDetailWrapper = styled.div``;
 
@@ -31,6 +32,10 @@ const DescProduct = styled.div`
 export const ProductDetail = () => {
   const { id }: any = useParams();
   const { data } = useGetProductDetailQuery(id);
+  const [addToCart] = useAddToCartMutation();
+  const handleAddToCart = () => {
+    addToCart(id);
+  };
   console.log(data?.data);
 
   return (
@@ -54,7 +59,7 @@ export const ProductDetail = () => {
               <p>{data?.data.description}</p>
             </div>
             <div>
-              <Button size={"large"} type="primary">
+              <Button size={"large"} type="primary" onClick={handleAddToCart}>
                 Add to cart
                 <i>
                   <BsCart4 />
