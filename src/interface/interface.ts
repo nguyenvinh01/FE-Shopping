@@ -29,7 +29,7 @@ export interface CartItemType {
   id: string;
   image?: string;
   desc?: string;
-  categories?: string;
+  categories?: Category[];
   price: number;
   quantity: number;
   product_id?: string;
@@ -96,6 +96,11 @@ export interface Product {
     label: string;
   }[];
 }
+
+export interface CartItemResponse extends Omit<Product, "price"> {
+  pricePerUnit: number;
+}
+
 export interface ProductResponse {
   success: boolean;
   data: Product[];
@@ -220,7 +225,7 @@ export interface Cart {
 }
 export interface CartResponse {
   success: boolean;
-  data: Cart[];
+  data: CartItemResponse[];
   metadata: {
     take: number;
     skip: number;

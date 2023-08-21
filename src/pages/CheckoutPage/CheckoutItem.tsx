@@ -1,8 +1,9 @@
 import { Image } from "antd";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import ImageProduct from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
 import { CheckoutItemType } from "../../interface/interface";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const CheckOutItemWrapper = styled.div`
   .image-product-checkout {

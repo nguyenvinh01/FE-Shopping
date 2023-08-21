@@ -10,7 +10,20 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { resetCart } from "../../redux/slice/cartSlice";
-import { CartItemType } from "../../interface/interface";
+import {
+  CartItemResponse,
+  CartItemType,
+  Product,
+  User,
+} from "../../interface/interface";
+// import { Elements } from "@stripe/react-stripe-js";
+
+import { loadStripe } from "@stripe/stripe-js";
+// import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(
+  "pk_test_51NhP4AFjHyyTbvAQxkeYBRXM6HKyP4VSb65wjR8hjmhlbQblSqaDkarnnOsExBOryyJwbhPyvkAyJOxZOkrBSkmM00BrRipny3"
+);
 const CheckoutPageWrapper = styled.div`
   .header-checkout {
     display: flex;
@@ -37,9 +50,10 @@ const CheckoutPageWrapper = styled.div`
 `;
 export const CheckoutPage = () => {
   const navigate = useNavigate();
-  const dataCart = useSelector<RootState, CartItemType[]>(
+  const dataCart = useSelector<RootState, CartItemResponse[]>(
     (state) => state.cart.items
   );
+  const user = useSelector<RootState, User>((state) => state.user);
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(resetCart());
@@ -49,10 +63,10 @@ export const CheckoutPage = () => {
     <CheckoutPageWrapper>
       <div>
         <div>
-          <p>Tên người nhận: 0015 Osinski Locks</p>
+          <p>Tên người nhận: {user?.fullname}</p>
         </div>
         <div>
-          <p>Địa chỉ giao hàng: 0015 Osinski Locks</p>
+          <p>Địa chỉ giao hàng: {user?.address}</p>
         </div>
         <div>
           <p>
@@ -83,12 +97,12 @@ export const CheckoutPage = () => {
         renderItem={(item) => (
           <div>
             <CheckoutItem
-              // image={item.image}
-              // productname={item.productname}
-              // categories={item.categories}
-              price={item.price}
+              image={item.image_url}
+              productname={item.name}
+              // categories={item.categories.join(",")}
+              price={item.pricePerUnit}
               quantity={item.quantity}
-              product_id={item.product_id}
+              product_id={item.id}
               // amount={item.amount}
             />
           </div>
@@ -99,7 +113,7 @@ export const CheckoutPage = () => {
           <Descriptions layout={"horizontal"} size={"default"}>
             <Descriptions.Item label="Tổng số tiền">
               {dataCart.reduce<number>((prev: number, current) => {
-                return prev + current.price * current.quantity;
+                return prev + current.pricePerUnit * current.quantity;
               }, 0)}
             </Descriptions.Item>
           </Descriptions>

@@ -1,17 +1,21 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import produce from "immer"; // Import thư viện immer
 import { isArray } from "util";
-import { CartItemType } from "../../interface/interface";
+import {
+  CartItemResponse,
+  CartItemType,
+  Product,
+} from "../../interface/interface";
 
 const initialState: CartStateType = {
   items: [],
 };
 type Action = {
-  payload: CartItemType[];
+  payload: CartItemResponse[];
   type: string;
 };
 interface CartStateType {
-  items: CartItemType[];
+  items: CartItemResponse[];
 }
 export const cartSlice = createSlice({
   name: "carts",

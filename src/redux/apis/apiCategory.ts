@@ -32,7 +32,17 @@ export const categoryApi = createApi({
           params: { ...params },
         };
       },
-      providesTags: ["Category"],
+      // providesTags: ["Category"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({
+                type: "Category" as const,
+                id,
+              })),
+              { type: "Category", id: "LIST" },
+            ]
+          : [{ type: "Category", id: "LIST" }],
     }),
     getCategoryDetail: builder.query<Category, string>({
       query: (id: string) => ({
@@ -57,7 +67,7 @@ export const categoryApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: ["Category"],
+      invalidatesTags: [{ type: "Category", id: "LIST" }],
     }),
     editCategory: builder.mutation<
       Category,
@@ -77,7 +87,9 @@ export const categoryApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: ["Category"],
+      invalidatesTags: (result) => [
+        { type: "Category" as const, id: result?.id },
+      ],
     }),
   }),
 });
