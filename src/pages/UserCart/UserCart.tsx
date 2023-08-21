@@ -4,28 +4,13 @@ import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
 import { CartItem } from "./CartItem";
 import { PurchaseBar } from "../../components/PurchaseBar/PurchaseBar";
-import { CartItemType } from "../../interface/interface";
+import {
+  CartItemResponse,
+  CartItemType,
+  Product,
+} from "../../interface/interface";
+import { useGetCartItemQuery } from "../../redux/apis/apiCart";
 
-const data: CartItemType[] = [
-  {
-    id: "12",
-    image: ProductImage,
-    desc: "Vero id delectus eos animi quia et.",
-    categories: "Cate 1culpa et expedita",
-    price: 1200,
-    quantity: 1,
-    amount: 12344,
-  },
-  {
-    id: "123",
-    image: ProductImage,
-    desc: "Vero id delectus eos animi quia et.",
-    categories: "Cate 1culpa et expedita",
-    price: 1200,
-    quantity: 1,
-    amount: 12344,
-  },
-];
 const UserCartWrapper = styled.div`
   width: 100%;
   .list-item {
@@ -80,13 +65,16 @@ const HeaderCart = (
 export const UserCart = () => {
   const [checked, setChecked] = useState(false);
   const [checkedAll, setCheckedAll] = useState(false);
-  const [currentCart, setCurrentCart] = useState<CartItemType[]>([]);
+  const [currentCart, setCurrentCart] = useState<CartItemResponse[]>([]);
+  const { data } = useGetCartItemQuery();
+  console.log(data?.data, 111, data);
+
   const handleChange = () => {
     setChecked(!checked);
   };
   console.log(currentCart, 1);
 
-  const handleAddToCart = (item: CartItemType) => {
+  const handleAddToCart = (item: CartItemResponse) => {
     if (currentCart?.some((cart) => cart.id === item.id)) {
       const newCart = currentCart?.filter((cart) => cart.id !== item.id);
       setCurrentCart(newCart);
@@ -95,15 +83,17 @@ export const UserCart = () => {
     }
   };
   const handleCheckedAll = () => {
-    setCurrentCart(data);
-    if (currentCart.length === data.length && checkedAll == true) {
+    if (data) {
+      setCurrentCart(data.data);
+    }
+    if (currentCart.length === data?.data.length && checkedAll == true) {
       setCurrentCart([]);
       setChecked(false);
       setCheckedAll(false);
     } else setCheckedAll(!checkedAll);
   };
   useEffect(() => {
-    if (currentCart.length === data.length) {
+    if (currentCart.length === data?.data.length) {
       setCheckedAll(true);
       setChecked(true);
     } else {
@@ -114,7 +104,7 @@ export const UserCart = () => {
   return (
     <UserCartWrapper>
       <List
-        dataSource={data}
+        dataSource={data?.data}
         header={
           <List.Item>
             <Checkbox

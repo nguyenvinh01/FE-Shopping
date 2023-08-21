@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { addCartItem } from "../../redux/slice/cartSlice";
 import { setUser } from "../../redux/slice/userSlice";
-import { CartItemType } from "../../interface/interface";
+import {
+  CartItemResponse,
+  CartItemType,
+  Product,
+} from "../../interface/interface";
 
 const PurchaseBarWrapper = styled.div`
   display: flex;
@@ -32,12 +36,14 @@ const PurchaseBarWrapper = styled.div`
 `;
 interface PurchaseBarType {
   handleAddToCart?: () => void;
-  cart: CartItemType[];
+  cart: CartItemResponse[];
 }
 export const PurchaseBar = ({ handleAddToCart, cart }: PurchaseBarType) => {
   const [disable, setDisable] = useState<boolean>(true);
   const navigate = useNavigate();
-  const dataCart = useSelector<RootState>((state) => state.cart.items);
+  const dataCart = useSelector<RootState, CartItemResponse[]>(
+    (state) => state.cart.items
+  );
   const dispatch = useDispatch();
   const handleClick = () => {
     const newItem = {
@@ -59,7 +65,7 @@ export const PurchaseBar = ({ handleAddToCart, cart }: PurchaseBarType) => {
         <p>
           Giá:{" "}
           {cart.reduce<number>((prev, current, index, array) => {
-            return prev + current.price * current.quantity;
+            return prev + current.pricePerUnit * current.quantity;
           }, 0)}
         </p>
         <Button

@@ -1,23 +1,29 @@
-import { Button, Checkbox, Image, InputNumber, List } from "antd";
+import { Button, Checkbox, Image, InputNumber, List, Tag } from "antd";
 import React, { useState, useEffect } from "react";
 import ProductImage from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { CartItemType } from "../../interface/interface";
+import {
+  CartItemResponse,
+  CartItemType,
+  Product,
+} from "../../interface/interface";
+import { useDeleteCartItemMutation } from "../../redux/apis/apiCart";
 
 type PropsCart = {
-  items: CartItemType;
+  items: CartItemResponse;
   checked: boolean;
-  handleAddToCart: (item: CartItemType) => void;
+  handleAddToCart: (item: CartItemResponse) => void;
 };
 export const CartItem = ({ items, checked, handleAddToCart }: PropsCart) => {
   const [check, setChecked] = useState<boolean>(false);
-
+  const [deleteCartItem] = useDeleteCartItemMutation();
   const handleChange = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);
     handleAddToCart(items);
   };
   const handleDelete = () => {
+    deleteCartItem(items.id);
     console.log(123);
   };
   useEffect(() => {
@@ -32,18 +38,24 @@ export const CartItem = ({ items, checked, handleAddToCart }: PropsCart) => {
         ></Checkbox>
         <div className="list-item image-product">
           <Image
-            src={items.image}
+            src={items.image_url}
             preview={false}
             width={"80px"}
             height={"80px"}
           />
-          <span>{items.desc}</span>
+          <span>{items.description}</span>
         </div>
         <div className="list-item">
-          <p>{items.categories}</p>
+          {items.categories.map((i) => {
+            return (
+              <p key={i.id}>
+                <Tag color="blue">{i.label}</Tag>
+              </p>
+            );
+          })}
         </div>
         <div className="list-item">
-          <p>{items.price}</p>
+          <p>{items.pricePerUnit}</p>
         </div>
         <div className="list-item">
           <p>
@@ -51,11 +63,13 @@ export const CartItem = ({ items, checked, handleAddToCart }: PropsCart) => {
           </p>
         </div>
         <div className="list-item">
-          <p>{items.amount}</p>
+          <p>{items.pricePerUnit * items.quantity}</p>
         </div>
         <div className="list-item">
           <p onClick={handleDelete}>
-            <Button type="link">Xoa</Button>
+            <Button type="link" danger>
+              Xóa
+            </Button>
           </p>
         </div>
       </List.Item>

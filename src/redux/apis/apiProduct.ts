@@ -4,7 +4,6 @@ import {
   DataProductUpdate,
   Product,
   ProductDetailResponse,
-  ProductFormValues,
   ProductResponse,
   ProductUpdateDataType,
   QueryParams,
@@ -12,7 +11,6 @@ import {
   inventoryResponse,
 } from "../../interface/interface";
 import { prepareHeaders } from "../../utility/PrepareHeaders";
-// import { prepareHeaders } from "./apiUser";
 
 export const productApi = createApi({
   reducerPath: "productsApi",
@@ -37,7 +35,16 @@ export const productApi = createApi({
           params: { ...params },
         };
       },
-      providesTags: ["AllProducts"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({
+                type: "Product" as const,
+                id,
+              })),
+              { type: "Product", id: "LIST" },
+            ]
+          : [{ type: "Product", id: "LIST" }],
     }),
 
     getProductDetail: builder.query<ProductDetailResponse, string>({
@@ -45,11 +52,10 @@ export const productApi = createApi({
         url: `/product/${id}`,
         method: "GET",
       }),
-      providesTags: ["Product"],
+      providesTags: (result) => [{ type: "Product", id: result?.data.id }],
     }),
 
     createProduct: builder.mutation<Product, DataProductUpdate>({
-      // invalidatesTags: ["Product"],
       query: (data: DataProductUpdate) => {
         const formData = new FormData();
         formData.append("productImage", data.productImage as File);
@@ -63,7 +69,7 @@ export const productApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: ["AllProducts"],
+      invalidatesTags: (result) => [{ type: "Product", id: result?.id }],
     }),
 
     editProduct: builder.mutation<
@@ -83,7 +89,13 @@ export const productApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: ["AllProducts", "Product"],
+      invalidatesTags: (result) =>
+        result
+          ? [
+              { type: "Product", id: result.id },
+              { type: "Product", id: "LIST" },
+            ]
+          : [{ type: "Product", id: "LIST" }],
     }),
 
     getInventory: builder.query<inventoryResponse, string>({
