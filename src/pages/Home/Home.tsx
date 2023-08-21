@@ -5,6 +5,7 @@ import { CardCategory } from "../../components/CardCategory/CardCategory";
 import { useGetCategoriesQuery } from "../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../redux/apis/apiProduct";
 import { Category, Product } from "../../interface/interface";
+import { Card, Carousel } from "antd";
 
 const HomePage = styled.div`
   /* padding: 0 200px; */

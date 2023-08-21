@@ -12,6 +12,7 @@ import { EditCategory } from "./EditCategory/EditCategory";
 const AdminContainer = styled.div`
   background-color: #ffffff;
   padding: 5px 10px;
+  margin-bottom: 10px;
 `;
 
 const TopContainer = styled.div`
@@ -36,7 +37,7 @@ export const AdminCategories = () => {
   const [searchValue, setSearchValue] = React.useState("");
   const [visible, setVisible] = useState(false);
   const [page, setPage] = React.useState(1);
-  const [limit, setLimit] = React.useState(5);
+  const [limit, setLimit] = React.useState(10);
 
   const { data: categoriesData, isFetching } = useGetCategoriesQuery({
     name: searchValue,
