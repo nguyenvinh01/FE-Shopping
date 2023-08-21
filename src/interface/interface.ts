@@ -131,7 +131,7 @@ export interface CardProductType {
   price?: number;
   desc?: string;
   img_url?: string;
-  idProduct?: string;
+  idProduct: string;
 }
 export interface cardCategoryType {
   name?: string;
@@ -192,6 +192,20 @@ export interface DataUserUpdate {
     fullname: string;
     address: string;
     phone: string;
+  };
+}
+
+export interface Cart {
+  product_id: string;
+  quantity: number;
+}
+export interface CartResponse {
+  success: boolean;
+  data: Cart[];
+  metadata: {
+    take: number;
+    skip: number;
+    count: number;
   };
 }
 export interface QueryParams {
