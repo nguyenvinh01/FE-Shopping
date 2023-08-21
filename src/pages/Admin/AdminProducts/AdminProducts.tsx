@@ -42,7 +42,7 @@ export const AdminProducts = () => {
   const [limit, setLimit] = React.useState(10);
   const navigate = useNavigate();
 
-  const { data: categoriesData } = useGetCategoriesQuery({});
+  const { data: categoriesData } = useGetCategoriesQuery({ limit: 1000000 });
   const {
     data: productsData,
     isFetching,
@@ -143,15 +143,6 @@ export const AdminProducts = () => {
           onShowSizeChange={onShowSizeChange}
           handleChangePage={handleChangePage}
         />
-        {/* <Pagination
-          showSizeChanger
-          current={page}
-          onShowSizeChange={onShowSizeChange}
-          defaultCurrent={1}
-          pageSize={limit}
-          total={productsData?.metadata.count}
-          onChange={(value) => handleChangePage(value)}
-        /> */}
       </AdminContainer>
     </>
   );

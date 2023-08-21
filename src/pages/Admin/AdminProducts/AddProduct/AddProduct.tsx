@@ -63,6 +63,7 @@ export const AddProduct: React.FC = () => {
   const [formValues, setFormValues] = useState<ProductFormValues>({
     name: "",
     categories: [],
+    import_price: 0,
     price: 0,
     quantity: 0,
     description: "",
@@ -140,8 +141,6 @@ export const AddProduct: React.FC = () => {
   };
 
   const handleSubmit = async (values: ProductFormValues) => {
-    // console.log(fileList, "filelist");
-
     if (fileList.length === 0) {
       message.error("Vui lòng tải ảnh sản phẩm!");
       return;
@@ -153,6 +152,7 @@ export const AddProduct: React.FC = () => {
       productInformation: {
         name: form.getFieldValue("name"),
         categories: form.getFieldValue("categories"),
+        import_price: parseInt(form.getFieldValue("import_price")),
         price: parseInt(form.getFieldValue("price")),
         quantity: parseInt(form.getFieldValue("quantity")),
         description: form.getFieldValue("description"),
@@ -244,6 +244,28 @@ export const AddProduct: React.FC = () => {
             </Form.Item>
             <div style={{ display: "flex", gap: "1rem" }}>
               <Form.Item
+                label="Import Price"
+                name="import_price"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập giá nhập khẩu của sản phẩm!",
+                  },
+                ]}
+              >
+                <Input
+                  type="number"
+                  name="import_price"
+                  value={formValues.import_price}
+                  onChange={handleInputChange}
+                  style={{
+                    width: "100%",
+                    maxWidth: "190px",
+                    marginRight: "15px",
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
                 label="Price"
                 name="price"
                 rules={[
@@ -257,32 +279,30 @@ export const AddProduct: React.FC = () => {
                   onChange={handleInputChange}
                   style={{
                     width: "100%",
-                    maxWidth: "200px",
+                    maxWidth: "185px",
                     marginRight: "25px",
                   }}
                 />
               </Form.Item>
-
-              <Form.Item
-                label="Quantity"
-                name="quantity"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng nhập số lượng sản phẩm!",
-                  },
-                ]}
-              >
-                <Input
-                  type="number"
-                  name="quantity"
-                  value={formValues.quantity}
-                  onChange={handleInputChange}
-                  style={{ width: "100%", maxWidth: "175px" }}
-                />
-              </Form.Item>
             </div>
-
+            <Form.Item
+              label="Quantity"
+              name="quantity"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập số lượng sản phẩm!",
+                },
+              ]}
+            >
+              <Input
+                type="number"
+                name="quantity"
+                value={formValues.quantity}
+                onChange={handleInputChange}
+                style={{ width: "100%", maxWidth: "400px" }}
+              />
+            </Form.Item>
             <Form.Item
               label="Description"
               name="description"

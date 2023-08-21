@@ -121,8 +121,9 @@ export interface ProductUpdateDataType {
 export interface ProductFormValues {
   name: string;
   categories: number[];
-  price: number;
-  quantity: number;
+  import_price?: number;
+  price?: number;
+  quantity?: number;
   description: string;
 }
 
@@ -163,10 +164,28 @@ export interface DataProductUpdate {
   productInformation?: {
     name: string;
     categories: number[];
-    price: number;
-    quantity: number;
+    import_price?: number;
+    price?: number;
     description: string;
   };
+}
+
+export interface inventoryResponse {
+  data: {
+    product_id: string;
+    product_name: string;
+    import_price: number;
+    price: number;
+    quantity: number;
+    revenue?: number;
+    profit?: number;
+  };
+}
+
+export interface inventoryDataUpdate {
+  import_price?: number;
+  price?: number;
+  quantity?: number;
 }
 
 export interface CategoryListType {
