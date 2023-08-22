@@ -36,12 +36,12 @@ export const CategoryList = ({
     setVisibleDetail(false);
     setVisibleEdit(false);
     setVisibleDelete(false);
-    setLoaded(!loaded);
+    setLoaded(true);
   };
 
   const handleDetail = (id: string) => {
     setVisibleDetail(true);
-    setLoaded(!loaded);
+    setLoaded(false);
     setId(id);
   };
 
@@ -56,6 +56,8 @@ export const CategoryList = ({
 
   const handleEdit = (id: string) => {
     setVisibleEdit(true);
+    setVisibleDetail(false);
+    setLoaded(false);
     setId(id);
     // console.log("id: ", id);
   };

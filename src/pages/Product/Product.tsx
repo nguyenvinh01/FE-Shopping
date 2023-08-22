@@ -58,6 +58,12 @@ const CategorySearch = styled.div`
   }
 `;
 
+const ProductWapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-basis: 77%;
+`;
+
 const ProductItems = styled.div`
   flex-basis: 77%;
   padding: 0 15px;
@@ -79,11 +85,13 @@ export const Products = () => {
   const [filterPrice, setFilterPrice] = useState(10000000);
   const [priceSort, setPriceSort] = useState(0);
   const [selectedCategory, setSelectedCategory] = React.useState("");
+  const [page, setPage] = React.useState(1);
 
   const { data: categoriesData } = useGetCategoriesQuery({});
   const { data: productsData } = useGetProductsQuery({
     id: selectedCategory,
     maxPrice: filterPrice,
+    page,
   });
 
   const HandleChangePriceFilter = (newValue: number) => {
@@ -92,6 +100,17 @@ export const Products = () => {
 
   const handleChangePriceSort = (newValue: number) => {
     setPriceSort(newValue);
+  };
+
+  const handleReset = () => {
+    setFilterPrice(10000000);
+    setPriceSort(0);
+    setSelectedCategory("");
+  };
+
+  const handleChangePage = (value: number) => {
+    // console.log("page", value);
+    setPage(value);
   };
 
   const onCheckBoxChange = (checkedValues: CheckboxValueType[]) => {
@@ -130,7 +149,7 @@ export const Products = () => {
         <ProductFilter>
           <FilterHeader>
             <h3>Filter</h3>
-            <Button type="default" shape="default">
+            <Button type="default" shape="default" onClick={handleReset}>
               Reset
             </Button>
           </FilterHeader>
@@ -157,12 +176,21 @@ export const Products = () => {
             <h3>Categories</h3>
             <Checkbox.Group
               options={categoryOptions}
+              // checked={selectedCategory}
               onChange={onCheckBoxChange}
               style={{ flexDirection: "column" }}
             />
           </CategorySearch>
         </ProductFilter>
-        <ProductItems>{renderProductList()}</ProductItems>;
+        <ProductWapper>
+          <ProductItems>{renderProductList()}</ProductItems>
+          <Pagination
+            defaultCurrent={1}
+            current={page}
+            total={productsData?.metadata?.count}
+            onChange={(value) => handleChangePage(value)}
+          />
+        </ProductWapper>
       </ProductContent>
     </>
   );

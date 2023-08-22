@@ -5,6 +5,8 @@ import { cardCategoryType } from "../../interface/interface";
 
 const CategoryCard = styled.div`
   position: relative;
+  /* width: 170px !important;
+  height: 220px !important; */
 
   p {
     position: absolute;
@@ -26,7 +28,7 @@ export const CardCategory: React.FC<cardCategoryType> = ({ name, img_url }) => {
   return (
     <CategoryCard>
       <p>{name}</p>
-      <img src={imageUrl} alt="Ảnh" />
+      <img src={img_url} alt="Ảnh" />
     </CategoryCard>
   );
 };
