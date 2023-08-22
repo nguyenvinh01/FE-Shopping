@@ -1,4 +1,4 @@
-import { Checkbox, Image, List } from "antd";
+import { Checkbox, Image, List, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
@@ -7,9 +7,14 @@ import { PurchaseBar } from "../../components/PurchaseBar/PurchaseBar";
 import {
   CartItemResponse,
   CartItemType,
+  MessageResponse,
   Product,
 } from "../../interface/interface";
-import { useGetCartItemQuery } from "../../redux/apis/apiCart";
+import {
+  useDeleteCartItemMutation,
+  useGetCartItemQuery,
+  useUpdateCartItemMutation,
+} from "../../redux/apis/apiCart";
 
 const UserCartWrapper = styled.div`
   width: 100%;
@@ -34,6 +39,12 @@ const UserCartWrapper = styled.div`
     align-items: baseline;
     display: flex;
     width: 350px;
+  }
+  .ant-image-img {
+    cursor: pointer;
+  }
+  .image-product span {
+    margin-left: 100px;
   }
 `;
 const CartItemWrapper = styled.div`
@@ -63,44 +74,100 @@ const HeaderCart = (
   </>
 );
 export const UserCart = () => {
-  const [checked, setChecked] = useState(false);
   const [checkedAll, setCheckedAll] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [currentCart, setCurrentCart] = useState<CartItemResponse[]>([]);
-  const { data } = useGetCartItemQuery();
-  console.log(data?.data, 111, data);
+  const { data, isFetching } = useGetCartItemQuery();
+  const [updateCartItem] = useUpdateCartItemMutation();
+  const [deleteCartItem] = useDeleteCartItemMutation();
 
-  const handleChange = () => {
-    setChecked(!checked);
+  const handleCheckedChange = (id: string, isChecked: boolean) => {
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [id]: isChecked,
+    }));
   };
-  console.log(currentCart, 1);
 
   const handleAddToCart = (item: CartItemResponse) => {
-    if (currentCart?.some((cart) => cart.id === item.id)) {
-      const newCart = currentCart?.filter((cart) => cart.id !== item.id);
+    if (currentCart.some((cart) => cart.id === item.id)) {
+      const newCart = currentCart.filter((cart) => cart.id !== item.id);
       setCurrentCart(newCart);
     } else {
-      setCurrentCart([...currentCart, item]);
+      if (currentCart) setCurrentCart([...currentCart, item]);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const response: MessageResponse<CartItemResponse> = await deleteCartItem(
+      id
+    );
+
+    if (response.data) {
+      if ("data" in response.data) {
+        const itemUpdated: { product_id: string; quantity: number } = response
+          .data.data as { product_id: string; quantity: number };
+        const newCart = currentCart.filter(
+          (cart: CartItemResponse) => cart.id !== itemUpdated.product_id
+        );
+        setCurrentCart(newCart);
+      }
+    }
+  };
+  const handleChangeQuantity = async (
+    value: string,
+    id: string,
+    quantity: number | undefined
+  ) => {
+    const updateData = {
+      product_id: id,
+      quantity: value,
+    };
+    const response: MessageResponse<CartItemResponse> = await updateCartItem(
+      updateData
+    );
+    if (Number(value) > Number(quantity)) {
+      notification.error({
+        message: "Vượt quá số lượng sản phẩm",
+        description: "Vượt quá số lượng sản phẩm",
+      });
+    } else {
+      if (response.data) {
+        if ("data" in response.data) {
+          const itemUpdated: { product_id: string; quantity: number } = response
+            .data.data as { product_id: string; quantity: number };
+          const newCart = currentCart.map((cart: CartItemResponse) =>
+            cart.id === itemUpdated.product_id
+              ? { ...cart, quantity: itemUpdated.quantity }
+              : cart
+          );
+          setCurrentCart(newCart);
+        }
+      }
     }
   };
   const handleCheckedAll = () => {
     if (data) {
+      const allChecked = !checkedAll;
+      const updatedCheckedItems: Record<string, boolean> = {};
+
+      data.data.forEach((item) => {
+        updatedCheckedItems[item.id] = allChecked;
+      });
+
+      setCheckedAll(allChecked);
+      setCheckedItems(updatedCheckedItems);
       setCurrentCart(data.data);
     }
-    if (currentCart.length === data?.data.length && checkedAll == true) {
-      setCurrentCart([]);
-      setChecked(false);
-      setCheckedAll(false);
-    } else setCheckedAll(!checkedAll);
   };
+
   useEffect(() => {
-    if (currentCart.length === data?.data.length) {
+    if (currentCart.length === data?.data.length && currentCart.length > 0) {
       setCheckedAll(true);
-      setChecked(true);
     } else {
       setCheckedAll(false);
-      // setChecked(false);
     }
-  }, [currentCart]);
+    console.log(currentCart, "current", data?.data);
+  }, [currentCart, data]);
   return (
     <UserCartWrapper>
       <List
@@ -116,19 +183,23 @@ export const UserCart = () => {
         }
         renderItem={(item) => {
           return (
-            <div>
+            <>
               <CartItemWrapper>
                 <CartItem
                   items={item}
-                  checked={checked}
+                  checked={checkedItems[item.id]}
                   handleAddToCart={handleAddToCart}
+                  handleChangeQuantity={handleChangeQuantity}
+                  handleDelete={handleDelete}
+                  handleCheckedChange={handleCheckedChange}
                 />
               </CartItemWrapper>
               <br />
-            </div>
+            </>
           );
         }}
       ></List>
+      {/* {currentCart ? <PurchaseBar cart={currentCart} /> : ""} */}
       <PurchaseBar cart={currentCart} />
     </UserCartWrapper>
   );

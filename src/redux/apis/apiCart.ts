@@ -29,7 +29,7 @@ export const cartApi = createApi({
             ]
           : [{ type: "Cart", id: "LIST" }],
     }),
-    addToCart: builder.mutation<void, string>({
+    addToCart: builder.mutation<CartResponse, string>({
       query: (id) => ({
         url: `/cart/add/${id}`,
         method: "POST",
@@ -41,7 +41,7 @@ export const cartApi = createApi({
       { product_id: string; quantity: string }
     >({
       query: (args) => ({
-        url: `/cart/${args.product_id}?${args.quantity}`,
+        url: `/cart/${args.product_id}?quantity=${args.quantity}`,
         method: "PUT",
       }),
       invalidatesTags: (result) => [
@@ -49,12 +49,12 @@ export const cartApi = createApi({
         { type: "Cart", id: "LIST" },
       ],
     }),
-    deleteCartItem: builder.mutation<void, string>({
+    deleteCartItem: builder.mutation<CartItemResponse, string>({
       query: (id) => ({
         url: `/cart/delete/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Cart"],
+      invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
   }),
 });
