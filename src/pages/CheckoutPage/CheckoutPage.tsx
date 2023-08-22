@@ -18,12 +18,12 @@ import {
 } from "../../interface/interface";
 // import { Elements } from "@stripe/react-stripe-js";
 
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 // import { Elements } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(
-  "pk_test_51NhP4AFjHyyTbvAQxkeYBRXM6HKyP4VSb65wjR8hjmhlbQblSqaDkarnnOsExBOryyJwbhPyvkAyJOxZOkrBSkmM00BrRipny3"
-);
+// const stripePromise = loadStripe(
+//   "pk_test_51NhP4AFjHyyTbvAQxkeYBRXM6HKyP4VSb65wjR8hjmhlbQblSqaDkarnnOsExBOryyJwbhPyvkAyJOxZOkrBSkmM00BrRipny3"
+// );
 const CheckoutPageWrapper = styled.div`
   .header-checkout {
     display: flex;
