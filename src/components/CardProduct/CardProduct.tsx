@@ -1,9 +1,14 @@
 import React from "react";
 import { styled } from "styled-components";
 import { Button, Card, notification } from "antd";
-import { CardProductType } from "../../interface/interface";
+import {
+  CardProductType,
+  CartResponse,
+  MessageResponse,
+} from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAddToCartMutation } from "../../redux/apis/apiCart";
+import { async } from "q";
 
 const { Meta } = Card;
 
@@ -65,10 +70,23 @@ export const CardProduct: React.FC<CardProductType> = ({
 }) => {
   const navigate = useNavigate();
   const [addToCart] = useAddToCartMutation();
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const token = localStorage.getItem("access_token");
     if (token) {
-      addToCart(idProduct);
+      const response: MessageResponse<CartResponse> = await addToCart(
+        idProduct
+      );
+      if (response.data?.success) {
+        notification.success({
+          message: "Thêm thành công",
+          description: `Thêm thành công vào rỏ hàng`,
+        });
+      } else {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: `Có lỗi xảy ra`,
+        });
+      }
     } else {
       notification.warning({
         message: "Đăng nhập để mua hàng",

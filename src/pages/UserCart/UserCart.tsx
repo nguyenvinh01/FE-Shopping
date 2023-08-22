@@ -1,4 +1,4 @@
-import { Checkbox, Image, List } from "antd";
+import { Checkbox, Image, List, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
@@ -114,26 +114,34 @@ export const UserCart = () => {
     }
   };
   const handleChangeQuantity = async (
-    value: React.FocusEvent<HTMLInputElement, Element>,
-    id: string
+    value: string,
+    id: string,
+    quantity: number | undefined
   ) => {
     const updateData = {
       product_id: id,
-      quantity: value.target.value,
+      quantity: value,
     };
     const response: MessageResponse<CartItemResponse> = await updateCartItem(
       updateData
     );
-    if (response.data) {
-      if ("data" in response.data) {
-        const itemUpdated: { product_id: string; quantity: number } = response
-          .data.data as { product_id: string; quantity: number };
-        const newCart = currentCart.map((cart: CartItemResponse) =>
-          cart.id === itemUpdated.product_id
-            ? { ...cart, quantity: itemUpdated.quantity }
-            : cart
-        );
-        setCurrentCart(newCart);
+    if (Number(value) > Number(quantity)) {
+      notification.error({
+        message: "Vượt quá số lượng sản phẩm",
+        description: "Vượt quá số lượng sản phẩm",
+      });
+    } else {
+      if (response.data) {
+        if ("data" in response.data) {
+          const itemUpdated: { product_id: string; quantity: number } = response
+            .data.data as { product_id: string; quantity: number };
+          const newCart = currentCart.map((cart: CartItemResponse) =>
+            cart.id === itemUpdated.product_id
+              ? { ...cart, quantity: itemUpdated.quantity }
+              : cart
+          );
+          setCurrentCart(newCart);
+        }
       }
     }
   };

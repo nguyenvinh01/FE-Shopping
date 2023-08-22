@@ -16,8 +16,9 @@ type PropsCart = {
   checked: boolean;
   handleAddToCart: (item: CartItemResponse) => void;
   handleChangeQuantity: (
-    value: React.FocusEvent<HTMLInputElement, Element>,
-    id: string
+    value: string,
+    id: string,
+    quantity: number | undefined
   ) => void;
   handleDelete: (id: string) => void;
   handleCheckedChange: (id: string, isChecked: boolean) => void;
@@ -38,12 +39,6 @@ export const CartItem = ({
     handleCheckedChange(items.id, e.target.checked);
     handleAddToCart(items);
   };
-  console.log(
-    items.quantity,
-    "quantity",
-    items.description,
-    data?.data.quantity
-  );
 
   const handleNavigate = () => {
     navigate(`/products/${items.id}`);
@@ -87,7 +82,22 @@ export const CartItem = ({
             min={1}
             max={data?.data.quantity}
             defaultValue={items.quantity}
-            onBlur={(value) => handleChangeQuantity(value, items.id)}
+            onBlur={(value) =>
+              handleChangeQuantity(
+                value.target.value,
+                items.id,
+                data?.data.quantity
+              )
+            }
+            onPressEnter={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if ("value" in e.target) {
+                handleChangeQuantity(
+                  String(e.target.value),
+                  items.id,
+                  data?.data.quantity
+                );
+              }
+            }}
           />
         </p>
       </div>
