@@ -11,13 +11,14 @@ import { OrderModal } from "./OrderModal";
 const OrderItemWrapper = styled.div`
   border-radius: 5px;
   padding: 0px 10px;
-  height: 50px;
+  height: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: baseline;
   box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
     rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+  margin-top: 15px;
   .ant-list-item {
     padding: 0px;
     display: flex;
@@ -39,9 +40,9 @@ export const OrderItem = ({ onClick }: PropsOrderItem) => {
   return (
     <OrderItemWrapper onClick={onClick}>
       <List.Item>
-        <div>Ma don hang</div>
-        <div>Ngay dat</div>
-        <div>Tong tien</div>
+        <div>Mã đơn hàng</div>
+        <div>Ngày đặt</div>
+        <div>Tổng tiền</div>
         <div>
           <AiOutlineArrowRight />
         </div>

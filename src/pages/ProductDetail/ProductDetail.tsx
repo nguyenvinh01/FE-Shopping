@@ -1,13 +1,18 @@
-import { Button, Carousel, Image, Space } from "antd";
+import { Button, Carousel, Image, Space, notification } from "antd";
 import React from "react";
 import { styled } from "styled-components";
 import Logo from "../../assets/images/Group 1481.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BsCart4 } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetProductDetailQuery } from "../../redux/apis/apiProduct";
 import { useAddToCartMutation } from "../../redux/apis/apiCart";
+import {
+  CartItemResponse,
+  CartResponse,
+  MessageResponse,
+} from "../../interface/interface";
 
 const ProductDetailWrapper = styled.div``;
 
@@ -33,10 +38,31 @@ export const ProductDetail = () => {
   const { id }: any = useParams();
   const { data } = useGetProductDetailQuery(id);
   const [addToCart] = useAddToCartMutation();
-  const handleAddToCart = () => {
-    addToCart(id);
+  const navigate = useNavigate();
+
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      const response: MessageResponse<CartResponse> = await addToCart(id);
+      if (response.data?.success) {
+        notification.success({
+          message: "Thêm thành công",
+          description: `Thêm thành công vào rỏ hàng`,
+        });
+      } else {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: `Có lỗi xảy ra`,
+        });
+      }
+    } else {
+      notification.warning({
+        message: "Đăng nhập để mua hàng",
+        description: "Đăng nhập để mua hàng",
+      });
+      navigate("/sign-in");
+    }
   };
-  console.log(data?.data);
 
   return (
     <ProductDetailWrapper>

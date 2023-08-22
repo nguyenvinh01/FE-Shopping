@@ -8,6 +8,7 @@ import {
   Dropdown,
   Avatar,
   Input,
+  Badge,
 } from "antd";
 import type { MenuProps } from "antd";
 import styled from "styled-components";
@@ -22,6 +23,7 @@ import { RootState } from "../../redux/store";
 import { InitialStateType, resetUser } from "../../redux/slice/userSlice";
 import { ROLE, User } from "../../interface/interface";
 import { useLoginMutation, useLogoutMutation } from "../../redux/apis/apiUser";
+import { useGetCartItemQuery } from "../../redux/apis/apiCart";
 
 const { Item } = Menu;
 const { Header } = Layout;
@@ -65,6 +67,7 @@ const HeaderLayout = styled.div`
 `;
 export const HeaderCompoment = () => {
   const [logout] = useLogoutMutation();
+  const { data, isFetching } = useGetCartItemQuery();
   const user = useSelector<RootState, User>((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -100,17 +103,6 @@ export const HeaderCompoment = () => {
         </a>
       ),
     },
-    // {
-    //   key: "4",
-    //   label:
-    //     user.role === ROLE.ADMIN ? (
-    //       <a onClick={() => navigate("/admin")}>
-    //         <span>Quản lý</span>
-    //       </a>
-    //     ) : (
-    //       true
-    //     ),
-    // },
     ...(user.role === ROLE.ADMIN
       ? [
           {
@@ -154,10 +146,12 @@ export const HeaderCompoment = () => {
           <AvatarProfile>
             <Space>
               <Link to={"/dashboard/cart"}>
-                <BsCart4 size={25} />
+                <Badge size="small" count={data?.data.length}>
+                  <BsCart4 size={25} />
+                </Badge>
               </Link>
               <Dropdown menu={{ items }} placement="bottomRight" arrow>
-                <Avatar src={AvatarUser} size={40}></Avatar>
+                <Avatar src={user.image_url} size={40}></Avatar>
               </Dropdown>
             </Space>
           </AvatarProfile>

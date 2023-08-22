@@ -22,8 +22,7 @@ export const cartSlice = createSlice({
   initialState: initialState,
   reducers: {
     addCartItem: (state: CartStateType, action: Action) => {
-      // state.items = [...state.items, ...action.payload];
-      state.items = Object.assign(state.items, action.payload);
+      state.items = action.payload;
     },
     resetCart: (state) => {
       state.items = [];

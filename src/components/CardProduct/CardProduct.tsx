@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
-import { Button, Card } from "antd";
+import { Button, Card, notification } from "antd";
 import { CardProductType } from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAddToCartMutation } from "../../redux/apis/apiCart";
@@ -66,7 +66,16 @@ export const CardProduct: React.FC<CardProductType> = ({
   const navigate = useNavigate();
   const [addToCart] = useAddToCartMutation();
   const handleAddToCart = () => {
-    addToCart(idProduct);
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      addToCart(idProduct);
+    } else {
+      notification.warning({
+        message: "Đăng nhập để mua hàng",
+        description: "Đăng nhập để mua hàng",
+      });
+      navigate("/sign-in");
+    }
   };
   return (
     <ProductCard>
@@ -87,10 +96,10 @@ export const CardProduct: React.FC<CardProductType> = ({
         <p>{price}</p>
 
         <Meta style={{ marginBlockEnd: 0 }} description={desc} />
-        <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
-          Add to card
-        </Button>
       </Card>
+      <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
+        Add to card
+      </Button>
     </ProductCard>
   );
 };

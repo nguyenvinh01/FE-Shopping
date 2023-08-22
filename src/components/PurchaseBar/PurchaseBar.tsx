@@ -33,12 +33,14 @@ const PurchaseBarWrapper = styled.div`
   p {
     margin: 0px 20px;
   }
+  .ant-btn {
+    margin-right: 20px;
+  }
 `;
 interface PurchaseBarType {
-  handleAddToCart?: () => void;
   cart: CartItemResponse[];
 }
-export const PurchaseBar = ({ handleAddToCart, cart }: PurchaseBarType) => {
+export const PurchaseBar = ({ cart }: PurchaseBarType) => {
   const [disable, setDisable] = useState<boolean>(true);
   const navigate = useNavigate();
   const dataCart = useSelector<RootState, CartItemResponse[]>(
@@ -64,9 +66,11 @@ export const PurchaseBar = ({ handleAddToCart, cart }: PurchaseBarType) => {
       <div>
         <p>
           Giá:{" "}
-          {cart.reduce<number>((prev, current, index, array) => {
-            return prev + current.pricePerUnit * current.quantity;
-          }, 0)}
+          {cart
+            ? cart.reduce<number>((prev, current, index, array) => {
+                return prev + current.pricePerUnit * current.quantity;
+              }, 0)
+            : 0}
         </p>
         <Button
           type="primary"
