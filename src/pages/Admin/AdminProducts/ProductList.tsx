@@ -35,9 +35,9 @@ export const ProductList = ({
   const handleEdit = (id: string) => {
     navigate(`/admin/products/edit/${id}`);
   };
-  const handleDelete = (id: String) => {
-    console.log(id);
-  };
+  // const handleDelete = (id: String) => {
+  //   console.log(id);
+  // };
 
   const columns: ColumnsType<Product> = [
     {
@@ -90,9 +90,9 @@ export const ProductList = ({
               <a onClick={() => handleEdit(useData.id)}>
                 <AiOutlineEdit />
               </a>
-              <a onClick={() => handleDelete(useData.id)}>
+              {/* <a onClick={() => handleDelete(useData.id)}>
                 <AiOutlineDelete />
-              </a>
+              </a> */}
             </span>
           </span>
         </Space>

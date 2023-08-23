@@ -31,9 +31,6 @@ export const AdminProductDetail = () => {
     navigate(`/admin/products/edit/${id}`);
   };
 
-  const handleDeleteProduct = () => {
-    alert("Xóa thành công");
-  };
   return (
     <>
       <HeaderAdmin pageName="Products Detail" />
@@ -85,11 +82,13 @@ export const AdminProductDetail = () => {
               Edit
             </Button>
             <Button
-              danger
+              // danger
               style={{ minWidth: "150px" }}
-              onClick={handleDeleteProduct}
+              onClick={() => {
+                navigate("/admin/products");
+              }}
             >
-              Delete
+              Back
             </Button>
           </div>
         </div>

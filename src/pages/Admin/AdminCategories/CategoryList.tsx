@@ -17,7 +17,7 @@ export const CategoryList = ({
 }: CategoryListType) => {
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
-  const [visibleDelete, setVisibleDelete] = useState(false);
+  // const [visibleDelete, setVisibleDelete] = useState(false);
   const [loaded, setLoaded] = useState<boolean>(true);
   const [id, setId] = useState<string>("");
 
@@ -35,7 +35,7 @@ export const CategoryList = ({
   const hideModal = () => {
     setVisibleDetail(false);
     setVisibleEdit(false);
-    setVisibleDelete(false);
+    // setVisibleDelete(false);
     setLoaded(true);
   };
 
@@ -61,9 +61,9 @@ export const CategoryList = ({
     setId(id);
     // console.log("id: ", id);
   };
-  const handleDelete = (id: string) => {
-    console.log(id);
-  };
+  // const handleDelete = (id: string) => {
+  //   console.log(id);
+  // };
 
   const columns: ColumnsType<Category> = [
     {
@@ -95,9 +95,9 @@ export const CategoryList = ({
               <a onClick={() => handleEdit(useData.id)}>
                 <AiOutlineEdit />
               </a>
-              <a onClick={() => handleDelete(useData.id)}>
+              {/* <a onClick={() => handleDelete(useData.id)}>
                 <AiOutlineDelete />
-              </a>
+              </a> */}
             </span>
           </span>
         </Space>

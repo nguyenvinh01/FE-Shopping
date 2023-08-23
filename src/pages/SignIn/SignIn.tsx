@@ -10,10 +10,6 @@ import {
 import { AxiosResponse } from "axios";
 import { LoginResponse, MessageResponse } from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../redux/slice/userSlice";
-import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { handleResponse } from "../../utility/HandleResponse";
 
@@ -158,13 +154,6 @@ export const SignIn = () => {
                   required: true,
                   message: "Please input your password!",
                 },
-                // {
-                //   pattern: new RegExp(
-                //     /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/
-                //   ),
-                //   message:
-                //     " Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character!",
-                // },
               ]}
             >
               <Input.Password
@@ -192,7 +181,7 @@ export const SignIn = () => {
               </Button>
             </Form.Item>
 
-            <p>Creact Account</p>
+            <p>Create Account</p>
           </Form>
         </Row>
       </LoginBg>

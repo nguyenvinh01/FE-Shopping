@@ -108,7 +108,7 @@ export const HeaderCompoment = () => {
           {
             key: "4",
             label: (
-              <a onClick={() => navigate("/admin")}>
+              <a onClick={() => navigate("/admin/dashboard")}>
                 <span>Quản lý</span>
               </a>
             ),
