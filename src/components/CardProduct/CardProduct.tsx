@@ -111,13 +111,13 @@ export const CardProduct: React.FC<CardProductType> = ({
       >
         <h3>{name}</h3>
 
-        <p>{price}</p>
+        <p>{price} Đ</p>
 
         <Meta style={{ marginBlockEnd: 0 }} description={desc} />
       </Card>
-      <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
+      {/* <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
         Add to card
-      </Button>
+      </Button> */}
     </ProductCard>
   );
 };

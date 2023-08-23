@@ -84,12 +84,12 @@ const priceOptions = [
 export const Products = () => {
   const [filterPrice, setFilterPrice] = useState(10000000);
   const [priceSort, setPriceSort] = useState(0);
-  const [selectedCategory, setSelectedCategory] = React.useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState([""]);
   const [page, setPage] = React.useState(1);
 
   const { data: categoriesData } = useGetCategoriesQuery({});
   const { data: productsData } = useGetProductsQuery({
-    id: selectedCategory,
+    id: selectedCategory.join(","),
     maxPrice: filterPrice,
     page,
   });
@@ -105,7 +105,7 @@ export const Products = () => {
   const handleReset = () => {
     setFilterPrice(10000000);
     setPriceSort(0);
-    setSelectedCategory("");
+    setSelectedCategory([""]);
   };
 
   const handleChangePage = (value: number) => {
@@ -114,8 +114,8 @@ export const Products = () => {
   };
 
   const onCheckBoxChange = (checkedValues: CheckboxValueType[]) => {
-    setSelectedCategory(checkedValues.join(","));
-    console.log("checked = ", selectedCategory);
+    setSelectedCategory(checkedValues as string[]);
+    // console.log("checked = ", selectedCategory);
   };
 
   const categoryOptions = categoriesData?.data.map((category: Category) => ({
@@ -176,7 +176,7 @@ export const Products = () => {
             <h3>Categories</h3>
             <Checkbox.Group
               options={categoryOptions}
-              // checked={selectedCategory}
+              value={selectedCategory}
               onChange={onCheckBoxChange}
               style={{ flexDirection: "column" }}
             />
