@@ -109,8 +109,8 @@ export const SignUp = () => {
             autoComplete="off"
           >
             <Title>
-              <h1>Sign In</h1>
-              <p>Sign in with your email address and password</p>
+              <h1>Sign Up</h1>
+              {/* <p>Sign in with your email address and password</p> */}
             </Title>
 
             <Form.Item<FieldType>
@@ -251,7 +251,7 @@ export const SignUp = () => {
                 htmlType="submit"
                 style={{ width: 360, marginTop: 10 }}
               >
-                Login
+                Register
               </Button>
             </Form.Item>
           </Form>

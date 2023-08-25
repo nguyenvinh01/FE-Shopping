@@ -115,11 +115,12 @@ export const CardProduct: React.FC<CardProductType> = ({
 
         <p>{FormatNumber(price)}₫</p>
 
+
         <Meta style={{ marginBlockEnd: 0 }} description={desc} />
       </Card>
-      <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
+      {/* <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
         Add to card
-      </Button>
+      </Button> */}
     </ProductCard>
   );
 };

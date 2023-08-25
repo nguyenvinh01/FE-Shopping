@@ -10,9 +10,11 @@ import { TbCategory } from "react-icons/tb";
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { User } from "../../interface/interface";
+import { useLogoutMutation } from "../../redux/apis/apiUser";
+import { resetUser } from "../../redux/slice/userSlice";
 
 const { Sider } = Layout;
 
@@ -124,8 +126,17 @@ const items = [
 export const SideBar = () => {
   const userData = useSelector<RootState, User>((state) => state.user);
   const [selectedKeys, setSelectedKeys] = useState([""]);
+  const [logout] = useLogoutMutation();
   const location = useLocation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const logOut = async () => {
+    dispatch(resetUser({}));
+    localStorage.clear();
+    await logout();
+    navigate("/");
+  };
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -135,6 +146,10 @@ export const SideBar = () => {
     } else setSelectedKeys([""]);
     // console.log(userData);
   }, [location]);
+
+  const handleLogout = () => {
+    logOut();
+  };
 
   return (
     <AdminSideBar style={siderStyle} width={230}>
@@ -172,7 +187,7 @@ export const SideBar = () => {
             <span>{userData.role}</span>
           </div>
         </AdminIcon>
-        <LogoutButton type="primary">
+        <LogoutButton type="primary" onClick={handleLogout}>
           <FiLogOut size={20} />
           <span className="logOut">Log out</span>
         </LogoutButton>

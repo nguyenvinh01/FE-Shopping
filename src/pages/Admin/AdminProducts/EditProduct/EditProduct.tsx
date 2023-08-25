@@ -369,15 +369,22 @@ export const EditProduct = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <Button type="primary" htmlType="submit">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ minWidth: "120px" }}
+                >
                   Update
                 </Button>
-                <Button onClick={() => navigate("/admin/products")}>
+                <Button
+                  style={{ minWidth: "120px" }}
+                  onClick={() => navigate("/admin/products")}
+                >
                   Cancel
                 </Button>
-                <Button danger onClick={handleDeleteProduct}>
+                {/* <Button danger onClick={handleDeleteProduct}>
                   Delete
-                </Button>
+                </Button> */}
               </div>
             </Form.Item>
           </InputContent>

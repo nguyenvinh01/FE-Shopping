@@ -10,10 +10,6 @@ import {
 import { AxiosResponse } from "axios";
 import { LoginResponse, MessageResponse } from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../redux/slice/userSlice";
-import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { handleResponse } from "../../utility/HandleResponse";
 
@@ -190,7 +186,7 @@ export const SignIn = () => {
               </Button>
             </Form.Item>
 
-            <p>Creact Account</p>
+            <p>Create Account</p>
           </Form>
         </Row>
       </LoginBg>
