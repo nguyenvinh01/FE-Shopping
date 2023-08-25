@@ -19,6 +19,7 @@ import { ProductDetail } from "../pages/ProductDetail/ProductDetail";
 import { AdminCategories } from "../pages/Admin/AdminCategories/AdminCategories";
 import { EditCategory } from "../pages/Admin/AdminCategories/EditCategory/EditCategory";
 import CheckoutSuccess from "../pages/CheckoutPage/CheckoutSuccess";
+import CheckoutFailed from "../pages/CheckoutPage/CheckoutFailed";
 
 export const routes = [
   {
@@ -64,6 +65,11 @@ export const routes = [
   {
     path: "/success",
     page: CheckoutSuccess,
+    isHeader: true,
+  },
+  {
+    path: "/failure",
+    page: CheckoutFailed,
     isHeader: true,
   },
 ];
