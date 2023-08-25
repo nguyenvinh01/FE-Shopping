@@ -1,29 +1,21 @@
 import { Button, Descriptions, Image, List, Radio, Space } from "antd";
-import DescriptionsItem from "antd/es/descriptions/Item";
 import React from "react";
-import { AiFillFileMarkdown } from "react-icons/ai";
-import { FaLocationDot } from "react-icons/fa6";
 import { styled } from "styled-components";
-import ImageProduct from "../../assets/images/lap 1.png";
 import { CheckoutItem } from "./CheckoutItem";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { RootState } from "../../redux/store";
 import { resetCart } from "../../redux/slice/cartSlice";
 import {
   CartItemResponse,
-  CartItemType,
-  Product,
+  CheckoutRequest,
+  CheckoutResponse,
+  MessageResponse,
   User,
 } from "../../interface/interface";
-// import { Elements } from "@stripe/react-stripe-js";
-
-// import { loadStripe } from "@stripe/stripe-js";
-// import { Elements } from "@stripe/react-stripe-js";
-
-// const stripePromise = loadStripe(
-//   "pk_test_51NhP4AFjHyyTbvAQxkeYBRXM6HKyP4VSb65wjR8hjmhlbQblSqaDkarnnOsExBOryyJwbhPyvkAyJOxZOkrBSkmM00BrRipny3"
-// );
+import { useCheckOutMutation } from "../../redux/apis/apiCart";
+import numeral from "numeral";
+import { FormatNumber } from "../../utility/FormatNumber";
 const CheckoutPageWrapper = styled.div`
   .header-checkout {
     display: flex;
@@ -53,12 +45,32 @@ export const CheckoutPage = () => {
   const dataCart = useSelector<RootState, CartItemResponse[]>(
     (state) => state.cart.items
   );
+  const [checkOut] = useCheckOutMutation();
   const user = useSelector<RootState, User>((state) => state.user);
   const dispatch = useDispatch();
-  const handleClick = () => {
-    dispatch(resetCart());
-    navigate("/");
+  const handleClick = async () => {
+    console.log(dataCart);
+    const data = dataCart.map((cart) => {
+      return {
+        id: cart.id,
+        quantity: cart.quantity,
+      };
+    });
+    const request: CheckoutRequest[] = dataCart.map((cart) => {
+      return {
+        product_id: cart.id,
+        quantity: cart.quantity,
+      };
+    });
+    const response: MessageResponse<CheckoutResponse> = await checkOut(request);
+    console.log(response.data?._stripeUrl);
+    window.location.href = response.data?._stripeUrl || "";
+    // dispatch(resetCart());
+    // navigate("/");
   };
+  const total: number = dataCart.reduce<number>((prev: number, current) => {
+    return prev + current.pricePerUnit * current.quantity;
+  }, 0);
   return (
     <CheckoutPageWrapper>
       <div>
@@ -99,11 +111,9 @@ export const CheckoutPage = () => {
             <CheckoutItem
               image={item.image_url}
               productname={item.name}
-              // categories={item.categories.join(",")}
               price={item.pricePerUnit}
               quantity={item.quantity}
               product_id={item.id}
-              // amount={item.amount}
             />
           </div>
         )}
@@ -112,9 +122,7 @@ export const CheckoutPage = () => {
         <div>
           <Descriptions layout={"horizontal"} size={"default"}>
             <Descriptions.Item label="Tổng số tiền">
-              {dataCart.reduce<number>((prev: number, current) => {
-                return prev + current.pricePerUnit * current.quantity;
-              }, 0)}
+              {FormatNumber(total)}₫
             </Descriptions.Item>
           </Descriptions>
         </div>

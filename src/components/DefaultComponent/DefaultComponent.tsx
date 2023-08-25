@@ -14,17 +14,9 @@ export const DefaultComponent = ({ children }: DefaultComponentType) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(data, "data");
-
     if (data?.data) {
-      console.log("error data", isError);
       dispatch(setUser(data.data));
     }
-    // if (isError) {
-    //   console.log("error", isError);
-
-    //   dispatch(resetUser({}));
-    // }
   }, [data, isError, isLoading]);
   return (
     <div className="App">

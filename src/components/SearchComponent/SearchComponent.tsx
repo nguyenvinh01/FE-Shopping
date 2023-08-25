@@ -68,7 +68,6 @@ export const SearchComponent = ({
     dispatch(setKeyWord(value));
   };
   return (
-    // <div>
     <InputSearchComponent>
       <Search
         placeholder={placeholder}
@@ -78,6 +77,5 @@ export const SearchComponent = ({
         onSearch={(value: string) => handleSearch(value)}
       />
     </InputSearchComponent>
-    // </div>
   );
 };

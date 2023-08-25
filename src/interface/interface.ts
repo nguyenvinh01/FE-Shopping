@@ -15,7 +15,13 @@ export interface CheckoutItemType {
   amount?: number;
   product_id?: string;
 }
-
+export interface CheckoutRequest {
+  product_id: string;
+  quantity: number;
+}
+export interface CheckoutResponse {
+  _stripeUrl: string;
+}
 export interface OrderModalType {
   visible: boolean;
   onCancel: () => void;
