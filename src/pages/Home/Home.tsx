@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CardProduct } from "../../components/CardProduct/CardProduct";
 import { styled } from "styled-components";
 import { CardCategory } from "../../components/CardCategory/CardCategory";
@@ -46,9 +46,6 @@ const HomeItems = styled.div`
 export const Home: React.FC = () => {
   const { data: categoriesData, isSuccess } = useGetCategoriesQuery({});
   const { data: productsData } = useGetProductsQuery({ limit: 10 });
-
-  // console.log("categoriesData: ", categoriesData);
-  // console.log("productsData: ", productsData);
 
   const renderCategoryList = () => {
     if (categoriesData) {

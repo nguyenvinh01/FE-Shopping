@@ -1,7 +1,6 @@
 import { Skeleton, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 import { useState } from "react";
 import { Category, CategoryListType } from "../../../interface/interface";
 import { CategoryDetail } from "./CategoryDetail/CategoryDetail";
@@ -17,7 +16,6 @@ export const CategoryList = ({
 }: CategoryListType) => {
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
-  // const [visibleDelete, setVisibleDelete] = useState(false);
   const [loaded, setLoaded] = useState<boolean>(true);
   const [id, setId] = useState<string>("");
 
@@ -35,7 +33,6 @@ export const CategoryList = ({
   const hideModal = () => {
     setVisibleDetail(false);
     setVisibleEdit(false);
-    // setVisibleDelete(false);
     setLoaded(true);
   };
 
@@ -50,7 +47,6 @@ export const CategoryList = ({
   };
 
   const handleOk = () => {
-    // Xử lý khi người dùng bấm nút OK (nếu cần)
     hideModal();
   };
 
@@ -59,11 +55,7 @@ export const CategoryList = ({
     setVisibleDetail(false);
     setLoaded(false);
     setId(id);
-    // console.log("id: ", id);
   };
-  // const handleDelete = (id: string) => {
-  //   console.log(id);
-  // };
 
   const columns: ColumnsType<Category> = [
     {
@@ -95,9 +87,6 @@ export const CategoryList = ({
               <a onClick={() => handleEdit(useData.id)}>
                 <AiOutlineEdit />
               </a>
-              {/* <a onClick={() => handleDelete(useData.id)}>
-                <AiOutlineDelete />
-              </a> */}
             </span>
           </span>
         </Space>

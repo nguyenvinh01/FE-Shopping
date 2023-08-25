@@ -16,9 +16,6 @@ const DescriptionOrderWrapper = styled.div`
 `;
 
 const OrderDetailWrapper = styled.div`
-  /* display: flex;
-  flex-direction: row;
-  justify-content: flex-start; */
   width: 100%;
   .order-item {
     display: flex;

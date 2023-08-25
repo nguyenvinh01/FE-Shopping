@@ -8,7 +8,6 @@ import {
 } from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAddToCartMutation } from "../../redux/apis/apiCart";
-import { async } from "q";
 
 const { Meta } = Card;
 

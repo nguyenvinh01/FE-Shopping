@@ -1,13 +1,11 @@
 import React from "react";
-import { Input, Select, Button, PaginationProps, Pagination } from "antd";
+import { Input, Button, PaginationProps } from "antd";
 import styled from "styled-components";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
-import { useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../../redux/apis/apiCategory";
 import { CategoryList } from "./CategoryList";
 import { AddCategory } from "./AddCategory/AddCategory";
 import { useState } from "react";
-import { EditCategory } from "./EditCategory/EditCategory";
 
 const AdminContainer = styled.div`
   background-color: #ffffff;
@@ -105,16 +103,6 @@ export const AdminCategories = () => {
           onShowSizeChange={onShowSizeChange}
           handleChangePage={handleChangePage}
         />
-        {/* <Pagination
-          showSizeChanger
-          // current={1}
-          onShowSizeChange={onShowSizeChange}
-          defaultCurrent={1}
-          pageSize={limit}
-          total={categoriesData?.metadata?.count}
-          onChange={(value) => handleChangePage(value)}
-        /> */}
-
         <AddCategory
           visible={visible}
           onCancel={handleCancel}

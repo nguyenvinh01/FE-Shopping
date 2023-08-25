@@ -91,10 +91,10 @@ export const FooterComponent = () => {
         <FooterItem title="Pages" item={itemPage}></FooterItem>
         <FooterItem title="Categories" item={itemCategories} />
         <FooterItem title="News Latter Subscription" item={itemComplain}>
-          <SearchComponent
+          {/* <SearchComponent
             placeholder="Your email adress"
             textButton="Submit"
-          />
+          /> */}
         </FooterItem>
       </PageFooter>
     </Footer>
