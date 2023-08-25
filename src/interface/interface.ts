@@ -62,6 +62,10 @@ export interface User {
   image_url: string;
 }
 
+export interface GetAllUserResponse {
+  success: boolean;
+  data: User[];
+}
 export interface Category {
   id: string;
   label: string;
@@ -237,6 +241,29 @@ export interface CartResponse {
     skip: number;
     count: number;
   };
+}
+
+export interface OrderProduct {
+  product_id: string;
+  name: string;
+  quantity: number;
+  pricePerUnit: number;
+  image_url: string;
+  description: string;
+}
+export interface Order {
+  id: string;
+  user_id?: string;
+  orderItems: OrderProduct[];
+}
+export interface GetOrderResponse {
+  success: boolean;
+  data: Order[];
+}
+
+export interface GetOrderByIdResponse {
+  success: boolean;
+  data: Order;
 }
 export interface QueryParams {
   limit?: number;

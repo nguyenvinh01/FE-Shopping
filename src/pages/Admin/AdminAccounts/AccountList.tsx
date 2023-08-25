@@ -15,7 +15,7 @@ interface DataType {
 }
 
 interface AccountListProps {
-  data: User[];
+  data?: User[];
   isFetch: boolean;
 }
 export const AccountList = ({ data, isFetch }: AccountListProps) => {
@@ -56,7 +56,7 @@ export const AccountList = ({ data, isFetch }: AccountListProps) => {
   const handleDelete = (id: String) => {
     console.log(id);
   };
-
+  console.log(data, "data");
   const columns: ColumnsType<DataType> = [
     {
       title: "Id",

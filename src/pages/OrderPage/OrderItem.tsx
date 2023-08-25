@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { styled } from "styled-components";
 import { OrderModal } from "./OrderModal";
+import { Order, OrderProduct } from "../../interface/interface";
 const OrderItemWrapper = styled.div`
   border-radius: 5px;
   padding: 0px 10px;
@@ -30,14 +31,15 @@ const OrderItemWrapper = styled.div`
 `;
 type PropsOrderItem = {
   onClick?: () => void;
+  orderData: Order;
 };
-export const OrderItem = ({ onClick }: PropsOrderItem) => {
+export const OrderItem = ({ onClick, orderData }: PropsOrderItem) => {
   return (
     <OrderItemWrapper onClick={onClick}>
       <List.Item>
-        <div>Mã đơn hàng</div>
+        <div>{orderData.id}</div>
         <div>Ngày đặt</div>
-        <div>Tổng tiền</div>
+        {/* <div>{}</div> */}
         <div>
           <AiOutlineArrowRight />
         </div>

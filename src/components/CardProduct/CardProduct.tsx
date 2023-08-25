@@ -71,6 +71,7 @@ export const CardProduct: React.FC<CardProductType> = ({
 }) => {
   const navigate = useNavigate();
   const [addToCart] = useAddToCartMutation();
+
   const handleAddToCart = async () => {
     const token = localStorage.getItem("access_token");
     if (token) {
@@ -108,17 +109,23 @@ export const CardProduct: React.FC<CardProductType> = ({
             style={{ width: 220, height: 190 }}
           />
         }
-        onClick={() => navigate(`/products/${idProduct}`)}
+        onClick={(e) => {
+          const element = e.target as HTMLElement;
+
+          if (element.tagName === "BUTTON" || element.tagName === "SPAN") {
+            handleAddToCart();
+          } else navigate(`/products/${idProduct}`);
+        }}
       >
         <h3>{name}</h3>
 
         <p>{FormatNumber(price)}₫</p>
 
         <Meta style={{ marginBlockEnd: 0 }} description={desc} />
+        <Button type="primary" shape="round">
+          Add to card
+        </Button>
       </Card>
-      {/* <Button type="primary" shape="round" onClick={() => handleAddToCart()}>
-        Add to card
-      </Button> */}
     </ProductCard>
   );
 };

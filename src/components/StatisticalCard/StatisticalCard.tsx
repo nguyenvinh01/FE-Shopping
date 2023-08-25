@@ -22,16 +22,22 @@ const StyledCard = styled(Card)`
   }
 `;
 
-export const StatisticalCard = () => {
+export const StatisticalCard = ({
+  title,
+  value,
+}: {
+  title: string;
+  value: number;
+}) => {
   return (
     <div>
       <StyledCard bordered={false}>
         <Statistic
-          title="On Proccess "
-          value={11.28}
+          title={title}
+          value={value}
           precision={2}
           valueStyle={{ color: "#3f8600" }}
-          suffix="%"
+          // suffix="%"
         />
         <BsBoxSeam size={45} />
       </StyledCard>
