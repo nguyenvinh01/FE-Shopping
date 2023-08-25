@@ -5,6 +5,7 @@ import { CartItem } from "../UserCart/CartItem";
 import { OrderItem } from "./OrderItem";
 import { OrderModal } from "./OrderModal";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useGetOrderQuery } from "../../redux/apis/apiOrder";
 
 interface OrderPageType {
   id: string;
@@ -28,6 +29,7 @@ const data: OrderPageType[] = [
     date: "12/2/2022",
   },
 ];
+
 const OrderPageWrapper = styled.div`
   .ant-list-item,
   p {
@@ -54,6 +56,8 @@ const Header = (
 export const OrderPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [idOrder, setIdOrder] = useState("");
+  const { data } = useGetOrderQuery();
+
   const showModal = () => {
     setIsVisible(true);
   };
@@ -78,12 +82,15 @@ export const OrderPage = () => {
   return (
     <OrderPageWrapper>
       <List
-        dataSource={data}
+        dataSource={data?.data}
         header={Header}
         renderItem={(item) => {
           return (
             <>
-              <OrderItem onClick={() => handleClick(item.id)} />
+              <OrderItem
+                onClick={() => handleClick(item.id)}
+                orderData={item}
+              />
             </>
           );
         }}
