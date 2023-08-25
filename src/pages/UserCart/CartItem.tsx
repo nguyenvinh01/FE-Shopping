@@ -10,6 +10,8 @@ import {
 } from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useGetProductDetailQuery } from "../../redux/apis/apiProduct";
+import numeral from "numeral";
+import { FormatNumber } from "../../utility/FormatNumber";
 
 type PropsCart = {
   items: CartItemResponse;
@@ -43,7 +45,6 @@ export const CartItem = ({
   const handleNavigate = () => {
     navigate(`/products/${items.id}`);
   };
-
   useEffect(() => {
     setChecked(checked);
   }, [checked]);
@@ -74,7 +75,7 @@ export const CartItem = ({
         })}
       </div>
       <div className="list-item">
-        <p>{items.pricePerUnit}</p>
+        <p>{FormatNumber(items.pricePerUnit)}₫</p>
       </div>
       <div className="list-item">
         <p>
@@ -102,7 +103,7 @@ export const CartItem = ({
         </p>
       </div>
       <div className="list-item">
-        <p>{items.pricePerUnit * items.quantity}</p>
+        <p>{FormatNumber(items.pricePerUnit * items.quantity)}₫</p>
       </div>
       <div className="list-item">
         <p onClick={() => handleDelete(items.id)}>

@@ -2,7 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { API } from "../../shared/Constants/Constants";
 import { prepareHeaders } from "../../utility/PrepareHeaders";
 import { url } from "inspector";
-import { CartItemResponse, CartResponse } from "../../interface/interface";
+import {
+  CartItemResponse,
+  CartResponse,
+  CheckoutRequest,
+  CheckoutResponse,
+} from "../../interface/interface";
 
 export const cartApi = createApi({
   reducerPath: "apiCart",
@@ -56,6 +61,17 @@ export const cartApi = createApi({
       }),
       invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
+    checkOut: builder.mutation<CheckoutResponse, CheckoutRequest[]>({
+      query: (request) => {
+        return {
+          url: "/cart/create-checkout",
+          method: "POST",
+          body: {
+            products: request,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -64,4 +80,5 @@ export const {
   useDeleteCartItemMutation,
   useGetCartItemQuery,
   useUpdateCartItemMutation,
+  useCheckOutMutation,
 } = cartApi;

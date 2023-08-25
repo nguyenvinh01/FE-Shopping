@@ -243,7 +243,6 @@ export const SignUp = () => {
 
             <Form.Item
               wrapperCol={{
-                // offset: 8,
                 span: 16,
               }}
             >
@@ -251,7 +250,6 @@ export const SignUp = () => {
                 type="primary"
                 htmlType="submit"
                 style={{ width: 360, marginTop: 10 }}
-                // onClick={() => handleSubmit}
               >
                 Login
               </Button>

@@ -3,6 +3,9 @@ import React, { Fragment, useState } from "react";
 import ImageProduct from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
 import { CheckoutItemType } from "../../interface/interface";
+import numeral from "numeral";
+import { FormatNumber } from "../../utility/FormatNumber";
+
 // import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const CheckOutItemWrapper = styled.div`
@@ -59,7 +62,7 @@ export const CheckoutItem = ({
           <p>{quantity}</p>
         </div>
         <div className="amount-product">
-          <p>{amount}</p>
+          <p>{FormatNumber(price * quantity)}₫</p>
         </div>
       </div>
     </CheckOutItemWrapper>
