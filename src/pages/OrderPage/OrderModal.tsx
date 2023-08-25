@@ -2,7 +2,10 @@ import { Descriptions, Modal, Image, List } from "antd";
 import React from "react";
 import { styled } from "styled-components";
 import ProductImage from "../../assets/images/lap 1.png";
-import { OrderModalType } from "../../interface/interface";
+import { OrderModalType, User } from "../../interface/interface";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { useGetOrderByIdQuery } from "../../redux/apis/apiOrder";
 // export interface OrderModalType {
 //   visible: boolean;
 //   onCancel: () => void;
@@ -43,6 +46,16 @@ export const OrderModal = ({
   onOk,
   idOrder,
 }: Omit<OrderModalType, "idUser">) => {
+  const userData = useSelector<RootState, User>((state) => state.user);
+  const { data } = useGetOrderByIdQuery(idOrder);
+
+  const total = data?.data?.orderItems?.reduce<number>(
+    (prev, current, index, array) => {
+      return prev + current.pricePerUnit * current.quantity;
+    },
+    0
+  );
+
   return (
     <div>
       <Modal
@@ -54,37 +67,40 @@ export const OrderModal = ({
       >
         <DescriptionOrderWrapper>
           <Descriptions title="Đơn hàng của" layout="vertical">
-            <Descriptions.Item label="Mã đơn hàng">
-              12363627171
+            <Descriptions.Item label="Mã đơn hàng">{idOrder}</Descriptions.Item>
+            <Descriptions.Item label="Họ và tên">
+              {userData?.fullname}
             </Descriptions.Item>
-            <Descriptions.Item label="Họ và tên">John Doe</Descriptions.Item>
             <Descriptions.Item label="Email">
-              johndoe@example.com
+              {userData?.email}
             </Descriptions.Item>
             <Descriptions.Item label="Địa chỉ">
-              Cassin Mountain, Velmastad, Avon
+              {userData?.address}
             </Descriptions.Item>
             <Descriptions.Item label="Số điện thoại">
-              (835) 609-5440 x607
+              {userData?.phone}
             </Descriptions.Item>
-            <Descriptions.Item label="Tổng tiền">90000000</Descriptions.Item>
+            <Descriptions.Item label="Tổng tiền">{total}</Descriptions.Item>
           </Descriptions>
         </DescriptionOrderWrapper>
         <OrderDetailWrapper>
-          <List>
-            <List.Item>
-              <div className="image-order">
-                <Image src={ProductImage} />
-              </div>
-              <div className="detail-order">
-                <h3>Name product</h3>
-                <div className="price-quantity">
-                  <p>Số lượng: 2</p>
-                  <p>Thành tiền: 123123123</p>
+          <List
+            dataSource={data?.data?.orderItems}
+            renderItem={(item, index) => (
+              <List.Item>
+                <div className="image-order">
+                  <Image src={item?.image_url} />
                 </div>
-              </div>
-            </List.Item>
-          </List>
+                <div className="detail-order">
+                  <h3>{item?.name}</h3>
+                  <div className="price-quantity">
+                    <p>Số lượng: {item?.quantity}</p>
+                    <p>Thành tiền: {item?.quantity * item?.pricePerUnit}</p>
+                  </div>
+                </div>
+              </List.Item>
+            )}
+          />
         </OrderDetailWrapper>
       </Modal>
     </div>

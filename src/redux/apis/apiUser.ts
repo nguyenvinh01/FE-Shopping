@@ -12,7 +12,12 @@ import jwt_decode from "jwt-decode";
 import { API } from "../../shared/Constants/Constants";
 import axios, { AxiosHeaders, AxiosResponse } from "axios";
 import axiosInstance from "../../shared/services/http-clients";
-import { DataUserUpdate, LoginResponse, User } from "../../interface/interface";
+import {
+  DataUserUpdate,
+  GetAllUserResponse,
+  LoginResponse,
+  User,
+} from "../../interface/interface";
 import { SerializedError } from "@reduxjs/toolkit";
 import { prepareHeaders } from "../../utility/PrepareHeaders";
 import { InitialStateType } from "../slice/userSlice";
@@ -98,7 +103,7 @@ export const userApi = createApi({
         };
       },
     }),
-    getAllUser: builder.query<any, void>({
+    getAllUser: builder.query<GetAllUserResponse, void>({
       query: () => ({
         url: "/user",
         method: "GET",
