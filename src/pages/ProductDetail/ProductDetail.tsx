@@ -1,12 +1,15 @@
 import { Button, Carousel, Image, Space, notification } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BsCart4 } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetProductDetailQuery } from "../../redux/apis/apiProduct";
-import { useAddToCartMutation } from "../../redux/apis/apiCart";
+import {
+  useAddToCartMutation,
+  useGetCartItemQuery,
+} from "../../redux/apis/apiCart";
 import { CartResponse, MessageResponse } from "../../interface/interface";
 import numeral from "numeral";
 import { FormatNumber } from "../../utility/FormatNumber";
@@ -34,30 +37,53 @@ const DescProduct = styled.div`
 export const ProductDetail = () => {
   const { id }: any = useParams();
   const { data } = useGetProductDetailQuery(id);
+  const { data: cartData } = useGetCartItemQuery();
   const [addToCart] = useAddToCartMutation();
   const navigate = useNavigate();
+  var quantity: number = 0;
 
+  useEffect(() => {
+    quantity = Number(data?.data.quantity);
+  }, []);
   const handleAddToCart = async () => {
     const token = localStorage.getItem("access_token");
-    if (token) {
-      const response: MessageResponse<CartResponse> = await addToCart(id);
-      if (response.data?.success) {
-        notification.success({
-          message: "Thêm thành công",
-          description: `Thêm thành công vào rỏ hàng`,
+
+    if (cartData) {
+      const currentProduct = cartData.data.filter(
+        (cart) => cart.id == String(data?.data.id)
+      );
+      if (Number(currentProduct[0]?.quantity) > Number(quantity)) {
+        console.log(
+          Number(currentProduct[0].quantity),
+          Number(data?.data.quantity)
+        );
+
+        notification.error({
+          message: "Vượt quá số hàng sẵn có",
+          description: `Vượt quá số hàng sẵn có`,
         });
       } else {
-        notification.error({
-          message: "Có lỗi xảy ra",
-          description: `Có lỗi xảy ra`,
-        });
+        if (token) {
+          const response: MessageResponse<CartResponse> = await addToCart(id);
+          if (response.data?.success) {
+            notification.success({
+              message: "Thêm thành công",
+              description: `Thêm thành công vào rỏ hàng`,
+            });
+          } else {
+            notification.error({
+              message: "Có lỗi xảy ra",
+              description: `Có lỗi xảy ra`,
+            });
+          }
+        } else {
+          notification.warning({
+            message: "Đăng nhập để mua hàng",
+            description: "Đăng nhập để mua hàng",
+          });
+          navigate("/sign-in");
+        }
       }
-    } else {
-      notification.warning({
-        message: "Đăng nhập để mua hàng",
-        description: "Đăng nhập để mua hàng",
-      });
-      navigate("/sign-in");
     }
   };
 
