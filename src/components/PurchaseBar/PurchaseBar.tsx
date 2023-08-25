@@ -6,11 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { addCartItem } from "../../redux/slice/cartSlice";
 import { setUser } from "../../redux/slice/userSlice";
-import {
-  CartItemResponse,
-  CartItemType,
-  Product,
-} from "../../interface/interface";
+import { CartItemResponse } from "../../interface/interface";
+import numeral from "numeral";
+import { FormatNumber } from "../../utility/FormatNumber";
 
 const PurchaseBarWrapper = styled.div`
   display: flex;
@@ -60,18 +58,13 @@ export const PurchaseBar = ({ cart }: PurchaseBarType) => {
     if (cart.length == 0) setDisable(true);
     else setDisable(false);
   }, [cart]);
-
+  const total: number = cart.reduce<number>((prev, current, index, array) => {
+    return prev + current.pricePerUnit * current.quantity;
+  }, 0);
   return (
     <PurchaseBarWrapper>
       <div>
-        <p>
-          Giá:{" "}
-          {cart
-            ? cart.reduce<number>((prev, current, index, array) => {
-                return prev + current.pricePerUnit * current.quantity;
-              }, 0)
-            : 0}
-        </p>
+        <p>Giá: {cart ? FormatNumber(total) : 0}₫</p>
         <Button
           type="primary"
           size="large"

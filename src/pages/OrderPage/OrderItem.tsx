@@ -1,11 +1,6 @@
 import { List } from "antd";
 import React, { useState } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import {
-  BsArrow90DegRight,
-  BsBoxArrowInRight,
-  BsBoxArrowRight,
-} from "react-icons/bs";
 import { styled } from "styled-components";
 import { OrderModal } from "./OrderModal";
 const OrderItemWrapper = styled.div`

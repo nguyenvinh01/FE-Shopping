@@ -18,6 +18,7 @@ import { Products } from "../pages/Product/Product";
 import { ProductDetail } from "../pages/ProductDetail/ProductDetail";
 import { AdminCategories } from "../pages/Admin/AdminCategories/AdminCategories";
 import { EditCategory } from "../pages/Admin/AdminCategories/EditCategory/EditCategory";
+import CheckoutSuccess from "../pages/CheckoutPage/CheckoutSuccess";
 
 export const routes = [
   {
@@ -56,8 +57,13 @@ export const routes = [
     isHeader: false,
   },
   {
-    path: "/check-out",
+    path: "/check-out/*",
     page: CheckoutPage,
+    isHeader: true,
+  },
+  {
+    path: "/success",
+    page: CheckoutSuccess,
     isHeader: true,
   },
 ];

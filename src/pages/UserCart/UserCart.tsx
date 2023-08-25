@@ -199,7 +199,6 @@ export const UserCart = () => {
           );
         }}
       ></List>
-      {/* {currentCart ? <PurchaseBar cart={currentCart} /> : ""} */}
       <PurchaseBar cart={currentCart} />
     </UserCartWrapper>
   );

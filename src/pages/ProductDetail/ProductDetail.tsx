@@ -1,18 +1,15 @@
 import { Button, Carousel, Image, Space, notification } from "antd";
 import React from "react";
 import { styled } from "styled-components";
-import Logo from "../../assets/images/Group 1481.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BsCart4 } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetProductDetailQuery } from "../../redux/apis/apiProduct";
 import { useAddToCartMutation } from "../../redux/apis/apiCart";
-import {
-  CartItemResponse,
-  CartResponse,
-  MessageResponse,
-} from "../../interface/interface";
+import { CartResponse, MessageResponse } from "../../interface/interface";
+import numeral from "numeral";
+import { FormatNumber } from "../../utility/FormatNumber";
 
 const ProductDetailWrapper = styled.div``;
 
@@ -78,7 +75,7 @@ export const ProductDetail = () => {
               </span>
             </div>
             <div>
-              <p>Giá: {data?.data.price} VNĐ</p>
+              <p>Giá: {FormatNumber(data?.data.price)}₫</p>
             </div>
             <div>
               <h4>Description</h4>
