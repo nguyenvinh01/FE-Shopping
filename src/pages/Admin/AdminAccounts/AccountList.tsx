@@ -1,6 +1,6 @@
 import { Skeleton, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
@@ -8,14 +8,10 @@ import { AccountDetail } from "./AccountDetail";
 import { User } from "../../../interface/interface";
 
 interface DataType {
-  // key?: string;
   id: string;
   fullname: string;
   email: string;
   phone?: string;
-  // orders?: number;
-  // total?: number;
-  //   status: string;
 }
 
 interface AccountListProps {
@@ -43,12 +39,10 @@ export const AccountList = ({ data, isFetch }: AccountListProps) => {
   };
 
   const handleOk = () => {
-    // Xử lý khi người dùng bấm nút OK (nếu cần)
     hideModal();
   };
 
   const handleCancel = () => {
-    // Xử lý khi người dùng bấm nút Cancel (nếu cần)
     hideModal();
   };
 
@@ -73,19 +67,16 @@ export const AccountList = ({ data, isFetch }: AccountListProps) => {
       title: "Customer Name",
       dataIndex: "fullname",
       key: "fullname",
-      // render: (text) => <a>{text}</a>,
     },
     {
       title: "Customer Email",
       dataIndex: "email",
       key: "email",
-      // render: (text) => <a>{text}</a>,
     },
     {
       title: "Customer Phone",
       dataIndex: "phone",
       key: "phone",
-      // render: (text) => <a>{text}</a>,
     },
     // {
     //   title: "Orders Count",

@@ -8,7 +8,6 @@ import {
 } from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAddToCartMutation } from "../../redux/apis/apiCart";
-import { async } from "q";
 import numeral from "numeral";
 import { FormatNumber } from "../../utility/FormatNumber";
 
@@ -114,7 +113,6 @@ export const CardProduct: React.FC<CardProductType> = ({
         <h3>{name}</h3>
 
         <p>{FormatNumber(price)}₫</p>
-
 
         <Meta style={{ marginBlockEnd: 0 }} description={desc} />
       </Card>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Form,
   Input,
@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../../../redux/apis/apiCategory";
@@ -30,8 +30,6 @@ const { Option } = Select;
 
 const InputContent = styled.div`
   flex: 2;
-  /* display: flex;
-  flex-wrap: wrap; */
 `;
 
 const UploadContainer = styled(Upload)`
@@ -111,7 +109,6 @@ export const AddProduct: React.FC = () => {
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    // console.log(fileList, "fileList");
   };
   const handleBeforeUpload = () => {
     return false;
@@ -146,7 +143,6 @@ export const AddProduct: React.FC = () => {
       return;
     }
 
-    // console.log(values);
     const dataUpdate: ProductUpdateDataType = {
       productImage: fileList[0].originFileObj as Blob,
       productInformation: {

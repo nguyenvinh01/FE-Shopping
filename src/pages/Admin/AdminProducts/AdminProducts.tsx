@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, Button, Pagination } from "antd";
+import { Input, Select, Button } from "antd";
 import styled from "styled-components";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 import { ProductList } from "./ProductList";
@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../../redux/apis/apiProduct";
 import { Category, CategoryOptionData } from "../../../interface/interface";
-import { useEffect } from "react";
 import type { PaginationProps } from "antd";
 
 const { Option } = Select;
@@ -73,7 +72,6 @@ export const AdminProducts = () => {
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
-    // console.log("search product", value, searchValue);
   };
 
   const categoryOptions = () => {
@@ -103,7 +101,6 @@ export const AdminProducts = () => {
     }
     return false;
   };
-  // console.log(productsData, "product");
 
   return (
     <>

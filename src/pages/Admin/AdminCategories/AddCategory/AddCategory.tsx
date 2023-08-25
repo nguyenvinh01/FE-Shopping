@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Descriptions,
-  Form,
-  Input,
-  Modal,
-  Upload,
-  notification,
-} from "antd";
+import { Button, Form, Input, Modal, Upload, notification } from "antd";
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import {
@@ -16,17 +7,13 @@ import {
   CreateCategoryDataType,
   MessageResponse,
 } from "../../../../interface/interface";
-import {
-  useCreateCategoryMutation,
-  useGetCategoryDetailQuery,
-} from "../../../../redux/apis/apiCategory";
+import { useCreateCategoryMutation } from "../../../../redux/apis/apiCategory";
 import type { UploadFile } from "antd/es/upload/interface";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import { useForm } from "antd/es/form/Form";
-import { useNavigate } from "react-router-dom";
 import { handleResponse } from "../../../../utility/HandleResponse";
 
-const CategoryWapper = styled.div`
+const CategoryWarper = styled.div`
   display: flex;
   border-bottom: 1px solid #978686a8;
 `;
@@ -113,7 +100,7 @@ export const AddCategory = ({
     }
     onOk();
   };
-  const footermodel = (
+  const footerModel = (
     <>
       <Button key="back" onClick={onCancel}>
         Cancel
@@ -129,11 +116,11 @@ export const AddCategory = ({
       <Modal
         open={visible}
         onCancel={onCancel}
-        footer={footermodel}
+        footer={footerModel}
         width={800}
         onOk={handleOk}
       >
-        <CategoryWapper>
+        <CategoryWarper>
           <div style={{ marginRight: "10px", flex: "1" }}>
             <UploadContainer
               listType="picture-card"
@@ -163,7 +150,7 @@ export const AddCategory = ({
               </Form.Item>
             </Form>
           </div>
-        </CategoryWapper>
+        </CategoryWarper>
       </Modal>
     </div>
   );

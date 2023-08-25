@@ -11,7 +11,6 @@ import {
 } from "antd";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
-import type { UploadChangeParam } from "antd/es/upload";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { styled } from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,12 +26,10 @@ import {
   CategoryOptionData,
   MessageResponse,
   Product,
-  ProductResponse,
   ProductUpdateDataType,
   inventoryDataUpdate,
 } from "../../../../interface/interface";
 import { handleResponse } from "../../../../utility/HandleResponse";
-import { error } from "console";
 
 const { Option } = Select;
 
@@ -120,9 +117,11 @@ export const EditProduct = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
+
   const filterOption = (
     input: string,
     option: CategoryOptionData | undefined
@@ -135,6 +134,7 @@ export const EditProduct = () => {
     }
     return false;
   };
+
   const handleCancel = () => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile) => {
@@ -150,9 +150,6 @@ export const EditProduct = () => {
   };
   const handleBeforeUpload = () => {
     return false;
-  };
-  const handleDeleteProduct = () => {
-    alert("Xóa thành công");
   };
 
   const handleSubmit = async () => {
@@ -197,7 +194,6 @@ export const EditProduct = () => {
         }
       })
       .catch((error) => {
-        // console.log(error.data.message);
         notification.error({
           message: error.data.message,
           description: "Có lỗi xảy ra, vui lòng thử lại",
@@ -382,9 +378,6 @@ export const EditProduct = () => {
                 >
                   Cancel
                 </Button>
-                {/* <Button danger onClick={handleDeleteProduct}>
-                  Delete
-                </Button> */}
               </div>
             </Form.Item>
           </InputContent>

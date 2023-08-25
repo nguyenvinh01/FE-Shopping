@@ -1,5 +1,4 @@
 import React from "react";
-import imageUrl from "../../assets/images/lap 1.png";
 import { styled } from "styled-components";
 import { cardCategoryType } from "../../interface/interface";
 

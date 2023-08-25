@@ -54,18 +54,19 @@ const InputSearchComponent = styled.div`
 interface InputSearchType {
   placeholder?: string;
   textButton?: string;
-  onClick?: () => void;
+  keyWord: (value: string) => void;
   color?: string;
 }
 export const SearchComponent = ({
   placeholder,
   textButton,
   color,
-  ...rest
+  keyWord,
 }: InputSearchType) => {
   const dispatch = useDispatch();
   const handleSearch = (value: string) => {
-    dispatch(setKeyWord(value));
+    // dispatch(setKeyWord(value));
+    keyWord(value);
   };
   return (
     <InputSearchComponent>
@@ -73,7 +74,6 @@ export const SearchComponent = ({
         placeholder={placeholder}
         enterButton={textButton}
         size="large"
-        {...rest}
         onSearch={(value: string) => handleSearch(value)}
       />
     </InputSearchComponent>

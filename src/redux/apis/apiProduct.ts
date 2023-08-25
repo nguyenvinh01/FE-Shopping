@@ -28,6 +28,7 @@ export const productApi = createApi({
           name: arg.name,
           page: arg.page,
           limit: arg.limit,
+          maxPrice: arg.maxPrice,
         };
         return {
           url: "/product",

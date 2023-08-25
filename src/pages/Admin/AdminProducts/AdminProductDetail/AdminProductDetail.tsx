@@ -1,5 +1,4 @@
 import { Avatar, Button, Descriptions, Tag } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import React from "react";
 import { styled } from "styled-components";
 import { HeaderAdmin } from "../../../../components/HeaderAdmin/HeaderAdmin";
@@ -8,7 +7,6 @@ import {
   useGetProductDetailQuery,
 } from "../../../../redux/apis/apiProduct";
 import { useNavigate, useParams } from "react-router-dom";
-import { Product } from "../../../../interface/interface";
 
 const Container = styled.div`
   display: flex;

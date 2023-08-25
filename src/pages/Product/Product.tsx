@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import { CardProduct } from "../../components/CardProduct/CardProduct";
-import { SearchList } from "../../components/SearchList/SearchList";
 import { Button, Checkbox, Pagination, Select, Slider } from "antd";
 import { useGetCategoriesQuery } from "../../redux/apis/apiCategory";
 import { useGetProductsQuery } from "../../redux/apis/apiProduct";
@@ -85,11 +84,13 @@ export const Products = () => {
   const [filterPrice, setFilterPrice] = useState(10000000);
   const [priceSort, setPriceSort] = useState(0);
   const [selectedCategory, setSelectedCategory] = React.useState([""]);
+  const [keyWord, setKeyWord] = useState("");
   const [page, setPage] = React.useState(1);
 
   const { data: categoriesData } = useGetCategoriesQuery({});
   const { data: productsData } = useGetProductsQuery({
     id: selectedCategory.join(","),
+    name: keyWord,
     maxPrice: filterPrice,
     page,
   });
@@ -109,13 +110,14 @@ export const Products = () => {
   };
 
   const handleChangePage = (value: number) => {
-    // console.log("page", value);
     setPage(value);
   };
 
+  const handleSearch = (value: string) => {
+    setKeyWord(value);
+  };
   const onCheckBoxChange = (checkedValues: CheckboxValueType[]) => {
     setSelectedCategory(checkedValues as string[]);
-    // console.log("checked = ", selectedCategory);
   };
 
   const categoryOptions = categoriesData?.data.map((category: Category) => ({
@@ -144,6 +146,7 @@ export const Products = () => {
         placeholder="search text"
         textButton="Search"
         color="red"
+        keyWord={handleSearch}
       />
       <ProductContent>
         <ProductFilter>
