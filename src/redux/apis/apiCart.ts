@@ -72,6 +72,14 @@ export const cartApi = createApi({
         };
       },
     }),
+    checkoutSession: builder.mutation<void, string>({
+      query: (id) => {
+        return {
+          url: `/cart/checkout-session?id=${id}`,
+          method: "POST",
+        };
+      },
+    }),
   }),
 });
 
@@ -81,4 +89,5 @@ export const {
   useGetCartItemQuery,
   useUpdateCartItemMutation,
   useCheckOutMutation,
+  useCheckoutSessionMutation,
 } = cartApi;

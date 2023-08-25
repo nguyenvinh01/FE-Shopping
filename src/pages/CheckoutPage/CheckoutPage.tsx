@@ -1,4 +1,12 @@
-import { Button, Descriptions, Image, List, Radio, Space } from "antd";
+import {
+  Button,
+  Descriptions,
+  Image,
+  List,
+  Radio,
+  Space,
+  notification,
+} from "antd";
 import React from "react";
 import { styled } from "styled-components";
 import { CheckoutItem } from "./CheckoutItem";
@@ -64,7 +72,14 @@ export const CheckoutPage = () => {
     });
     const response: MessageResponse<CheckoutResponse> = await checkOut(request);
     console.log(response.data?._stripeUrl);
-    window.location.href = response.data?._stripeUrl || "";
+    if (response.data?._stripeUrl) {
+      window.location.href = response.data?._stripeUrl;
+    } else {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: "Có lỗi xảy ra",
+      });
+    }
     // dispatch(resetCart());
     // navigate("/");
   };
