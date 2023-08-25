@@ -79,6 +79,7 @@ export const cartApi = createApi({
           method: "POST",
         };
       },
+      invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
   }),
 });
