@@ -39,13 +39,13 @@ const DashboardUserContent = styled.div`
 const options = [
   {
     path: "/dashboard/",
-    title: "Tài khoản",
+    title: "My Profile",
     icon: <AiOutlineUser />,
   },
 
   {
     path: "/dashboard/order",
-    title: "Đơn hàng",
+    title: "Order",
     icon: <BsCart3 />,
   },
 ];

@@ -150,7 +150,7 @@ export const UserProfile = () => {
           />
         </div>
         <div className="profile-user">
-          <Descriptions title="Ho so cua toi" layout="vertical">
+          <Descriptions title="My Profile" layout="vertical">
             <Descriptions.Item label="Fullname">
               {userData?.fullname}
             </Descriptions.Item>

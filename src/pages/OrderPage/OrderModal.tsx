@@ -6,21 +6,13 @@ import { OrderModalType, User } from "../../interface/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useGetOrderByIdQuery } from "../../redux/apis/apiOrder";
-// export interface OrderModalType {
-//   visible: boolean;
-//   onCancel: () => void;
-//   onOk: () => void;
-//   idOrder: string;
-// }
+import { FormatNumber } from "../../utility/FormatNumber";
 
 const DescriptionOrderWrapper = styled.div`
   border-bottom: 1px solid #978686a8;
 `;
 
 const OrderDetailWrapper = styled.div`
-  /* display: flex;
-  flex-direction: row;
-  justify-content: flex-start; */
   width: 100%;
   .order-item {
     display: flex;
@@ -55,7 +47,7 @@ export const OrderModal = ({
     },
     0
   );
-
+  const textDesc = `Ordered By ${userData?.fullname}`;
   return (
     <div>
       <Modal
@@ -66,21 +58,23 @@ export const OrderModal = ({
         width={550}
       >
         <DescriptionOrderWrapper>
-          <Descriptions title="Đơn hàng của" layout="vertical">
-            <Descriptions.Item label="Mã đơn hàng">{idOrder}</Descriptions.Item>
-            <Descriptions.Item label="Họ và tên">
+          <Descriptions title={textDesc} layout="vertical">
+            <Descriptions.Item label="Code">{idOrder}</Descriptions.Item>
+            <Descriptions.Item label="Fullname">
               {userData?.fullname}
             </Descriptions.Item>
             <Descriptions.Item label="Email">
               {userData?.email}
             </Descriptions.Item>
-            <Descriptions.Item label="Địa chỉ">
+            <Descriptions.Item label="Address">
               {userData?.address}
             </Descriptions.Item>
-            <Descriptions.Item label="Số điện thoại">
+            <Descriptions.Item label="Phone">
               {userData?.phone}
             </Descriptions.Item>
-            <Descriptions.Item label="Tổng tiền">{total}</Descriptions.Item>
+            <Descriptions.Item label="Amount">
+              {FormatNumber(total)}₫
+            </Descriptions.Item>
           </Descriptions>
         </DescriptionOrderWrapper>
         <OrderDetailWrapper>
@@ -94,8 +88,11 @@ export const OrderModal = ({
                 <div className="detail-order">
                   <h3>{item?.name}</h3>
                   <div className="price-quantity">
-                    <p>Số lượng: {item?.quantity}</p>
-                    <p>Thành tiền: {item?.quantity * item?.pricePerUnit}</p>
+                    <p>Quantity: {item?.quantity}</p>
+                    <p>
+                      Total:
+                      {FormatNumber(item?.quantity * item?.pricePerUnit)}₫
+                    </p>
                   </div>
                 </div>
               </List.Item>

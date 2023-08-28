@@ -54,22 +54,22 @@ const CartItemWrapper = styled.div`
 const HeaderCart = (
   <>
     <div className="list-item image-product">
-      <p>Sản phẩm</p>
+      <p>Product Name</p>
     </div>
     <div className="list-item">
-      <p>Loại</p>
+      <p>Type</p>
     </div>
     <div className="list-item">
-      <p>Đơn giá</p>
+      <p>Price</p>
     </div>
     <div className="list-item">
-      <p>Số lượng</p>
+      <p>Quantity</p>
     </div>
     <div className="list-item">
-      <p>Tổng giá</p>
+      <p>Total</p>
     </div>
     <div className="list-item">
-      <p>Thao tác</p>
+      <p></p>
     </div>
   </>
 );

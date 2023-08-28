@@ -44,26 +44,41 @@ export const ProductDetail = () => {
 
   useEffect(() => {
     quantity = Number(data?.data.quantity);
-  }, []);
+  }, [cartData]);
   const handleAddToCart = async () => {
     const token = localStorage.getItem("access_token");
+    console.log(data?.data.quantity, "data quantity");
+    const currentProduct = cartData?.data.find((cart) => cart.id === id);
+    if (!token) {
+      notification.warning({
+        message: "Đăng nhập để mua hàng",
+        description: "Đăng nhập để mua hàng",
+      });
+      navigate("/sign-in");
+    } else {
+      if (!currentProduct) {
+        console.log(quantity, "Còn");
 
-    if (cartData) {
-      const currentProduct = cartData.data.filter(
-        (cart) => cart.id == String(data?.data.id)
-      );
-      if (Number(currentProduct[0]?.quantity) > Number(quantity)) {
-        console.log(
-          Number(currentProduct[0].quantity),
-          Number(data?.data.quantity)
-        );
-
-        notification.error({
-          message: "Vượt quá số hàng sẵn có",
-          description: `Vượt quá số hàng sẵn có`,
-        });
+        const response: MessageResponse<CartResponse> = await addToCart(id);
+        if (response.data?.success) {
+          notification.success({
+            message: "Thêm thành công",
+            description: `Thêm thành công vào rỏ hàng`,
+          });
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: `Có lỗi xảy ra`,
+          });
+        }
       } else {
-        if (token) {
+        console.log(currentProduct?.quantity, quantity, "Hết");
+        if (Number(currentProduct?.quantity) >= quantity) {
+          notification.error({
+            message: "Vượt quá số hàng sẵn có",
+            description: `Vượt quá số hàng sẵn có`,
+          });
+        } else {
           const response: MessageResponse<CartResponse> = await addToCart(id);
           if (response.data?.success) {
             notification.success({
@@ -76,12 +91,6 @@ export const ProductDetail = () => {
               description: `Có lỗi xảy ra`,
             });
           }
-        } else {
-          notification.warning({
-            message: "Đăng nhập để mua hàng",
-            description: "Đăng nhập để mua hàng",
-          });
-          navigate("/sign-in");
         }
       }
     }

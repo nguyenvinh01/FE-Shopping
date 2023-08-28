@@ -4,6 +4,7 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import { styled } from "styled-components";
 import { OrderModal } from "./OrderModal";
 import { Order, OrderProduct } from "../../interface/interface";
+import { FormatNumber } from "../../utility/FormatNumber";
 const OrderItemWrapper = styled.div`
   border-radius: 5px;
   padding: 0px 10px;
@@ -31,18 +32,28 @@ const OrderItemWrapper = styled.div`
 `;
 type PropsOrderItem = {
   onClick?: () => void;
-  orderData: Order;
+  orderData: OrderProduct[];
+  idOrder: string;
 };
-export const OrderItem = ({ onClick, orderData }: PropsOrderItem) => {
+export const OrderItem = ({ onClick, orderData, idOrder }: PropsOrderItem) => {
+  console.log(orderData);
+
   return (
     <OrderItemWrapper onClick={onClick}>
       <List.Item>
-        <div>{orderData.id}</div>
-        <div>Ngày đặt</div>
-        {/* <div>{}</div> */}
+        <div>{idOrder}</div>
         <div>
-          <AiOutlineArrowRight />
+          {FormatNumber(
+            orderData.reduce((acc, cur) => {
+              return acc + cur.pricePerUnit * cur.quantity;
+            }, 0)
+          )}
+          ₫
         </div>
+        {/* <div>{}</div> */}
+        {/* <div>
+          <AiOutlineArrowRight />
+        </div> */}
       </List.Item>
     </OrderItemWrapper>
   );

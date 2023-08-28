@@ -79,11 +79,23 @@ export const HeaderCompoment = () => {
   };
   const token = localStorage.getItem("access_token");
   const items = [
+    ...(user.role === ROLE.ADMIN
+      ? [
+          {
+            key: "4",
+            label: (
+              <a onClick={() => navigate("/admin/dashboard")}>
+                <span>Manage</span>
+              </a>
+            ),
+          },
+        ]
+      : []),
     {
       key: "1",
       label: (
         <a onClick={() => navigate("/dashboard")}>
-          <span>Thông tin cá nhân</span>
+          <span>Profile</span>
         </a>
       ),
     },
@@ -91,7 +103,7 @@ export const HeaderCompoment = () => {
       key: "2",
       label: (
         <a onClick={() => navigate("/dashboard/order")}>
-          <span>Đơn hàng</span>
+          <span>Order</span>
         </a>
       ),
     },
@@ -99,22 +111,10 @@ export const HeaderCompoment = () => {
       key: "3",
       label: (
         <a onClick={() => logOut()}>
-          <span>Đăng xuất</span>
+          <span>Log Out</span>
         </a>
       ),
     },
-    ...(user.role === ROLE.ADMIN
-      ? [
-          {
-            key: "4",
-            label: (
-              <a onClick={() => navigate("/admin/dashboard")}>
-                <span>Quản lý</span>
-              </a>
-            ),
-          },
-        ]
-      : []),
   ];
 
   return (

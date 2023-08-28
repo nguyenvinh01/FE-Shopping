@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "styled-components";
 import { Button, Card, notification } from "antd";
 import {
@@ -7,9 +7,13 @@ import {
   MessageResponse,
 } from "../../interface/interface";
 import { useNavigate } from "react-router-dom";
-import { useAddToCartMutation } from "../../redux/apis/apiCart";
+import {
+  useAddToCartMutation,
+  useGetCartItemQuery,
+} from "../../redux/apis/apiCart";
 import numeral from "numeral";
 import { FormatNumber } from "../../utility/FormatNumber";
+import { useGetProductDetailQuery } from "../../redux/apis/apiProduct";
 
 const { Meta } = Card;
 
@@ -70,31 +74,64 @@ export const CardProduct: React.FC<CardProductType> = ({
   idProduct,
 }) => {
   const navigate = useNavigate();
-  const [addToCart] = useAddToCartMutation();
+  const { data } = useGetProductDetailQuery(idProduct);
 
+  const [addToCart] = useAddToCartMutation();
+  const { data: cartData } = useGetCartItemQuery();
+  var quantity: number = 0;
+  useEffect(() => {
+    quantity = Number(data?.data.quantity);
+  }, [cartData]);
   const handleAddToCart = async () => {
     const token = localStorage.getItem("access_token");
-    if (token) {
-      const response: MessageResponse<CartResponse> = await addToCart(
-        idProduct
-      );
-      if (response.data?.success) {
-        notification.success({
-          message: "Thêm thành công",
-          description: `Thêm thành công vào rỏ hàng`,
-        });
-      } else {
-        notification.error({
-          message: "Có lỗi xảy ra",
-          description: `Có lỗi xảy ra`,
-        });
-      }
-    } else {
+    console.log(data?.data.quantity, "data quantity");
+    const currentProduct = cartData?.data.find((cart) => cart.id === idProduct);
+    if (!token) {
       notification.warning({
         message: "Đăng nhập để mua hàng",
         description: "Đăng nhập để mua hàng",
       });
       navigate("/sign-in");
+    } else {
+      if (!currentProduct) {
+        const response: MessageResponse<CartResponse> = await addToCart(
+          idProduct
+        );
+        if (response.data?.success) {
+          notification.success({
+            message: "Thêm thành công",
+            description: `Thêm thành công vào rỏ hàng`,
+          });
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: `Có lỗi xảy ra`,
+          });
+        }
+      } else {
+        console.log(currentProduct?.quantity, quantity, "Hết");
+        if (Number(currentProduct?.quantity) >= quantity) {
+          notification.error({
+            message: "Vượt quá số hàng sẵn có",
+            description: `Vượt quá số hàng sẵn có`,
+          });
+        } else {
+          const response: MessageResponse<CartResponse> = await addToCart(
+            idProduct
+          );
+          if (response.data?.success) {
+            notification.success({
+              message: "Thêm thành công",
+              description: `Thêm thành công vào rỏ hàng`,
+            });
+          } else {
+            notification.error({
+              message: "Có lỗi xảy ra",
+              description: `Có lỗi xảy ra`,
+            });
+          }
+        }
+      }
     }
   };
   return (

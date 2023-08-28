@@ -63,7 +63,7 @@ export const CartItem = ({
           height={"80px"}
           onClick={handleNavigate}
         />
-        <span>{items.description}</span>
+        <span>{items.name}</span>
       </div>
       <div className="list-item">
         {items.categories.map((i) => {
@@ -108,7 +108,7 @@ export const CartItem = ({
       <div className="list-item">
         <p onClick={() => handleDelete(items.id)}>
           <Button type="link" danger>
-            Xóa
+            Delete
           </Button>
         </p>
       </div>
