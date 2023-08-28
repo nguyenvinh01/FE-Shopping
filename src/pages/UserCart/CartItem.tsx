@@ -108,7 +108,7 @@ export const CartItem = ({
       <div className="list-item">
         <p onClick={() => handleDelete(items.id)}>
           <Button type="link" danger>
-            Delete
+            Remove
           </Button>
         </p>
       </div>

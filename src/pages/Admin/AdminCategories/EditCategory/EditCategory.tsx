@@ -118,11 +118,11 @@ export const EditCategory = ({
     if (isError) {
       notification.error({
         message: messageResponse,
-        description: "Có lỗi xảy ra, vui lòng thử lại",
+        // description: "Có lỗi xảy ra, vui lòng thử lại",
       });
     } else {
       notification.success({
-        message: "Update thành công",
+        message: "Update Success",
       });
     }
     onOk();

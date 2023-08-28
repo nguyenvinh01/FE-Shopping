@@ -14,11 +14,11 @@ export default function CheckoutFailed() {
     <div>
       <Result
         status="error"
-        title="Thanh toán không thành công"
-        subTitle="Có lỗi xảy ra"
+        title="Purchase Failed"
+        subTitle="Something Wrong"
         extra={[
           <Button type="primary" key="console">
-            Trang chủ
+            Home
           </Button>,
         ]}
       />

@@ -51,8 +51,8 @@ export const ProductDetail = () => {
     const currentProduct = cartData?.data.find((cart) => cart.id === id);
     if (!token) {
       notification.warning({
-        message: "Đăng nhập để mua hàng",
-        description: "Đăng nhập để mua hàng",
+        message: "Sign in to shopping",
+        description: "Sign in to shopping",
       });
       navigate("/sign-in");
     } else {
@@ -62,33 +62,33 @@ export const ProductDetail = () => {
         const response: MessageResponse<CartResponse> = await addToCart(id);
         if (response.data?.success) {
           notification.success({
-            message: "Thêm thành công",
-            description: `Thêm thành công vào rỏ hàng`,
+            message: "Adding Success",
+            // description: `Thêm thành công vào rỏ hàng`,
           });
         } else {
           notification.error({
-            message: "Có lỗi xảy ra",
-            description: `Có lỗi xảy ra`,
+            message: "Error",
+            // description: `Có lỗi xảy ra`,
           });
         }
       } else {
         console.log(currentProduct?.quantity, quantity, "Hết");
         if (Number(currentProduct?.quantity) >= quantity) {
           notification.error({
-            message: "Vượt quá số hàng sẵn có",
-            description: `Vượt quá số hàng sẵn có`,
+            message: "Exceeded available stock",
+            description: `Exceeded available stock`,
           });
         } else {
           const response: MessageResponse<CartResponse> = await addToCart(id);
           if (response.data?.success) {
             notification.success({
-              message: "Thêm thành công",
-              description: `Thêm thành công vào rỏ hàng`,
+              message: "Adding Success",
+              // description: `Thêm thành công vào rỏ hàng`,
             });
           } else {
             notification.error({
-              message: "Có lỗi xảy ra",
-              description: `Có lỗi xảy ra`,
+              message: "Error",
+              // description: `Có lỗi xảy ra`,
             });
           }
         }
@@ -106,11 +106,11 @@ export const ProductDetail = () => {
           <DescProduct>
             <div>
               <span>
-                Tên sản phẩm: <h2>{data?.data.name}</h2>
+                Product Name: <h2>{data?.data.name}</h2>
               </span>
             </div>
             <div>
-              <p>Giá: {FormatNumber(data?.data.price)}₫</p>
+              <p>Price: {FormatNumber(data?.data.price)}₫</p>
             </div>
             <div>
               <h4>Description</h4>

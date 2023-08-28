@@ -76,8 +76,7 @@ export const CheckoutPage = () => {
       window.location.href = response.data?._stripeUrl;
     } else {
       notification.error({
-        message: "Có lỗi xảy ra",
-        description: "Có lỗi xảy ra",
+        message: "Error",
       });
     }
     // dispatch(resetCart());
@@ -90,12 +89,12 @@ export const CheckoutPage = () => {
     <CheckoutPageWrapper>
       <div>
         <div>
-          <p>Tên người nhận: {user?.fullname}</p>
+          <p>Name: {user?.fullname}</p>
         </div>
         <div>
-          <p>Địa chỉ giao hàng: {user?.address}</p>
+          <p>Address: {user?.address}</p>
         </div>
-        <div>
+        {/* <div>
           <p>
             Phương thức thanh toán:
             <Radio.Group optionType="button" buttonStyle="solid">
@@ -103,20 +102,20 @@ export const CheckoutPage = () => {
               <Radio value="option2">Chuyển khoản</Radio>
             </Radio.Group>
           </p>
-        </div>
+        </div> */}
       </div>
       <div className="header-checkout">
         <div className="checkout-item-first">
-          <p>Sản phẩm</p>
+          <p>Product</p>
         </div>
         <div>
-          <p>Đơn giá</p>
+          <p>Price</p>
         </div>
         <div>
-          <p>Số lượng</p>
+          <p>Quantity</p>
         </div>
         <div>
-          <p>Thành tiền</p>
+          <p>Total</p>
         </div>
       </div>
       <List
@@ -136,13 +135,13 @@ export const CheckoutPage = () => {
       <div>
         <div>
           <Descriptions layout={"horizontal"} size={"default"}>
-            <Descriptions.Item label="Tổng số tiền">
+            <Descriptions.Item label="Total">
               {FormatNumber(total)}₫
             </Descriptions.Item>
           </Descriptions>
         </div>
         <Button type="primary" onClick={() => handleClick()}>
-          Thanh toán
+          Purchase
         </Button>
       </div>
     </CheckoutPageWrapper>

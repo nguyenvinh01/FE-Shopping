@@ -128,12 +128,12 @@ export const UserProfile = () => {
       if (isError) {
         notification.error({
           message: messageResponse,
-          description: "Có lỗi xảy ra, vui lòng thử lại",
+          // description: "Có lỗi xảy ra, vui lòng thử lại",
         });
       } else {
         notification.success({
-          message: "Thành công",
-          description: "Cập nhật thành công thành công",
+          message: "Success",
+          description: "Update Success",
         });
         setIsModalOpen(false);
         setIsModalVisible(false);
