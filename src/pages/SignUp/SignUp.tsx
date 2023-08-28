@@ -67,12 +67,12 @@ export const SignUp = () => {
       if (isError) {
         notification.error({
           message: messageResponse,
-          description: "Có lỗi xảy ra, vui lòng thử lại",
+          // description: "Có lỗi xảy ra, vui lòng thử lại",
         });
       } else {
         notification.success({
-          message: "Thành công",
-          description: "Đăng ký thành công thành công",
+          message: "Success",
+          description: "Sign-up Success",
         });
         navigate("/sign-in");
       }

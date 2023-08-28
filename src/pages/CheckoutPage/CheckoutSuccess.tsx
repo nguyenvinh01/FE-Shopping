@@ -24,11 +24,11 @@ export default function CheckoutSuccess() {
     <div>
       <Result
         status="success"
-        title="Thanh toán thành công"
-        subTitle="Tiếp tục mua sắm"
+        title="Purchase Success"
+        subTitle="Continue Shopping"
         extra={[
           <Button type="primary" key="console">
-            Trang chủ
+            Home
           </Button>,
         ]}
       />

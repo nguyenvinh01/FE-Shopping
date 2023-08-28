@@ -79,15 +79,15 @@ export const SignIn = () => {
       if (isError) {
         notification.error({
           message: messageResponse,
-          description: "Có lỗi xảy ra, vui lòng thử lại",
+          // description: "Có lỗi xảy ra, vui lòng thử lại",
         });
       } else {
         if (response.data) {
           localStorage.setItem("access_token", response.data.AccessToken);
         }
         notification.success({
-          message: "Thành công",
-          description: "Đăng nhập thành công",
+          message: "Success",
+          description: "Sign-In Success",
         });
         navigate("/dashboard");
       }

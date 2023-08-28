@@ -88,32 +88,34 @@ export const CardProduct: React.FC<CardProductType> = ({
     const currentProduct = cartData?.data.find((cart) => cart.id === idProduct);
     if (!token) {
       notification.warning({
-        message: "Đăng nhập để mua hàng",
-        description: "Đăng nhập để mua hàng",
+        message: "Sign in to shopping",
+        description: "Sign in to shopping",
       });
       navigate("/sign-in");
     } else {
       if (!currentProduct) {
+        console.log(quantity, "Còn");
+
         const response: MessageResponse<CartResponse> = await addToCart(
           idProduct
         );
         if (response.data?.success) {
           notification.success({
-            message: "Thêm thành công",
-            description: `Thêm thành công vào rỏ hàng`,
+            message: "Adding Success",
+            // description: `Thêm thành công vào rỏ hàng`,
           });
         } else {
           notification.error({
-            message: "Có lỗi xảy ra",
-            description: `Có lỗi xảy ra`,
+            message: "Error",
+            // description: `Có lỗi xảy ra`,
           });
         }
       } else {
         console.log(currentProduct?.quantity, quantity, "Hết");
         if (Number(currentProduct?.quantity) >= quantity) {
           notification.error({
-            message: "Vượt quá số hàng sẵn có",
-            description: `Vượt quá số hàng sẵn có`,
+            message: "Exceeded available stock",
+            description: `Exceeded available stock`,
           });
         } else {
           const response: MessageResponse<CartResponse> = await addToCart(
@@ -121,13 +123,13 @@ export const CardProduct: React.FC<CardProductType> = ({
           );
           if (response.data?.success) {
             notification.success({
-              message: "Thêm thành công",
-              description: `Thêm thành công vào rỏ hàng`,
+              message: "Adding Success",
+              // description: `Thêm thành công vào rỏ hàng`,
             });
           } else {
             notification.error({
-              message: "Có lỗi xảy ra",
-              description: `Có lỗi xảy ra`,
+              message: "Error",
+              // description: `Có lỗi xảy ra`,
             });
           }
         }

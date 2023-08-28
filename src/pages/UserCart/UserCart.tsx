@@ -127,8 +127,8 @@ export const UserCart = () => {
     );
     if (Number(value) > Number(quantity)) {
       notification.error({
-        message: "Vượt quá số lượng sản phẩm",
-        description: "Vượt quá số lượng sản phẩm",
+        message: "Exceeded available stock",
+        description: "Exceeded available stock",
       });
     } else {
       if (response.data) {

@@ -160,11 +160,11 @@ export const AddProduct: React.FC = () => {
     if (isError) {
       notification.error({
         message: messageResponse,
-        description: "Có lỗi xảy ra, vui lòng thử lại",
+        // description: "Có lỗi xảy ra, vui lòng thử lại",
       });
     } else {
       notification.success({
-        message: "Tạo thành công",
+        message: "Create Success",
       });
       navigate("/admin/products");
     }

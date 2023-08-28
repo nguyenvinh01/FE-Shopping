@@ -91,11 +91,11 @@ export const AddCategory = ({
     if (isError) {
       notification.error({
         message: messageResponse,
-        description: "Có lỗi xảy ra, vui lòng thử lại",
+        description: "Error",
       });
     } else {
       notification.success({
-        message: "Tạo thành công",
+        message: "Create Success",
       });
     }
     onOk();

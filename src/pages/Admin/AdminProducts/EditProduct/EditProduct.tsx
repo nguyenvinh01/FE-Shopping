@@ -172,7 +172,7 @@ export const EditProduct = () => {
       price: parseInt(form.getFieldValue("price")),
       quantity: parseInt(form.getFieldValue("quantity")),
     };
-
+    //
     await updateInventory({ data: dataInventoryUpdate, id })
       .unwrap()
       .then(async () => {
@@ -184,11 +184,11 @@ export const EditProduct = () => {
         if (isError) {
           notification.error({
             message: messageResponse,
-            description: "Có lỗi xảy ra, vui lòng thử lại",
+            // description: "Có lỗi xảy ra, vui lòng thử lại",
           });
         } else {
           notification.success({
-            message: "Chỉnh sửa thành công",
+            message: "Update Success",
           });
           navigate(`/admin/products/detail/${id}`);
         }
@@ -196,7 +196,7 @@ export const EditProduct = () => {
       .catch((error) => {
         notification.error({
           message: error.data.message,
-          description: "Có lỗi xảy ra, vui lòng thử lại",
+          // description: "Có lỗi xảy ra, vui lòng thử lại",
         });
       });
   };
