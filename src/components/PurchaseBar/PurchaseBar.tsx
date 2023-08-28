@@ -64,14 +64,14 @@ export const PurchaseBar = ({ cart }: PurchaseBarType) => {
   return (
     <PurchaseBarWrapper>
       <div>
-        <p>Giá: {cart ? FormatNumber(total) : 0}₫</p>
+        <p>Total: {cart ? FormatNumber(total) : 0}₫</p>
         <Button
           type="primary"
           size="large"
           onClick={() => handleClick()}
           disabled={disable}
         >
-          Mua hàng
+          Buy
         </Button>
       </div>
     </PurchaseBarWrapper>

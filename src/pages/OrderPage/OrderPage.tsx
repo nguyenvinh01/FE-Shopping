@@ -12,23 +12,6 @@ interface OrderPageType {
   date: string;
   amount: number;
 }
-const data: OrderPageType[] = [
-  {
-    id: "12312321321313",
-    amount: 112312321312,
-    date: "12/2/2022",
-  },
-  {
-    id: "12312321321313",
-    amount: 112312321312,
-    date: "12/2/2022",
-  },
-  {
-    id: "12312321321313",
-    amount: 112312321312,
-    date: "12/2/2022",
-  },
-];
 
 const OrderPageWrapper = styled.div`
   .ant-list-item,
@@ -40,23 +23,24 @@ const OrderPageWrapper = styled.div`
 const Header = (
   <List.Item>
     <div>
-      <p>Mã đơn hàng</p>
+      <p>Order Code</p>
     </div>
     <div>
-      <p>Ngày đặt</p>
+      <p>Amount</p>
     </div>
-    <div>
-      <p>Tổng giá</p>
+    {/* <div>
+      <p></p>
     </div>
     <div>
       <p></p>
-    </div>
+    </div> */}
   </List.Item>
 );
 export const OrderPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [idOrder, setIdOrder] = useState("");
   const { data } = useGetOrderQuery();
+  console.log(data);
 
   const showModal = () => {
     setIsVisible(true);
@@ -89,13 +73,13 @@ export const OrderPage = () => {
             <>
               <OrderItem
                 onClick={() => handleClick(item.id)}
-                orderData={item}
+                orderData={item.orderItems}
+                idOrder={item.id}
               />
             </>
           );
         }}
       ></List>
-      <Pagination defaultCurrent={1} total={50} />
       <OrderModal
         visible={isVisible}
         onCancel={handleCancel}
