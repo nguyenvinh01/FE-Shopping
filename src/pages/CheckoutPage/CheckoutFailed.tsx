@@ -1,10 +1,11 @@
 import { Button, Result } from "antd";
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function CheckoutFailed() {
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
+  const navigate = useNavigate();
 
   if (searchParams.has("id")) {
     const id = searchParams.get("id");
@@ -17,7 +18,13 @@ export default function CheckoutFailed() {
         title="Purchase Failed"
         subTitle="Something Wrong"
         extra={[
-          <Button type="primary" key="console">
+          <Button
+            type="primary"
+            key="console"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
             Home
           </Button>,
         ]}
