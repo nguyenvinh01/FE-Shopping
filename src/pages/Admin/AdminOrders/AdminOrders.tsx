@@ -1,9 +1,13 @@
-import { Space, Table } from "antd";
+import { List, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { useState } from "react";
 import { AiOutlineEdit, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 import { HeaderAdmin } from "../../../components/HeaderAdmin/HeaderAdmin";
 import { OrderModal } from "../../OrderPage/OrderModal";
+import { useGetAllOrderQuery } from "../../../redux/apis/apiOrder";
+import { GetOrderResponse } from "../../../interface/interface";
+import { OrderItem } from "../../OrderPage/OrderItem";
+import { AdminOrderModal } from "./AdminOrderDetail";
 
 interface DataType {
   key: string;
@@ -13,37 +17,28 @@ interface DataType {
   orderdate: string;
   status: string;
 }
-
-const data: DataType[] = [
-  {
-    key: "1",
-    order_id: "1",
-    username: "User1",
-    amount: 1000000,
-    orderdate: "4/8/23",
-    status: "done",
-  },
-  {
-    key: "2",
-    order_id: "2",
-    username: "User2",
-    amount: 1300000,
-    orderdate: "4/8/23",
-    status: "done",
-  },
-  {
-    key: "3",
-    order_id: "3",
-    username: "User3",
-    amount: 1500000,
-    orderdate: "4/8/23",
-    status: "pending",
-  },
-];
-
+const Header = (
+  <List.Item>
+    <div>
+      <p>Order Code</p>
+    </div>
+    <div>
+      <p>Amount</p>
+    </div>
+    {/* <div>
+      <p></p>
+    </div>
+    <div>
+      <p></p>
+    </div> */}
+  </List.Item>
+);
 export const AdminOrders = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [idOrder, setIdOrder] = useState("");
+  const [idUser, setIdUser] = useState("");
+  const { data } = useGetAllOrderQuery();
+
   const showModal = () => {
     setIsVisible(true);
   };
@@ -65,62 +60,85 @@ export const AdminOrders = () => {
   const handleDetail = (id: string) => {
     showModal();
   };
+  console.log(data, "data order");
 
-  const columns: ColumnsType<DataType> = [
-    {
-      title: "Order Id",
-      dataIndex: "order_id",
-      key: "id",
-    },
-    {
-      title: "User Name",
-      dataIndex: "username",
-      key: "name",
-      // render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Order Date",
-      dataIndex: "orderdate",
-      key: "orderdate",
-      // render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: (text, orderData) => (
-        <Space>
-          <span>
-            <a onClick={() => handleDetail(orderData.order_id)}>
-              <AiOutlineEye size={18} style={{ marginLeft: "10px" }} />
-            </a>
-          </span>
-        </Space>
-      ),
-    },
-  ];
-
+  // const columns: ColumnsType<GetOrderResponse> = [
+  //   {
+  //     title: "Order Id",
+  //     dataIndex: "id",
+  //     key: "id",
+  //   },
+  //   {
+  //     title: "User Name",
+  //     dataIndex: "username",
+  //     key: "name",
+  //     // render: (text) => <a>{text}</a>,
+  //   },
+  //   {
+  //     title: "Order Date",
+  //     dataIndex: "orderdate",
+  //     key: "orderdate",
+  //     // render: (text) => <a>{text}</a>,
+  //   },
+  //   {
+  //     title: "Amount",
+  //     dataIndex: "amount",
+  //     key: "amount",
+  //   },
+  //   {
+  //     title: "Status",
+  //     dataIndex: "status",
+  //     key: "status",
+  //   },
+  //   {
+  //     title: "Actions",
+  //     dataIndex: "actions",
+  //     key: "actions",
+  //     render: (text, orderData) => (
+  //       <Space>
+  //         <span>
+  //           <a onClick={() => handleDetail(orderData.order_id)}>
+  //             <AiOutlineEye size={18} style={{ marginLeft: "10px" }} />
+  //           </a>
+  //         </span>
+  //       </Space>
+  //     ),
+  //   },
+  // ];
+  const handleClick = (id: string, idUser: string) => {
+    showModal();
+    setIdOrder(id);
+    setIdUser(idUser);
+    console.log("click");
+  };
   return (
     <>
       <HeaderAdmin pageName="Order" />
       <div>
-        <Table columns={columns} dataSource={data} />
+        {/* <Table columns={columns} dataSource={data?.data} /> */}
+
+        <List
+          dataSource={data?.data}
+          header={Header}
+          renderItem={(item) => {
+            return (
+              <>
+                <OrderItem
+                  onClick={() => handleClick(item.id, item.user_id as string)}
+                  orderData={item.orderItems}
+                  idOrder={item.id}
+                />
+              </>
+            );
+          }}
+        ></List>
       </div>
-      <OrderModal
+      <AdminOrderModal
         visible={isVisible}
         onCancel={handleCancel}
         onOk={handleOk}
         idOrder={idOrder}
+        idUser={idUser}
       />
     </>
   );
